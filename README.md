@@ -48,19 +48,19 @@ Solon Java Framework
 
 <hr />
 
-本项目基于 java 17 进行编译和发布，专门争对 jakarta 相关接口进行“适配”。
+本项目基于 java 17 进行编译和发布，专门争对 jakarta（Servlet6.0, JSP3.1） 相关接口进行“适配”。
 
-| 插件                              | 描述                            | 备注    |
-|---------------------------------|-------------------------------|-------|
-| solon.boot.jetty.jakarta        | 对 jetty-jakarta 进行适配       |       |
-| solon.boot.undertow.jakarta     | 对 undertow-jakarta 进行适配    |       |
-|                                 |                               |       |
-| solon.web.servlet.jakarta       | 对 servlet-jakarta 进行适配     | 已完成   |
-|                                 |                               |       |
-| solon.view.jsp.jakarta          | 对 jsp-jakarta 进行适配         | 已完成   |
-|                                 |                               |       |
-| hibernate-jakarta-solon-plugin  | 对 jap-jakarta 进行适配         |       |
-|                                 |                               |       |
+| 插件                              | 描述                           | 备注    |
+|---------------------------------|------------------------------|-------|
+| solon.boot.jetty.jakarta        | 对 jetty(12)-jakarta 进行适配     |       |
+| solon.boot.undertow.jakarta     | 对 undertow(2.3)-jakarta 进行适配 |       |
+|                                 |                              |       |
+| solon.web.servlet.jakarta       | 对 servlet-jakarta 进行适配       | 已完成   |
+|                                 |                              |       |
+| solon.view.jsp.jakarta          | 对 jsp-jakarta 进行适配           | 已完成   |
+|                                 |                              |       |
+| hibernate-jakarta-solon-plugin  | 对 jap-jakarta 进行适配           |       |
+|                                 |                              |       |
 
 工程模块
 
