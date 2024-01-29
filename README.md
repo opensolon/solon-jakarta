@@ -47,3 +47,20 @@ Solon Java Framework
 启动快 5 ～ 10 倍；qps 高 2～ 3 倍；运行时内存节省 1/3 ~ 1/2；打包可以缩到 1/2 ~ 1/10
 
 <hr />
+
+本项目基于 java 17 进行编译和发布，专门争对 jakarta 相关接口进行“适配”。
+
+```xml
+<modules>
+    <module>solon-jakarta-projects/solon-boot/solon.boot.jetty.add.jsp.jakarta</module>
+    <module>solon-jakarta-projects/solon-boot/solon.boot.jetty.jakarta</module>
+    <module>solon-jakarta-projects/solon-boot/solon.boot.undertow.add.jsp.jakarta</module>
+    <module>solon-jakarta-projects/solon-boot/solon.boot.undertow.jakarta</module>
+
+    <module>solon-jakarta-projects/solon-web/solon.web.servlet.jakarta</module>
+
+    <module>solon-jakarta-projects/solon-render/solon.view.jsp.jakarta</module>
+    
+    <module>solon-jakarta-projects/solon-plugin-data/hibernate-jakarta-solon-plugin</module>
+</modules>
+```
