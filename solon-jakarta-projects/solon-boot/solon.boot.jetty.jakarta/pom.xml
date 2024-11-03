@@ -7,21 +7,87 @@
     <parent>
         <groupId>org.noear</groupId>
         <artifactId>solon-parent</artifactId>
-        <version>2.7.0-SNAPSHOT</version>
+        <version>3.0.3-M3</version>
         <relativePath />
     </parent>
 
-    <artifactId>  solon.boot.jetty.jakarta</artifactId>
+    <artifactId>solon.boot.jetty.jakarta</artifactId>
     <packaging>jar</packaging>
 
     <description>Java project for solon</description>
 
+    <properties>
+        <jetty.version>12.0.12</jetty.version>
+        <jetty-servlet.version>11.0.22</jetty-servlet.version>
+        <jetty-servlet-jstl.version>10.0.22</jetty-servlet-jstl.version>
+    </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.noear</groupId>
+            <artifactId>solon.boot</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.noear</groupId>
-            <artifactId>solon</artifactId>
+            <artifactId>solon.net</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.noear</groupId>
+            <artifactId>solon.web.servlet.jakarta</artifactId>
+        </dependency>
+
+        <!-- jetty http -->
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+            <version>${jetty-servlet.version}</version>
+        </dependency>
+
+
+        <!-- jetty web socket -->
+        <dependency>
+            <groupId>org.eclipse.jetty.websocket</groupId>
+            <artifactId>jetty-websocket-jetty-server</artifactId>
+            <version>${jetty.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty.websocket</groupId>
+            <artifactId>jetty-websocket-jetty-client</artifactId>
+            <version>${jetty.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- jetty jsp -->
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-webapp</artifactId>
+            <version>${jetty-servlet.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>apache-jsp</artifactId>
+            <version>${jetty-servlet.version}</version>
+            <type>jar</type>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>apache-jstl</artifactId>
+            <version>${jetty-servlet-jstl.version}</version>
+            <type>pom</type>
             <scope>provided</scope>
         </dependency>
     </dependencies>

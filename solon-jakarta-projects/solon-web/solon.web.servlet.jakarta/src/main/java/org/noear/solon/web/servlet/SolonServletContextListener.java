@@ -1,7 +1,23 @@
+/*
+ * Copyright 2017-2024 noear.org and authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.noear.solon.web.servlet;
 
 import jakarta.servlet.*;
 import org.noear.solon.Solon;
+import org.noear.solon.SolonApp;
 import org.noear.solon.Utils;
 import org.noear.solon.boot.ServerProps;
 import org.noear.solon.core.event.AppInitEndEvent;
@@ -105,6 +121,22 @@ public class SolonServletContextListener implements ServletContextListener {
             }
         } else {
             throw new IllegalStateException("The main function was not found for: " + this.getClass().getName());
+        }
+    }
+
+    /**
+     * Servlet容器销毁时关闭Solon
+     */
+    @Override
+    public void contextDestroyed(ServletContextEvent sce) {
+        // 1.获取SolonApp
+        SolonApp app = Solon.app();
+
+        // 2.阻塞关闭Solon
+        if (app.cfg().stopSafe()) {
+            Solon.stopBlock(false, app.cfg().stopDelay());
+        } else {
+            Solon.stopBlock(false, 0);
         }
     }
 }
