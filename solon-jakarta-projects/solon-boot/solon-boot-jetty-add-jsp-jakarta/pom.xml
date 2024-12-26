@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.noear</groupId>
+        <artifactId>solon-parent</artifactId>
+        <version>3.0.5</version>
+        <relativePath />
+    </parent>
+
+    <artifactId>solon-boot-jetty-add-jsp-jakarta</artifactId>
+    <packaging>jar</packaging>
+
+    <description>Java project for solon</description>
+
+    <properties>
+        <jetty.version>12.0.14</jetty.version>
+        <jetty-servlet.version>11.0.24</jetty-servlet.version>
+        <jetty-servlet-jstl.version>10.0.24</jetty-servlet-jstl.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-webapp</artifactId>
+            <version>${jetty-servlet.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>apache-jsp</artifactId>
+            <version>${jetty-servlet.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>apache-jstl</artifactId>
+            <version>${jetty-servlet-jstl.version}</version>
+            <type>pom</type>
+        </dependency>
+    </dependencies>
+
+</project>
