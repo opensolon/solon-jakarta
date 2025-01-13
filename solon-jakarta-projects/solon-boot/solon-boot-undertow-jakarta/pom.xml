@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.noear</groupId>
         <artifactId>solon-parent</artifactId>
-        <version>3.0.5</version>
+        <version>3.0.6</version>
         <relativePath />
     </parent>
 
@@ -16,9 +16,7 @@
 
     <description>Java project for solon</description>
 
-
     <dependencies>
-
         <dependency>
             <groupId>org.noear</groupId>
             <artifactId>solon</artifactId>
