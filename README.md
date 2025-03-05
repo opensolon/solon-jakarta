@@ -4,7 +4,7 @@
 Solon
 </h1>
 <p align="center">
-	<strong>面向全场景的 Java 应用开发框架：克制、高效、开放、生态</strong>
+	<strong>面向全场景的 Java 企业级应用开发框架：克制、高效、开放、生态</strong>
     <br/>
     <strong>【开放原子开源基金会，孵化项目】</strong>
 </p>
@@ -49,25 +49,30 @@ Solon
 <hr />
 
 <p align="center">
-并发高 300%；内存省 50%；启动快 10 倍；打包小 90%；同时支持 java8 ~ java22, native 运行时。
+并发高 300%；内存省 50%；启动快 10 倍；打包小 90%；同时支持 java8 ~ java23, native 运行时。
 <br/>
 从零开始构建，有更灵活的接口规范与开放生态
 </p>
 
 <hr />
 
-Solon 本身并不基于 java-ee 构建，可以同时适配 javax 和 jakarta 两套 java-ee 包名。 本仓库的项目基于 java 17 进行编译和发布，专门争对 “jakarta 10”（java-ee 的新名） 相关接口进行“适配”。
+## 主要代码仓库
 
-| 插件                             | 描述                           | 备注  |
-|--------------------------------|------------------------------|-----|
-| solon-boot-jetty-jakarta       | 对 jetty(12)-jakarta 进行适配     |     |
-| solon-boot-undertow-jakarta    | 对 undertow(2.3)-jakarta 进行适配 |     |
-|                                |                              |     |
-| solon-logging-logback-jakarta  | 对 logback(1.15) 进行适配         | 已完成    |
-|                                |                              |     |
-| solon-web-servlet-jakarta      | 对 servlet-jakarta 进行适配       | 已完成 |
-|                                |                              |     |
-| solon-view-jsp-jakarta         | 对 jsp-jakarta 进行适配           | 已完成 |
-|                                |                              |     |
-| hibernate-jakarta-solon-plugin | 对 jap-jakarta 进行适配           |     |
-|                                |                              |     |
+| 代码仓库                                            | 描述                               | 
+|-------------------------------------------------|----------------------------------| 
+| https://gitee.com/opensolon/solon               | Solon ,主代码仓库                     | 
+| https://gitee.com/opensolon/solon-examples      | Solon ,官网配套示例代码仓库                |
+|                                                 |                                  |
+| https://gitee.com/opensolon/solon-ai            | Solon Ai ,代码仓库                   | 
+| https://gitee.com/opensolon/solon-cloud         | Solon Cloud ,代码仓库                | 
+| https://gitee.com/opensolon/solon-admin         | Solon Admin ,代码仓库                | 
+| https://gitee.com/opensolon/solon-jakarta       | Solon Jakarta ,代码仓库（base java17） | 
+| https://gitee.com/opensolon/solon-integration   | Solon Integration ,代码仓库          | 
+|                                                 |                                  |
+| https://gitee.com/opensolon/solon-gradle-plugin | Solon Gradle ,插件代码仓库             | 
+| https://gitee.com/opensolon/solon-idea-plugin   | Solon Idea ,插件代码仓库               | 
+| https://gitee.com/opensolon/solon-vscode-plugin | Solon VsCode ,插件代码仓库             | 
+|                                                 |                                  |
+| https://gitee.com/dromara/solon-plugins         | Solon 第三方扩展插件代码仓库                | 
+
+
