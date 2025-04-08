@@ -25,6 +25,7 @@ import org.noear.solon.ai.chat.annotation.FunctionMapping;
 import org.noear.solon.ai.chat.function.ChatFunction;
 import org.noear.solon.ai.chat.function.ChatFunctionParam;
 import org.noear.solon.ai.chat.function.MethodChatFunction;
+import org.noear.solon.ai.mcp.server.McpServerProperties;
 import org.noear.solon.core.*;
 import reactor.core.publisher.Mono;
 
@@ -40,7 +41,7 @@ public class McpServerPlugin implements Plugin {
 
     @Override
     public void start(AppContext context) throws Throwable {
-        McpServerProperties serverProperties = context.beanMake(McpServerProperties.class).get();
+        McpServerProperties serverProperties = context.cfg().bindTo(McpServerProperties.class);
 
         if (serverProperties.isEnabled()) {
             //如果启用了

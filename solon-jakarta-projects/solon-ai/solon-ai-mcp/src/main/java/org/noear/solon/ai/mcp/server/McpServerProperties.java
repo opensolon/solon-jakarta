@@ -13,41 +13,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.solon.ai.mcp.server.integration;
+package org.noear.solon.ai.mcp.server;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.noear.solon.annotation.BindProps;
-import org.noear.solon.annotation.Configuration;
 
 /**
+ * Mcp 服务端属性
+ *
  * @author noear
  * @since 3.1
  */
-@BindProps(prefix="solon.ai.mcp.server")
-@Configuration
+@Setter
+@Getter
+@BindProps(prefix = "solon.ai.mcp.server")
 public class McpServerProperties {
+    /**
+     * 是否启用
+     */
     private boolean enabled = true;
+    /**
+     * 服务名称
+     */
     private String name = "solon-ai-mcp-server";
+    /**
+     * 服务版本号
+     */
     private String version = "1.0.0";
+    /**
+     * 消息端点（路径）
+     */
     private String messageEndpoint = "/mcp/message";
+    /**
+     * 服务器派发事件端点（路径）
+     */
     private String sseEndpoint = "/mcp/sse";
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
-    public String getMessageEndpoint() {
-        return messageEndpoint;
-    }
-
-    public String getSseEndpoint() {
-        return sseEndpoint;
-    }
 }
