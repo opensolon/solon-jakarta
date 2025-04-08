@@ -8,7 +8,7 @@ import org.noear.solon.annotation.Component;
  * @author noear 2025/4/8 created
  */
 @Component
-public class McpCom {
+public class McpServerTool {
     //
     // 建议开启编译参数：-parameters （否则，要再配置参数的 name）
     //

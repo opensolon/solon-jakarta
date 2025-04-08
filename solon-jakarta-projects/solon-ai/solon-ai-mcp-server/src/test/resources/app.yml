@@ -1,5 +1,5 @@
 
 solon.ai.mvc.server:
-  sseEndpoint: "/sse"
+  sseEndpoint: "/mcp/sse"
 
 solon.logging.logger.root.level: INFO

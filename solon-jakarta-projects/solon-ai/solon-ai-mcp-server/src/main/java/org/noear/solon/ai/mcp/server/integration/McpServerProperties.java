@@ -12,8 +12,8 @@ import org.noear.solon.annotation.Configuration;
 public class McpServerProperties {
     private String name = "solon-ai-mcp-server";
     private String version = "1.0.0";
-    private String messageEndpoint = "/message";
-    private String sseEndpoint = "/sse";
+    private String messageEndpoint = "/mcp/message";
+    private String sseEndpoint = "/mcp/sse";
 
     public String getName() {
         return name;

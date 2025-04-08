@@ -23,7 +23,7 @@ public class McpTest {
     public void case1() throws Exception {
         String baseUri = "http://localhost:" + Solon.cfg().serverPort();
         HttpClientSseClientTransport clientTransport = HttpClientSseClientTransport.builder(baseUri)
-                .sseEndpoint("/sse")
+                .sseEndpoint("/mcp/sse")
                 .build();
 
         McpSyncClient mcpClient = McpClient.sync(clientTransport).clientInfo(new McpSchema.Implementation("Sample " + "client", "0.0.0"))
