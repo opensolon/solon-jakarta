@@ -42,33 +42,36 @@ public class McpServerPlugin implements Plugin {
     public void start(AppContext context) throws Throwable {
         McpServerProperties serverProperties = context.beanMake(McpServerProperties.class).get();
 
-        mcpTransportProvider = WebRxSseServerTransportProvider.builder()
-                .messageEndpoint(serverProperties.getMessageEndpoint())
-                .sseEndpoint(serverProperties.getSseEndpoint())
-                .objectMapper(new ObjectMapper())
-                .build();
+        if (serverProperties.isEnabled()) {
+            //如果启用了
+            mcpTransportProvider = WebRxSseServerTransportProvider.builder()
+                    .messageEndpoint(serverProperties.getMessageEndpoint())
+                    .sseEndpoint(serverProperties.getSseEndpoint())
+                    .objectMapper(new ObjectMapper())
+                    .build();
 
-        mcpServerSpec = McpServer.async(mcpTransportProvider)
-                .serverInfo(serverProperties.getName(), serverProperties.getVersion());
+            mcpServerSpec = McpServer.async(mcpTransportProvider)
+                    .serverInfo(serverProperties.getName(), serverProperties.getVersion());
 
-        context.beanExtractorAdd(FunctionMapping.class, (bw, method, anno) -> {
-            ChatFunction chatFunction = new MethodChatFunction(bw.raw(), method);
-            addToolSpec(mcpServerSpec, chatFunction);
-        });
+            context.beanExtractorAdd(FunctionMapping.class, (bw, method, anno) -> {
+                ChatFunction chatFunction = new MethodChatFunction(bw.raw(), method);
+                addToolSpec(mcpServerSpec, chatFunction);
+            });
 
-        mcpTransportProvider.toHttpHandler(context.app());
+            mcpTransportProvider.toHttpHandler(context.app());
 
-        context.lifecycle(new Lifecycle() {
-            @Override
-            public void start() throws Throwable {
+            context.lifecycle(new Lifecycle() {
+                @Override
+                public void start() throws Throwable {
 
-            }
+                }
 
-            @Override
-            public void postStart() throws Throwable {
-                mcpServerSpec.build();
-            }
-        });
+                @Override
+                public void postStart() throws Throwable {
+                    mcpServerSpec.build();
+                }
+            });
+        }
     }
 
 
@@ -119,25 +122,25 @@ public class McpServerPlugin implements Plugin {
     /**
      * 字符串形态
      */
-    protected void buildJsonSchemaParamNodeDo(ChatFunctionParam p1, ONode n6) {
+    protected void buildJsonSchemaParamNodeDo(ChatFunctionParam p1, ONode paramNode) {
         String typeStr = p1.type().getSimpleName().toLowerCase();
         if (p1.type().isArray()) {
-            n6.set("type", "array");
+            paramNode.set("type", "array");
             String typeItem = typeStr.substring(0, typeStr.length() - 2); //int[]
 
-            n6.getOrNew("items").set("type", typeItem);
+            paramNode.getOrNew("items").set("type", typeItem);
         } else if (p1.type().isEnum()) {
-            n6.set("type", typeStr);
+            paramNode.set("type", typeStr);
 
-            n6.getOrNew("enum").build(n7 -> {
+            paramNode.getOrNew("enum").build(n7 -> {
                 for (Object e : p1.type().getEnumConstants()) {
                     n7.add(e.toString());
                 }
             });
         } else {
-            n6.set("type", typeStr);
+            paramNode.set("type", typeStr);
         }
 
-        n6.set("description", p1.description());
+        paramNode.set("description", p1.description());
     }
 }
