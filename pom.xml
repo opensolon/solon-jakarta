@@ -19,7 +19,7 @@
     </properties>
 
     <modules>
-        <module>solon-jakarta-projects/solon-ai/solon-ai-mcp-server</module>
+        <module>solon-jakarta-projects/solon-ai/solon-ai-mcp</module>
 
         <module>solon-jakarta-projects/solon-data/hibernate-jakarta-solon-plugin</module>
 
