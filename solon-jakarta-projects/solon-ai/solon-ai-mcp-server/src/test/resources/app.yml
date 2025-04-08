@@ -1,0 +1,4 @@
+
+solon.ai.mvc.server:
+  messageEndpoint: ""
+  sseEndpoint: ""

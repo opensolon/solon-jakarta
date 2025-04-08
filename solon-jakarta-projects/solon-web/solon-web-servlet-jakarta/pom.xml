@@ -14,6 +14,10 @@
     <artifactId>solon-web-servlet-jakarta</artifactId>
     <packaging>jar</packaging>
 
+    <properties>
+        <java.version>17</java.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.noear</groupId>

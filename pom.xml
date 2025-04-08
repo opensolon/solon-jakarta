@@ -14,8 +14,14 @@
     <artifactId>solon-jakarta</artifactId>
     <packaging>pom</packaging>
 
+    <properties>
+        <java.version>17</java.version>
+    </properties>
+
     <modules>
-        <module>solon-jakarta-projects/solon-plugin-data/hibernate-jakarta-solon-plugin</module>
+        <module>solon-jakarta-projects/solon-ai/solon-ai-mcp-server</module>
+
+        <module>solon-jakarta-projects/solon-data/hibernate-jakarta-solon-plugin</module>
 
         <module>solon-jakarta-projects/solon-logging/solon-logging-logback-jakarta</module>
 
