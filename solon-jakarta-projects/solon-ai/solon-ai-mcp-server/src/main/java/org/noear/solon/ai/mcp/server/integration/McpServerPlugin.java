@@ -20,51 +20,64 @@ import io.modelcontextprotocol.server.McpServer;
 import io.modelcontextprotocol.server.McpServerFeatures;
 import io.modelcontextprotocol.server.transport.WebRxSseServerTransportProvider;
 import io.modelcontextprotocol.spec.McpSchema;
+import org.noear.snack.ONode;
 import org.noear.solon.ai.chat.annotation.FunctionMapping;
+import org.noear.solon.ai.chat.function.ChatFunction;
+import org.noear.solon.ai.chat.function.ChatFunctionParam;
 import org.noear.solon.ai.chat.function.MethodChatFunction;
-import org.noear.solon.core.AppContext;
-import org.noear.solon.core.BeanExtractor;
-import org.noear.solon.core.BeanWrap;
-import org.noear.solon.core.Plugin;
+import org.noear.solon.core.*;
 import reactor.core.publisher.Mono;
 
-import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.function.BiFunction;
 
 /**
  * @author noear
  * @since 3.1
  */
 public class McpServerPlugin implements Plugin {
+    private WebRxSseServerTransportProvider mcpTransportProvider;
+    private McpServer.AsyncSpecification mcpServerSpec;
+
     @Override
     public void start(AppContext context) throws Throwable {
         McpServerProperties serverProperties = context.beanMake(McpServerProperties.class).get();
 
-        WebRxSseServerTransportProvider mcpTransportProvider = WebRxSseServerTransportProvider.builder()
+        mcpTransportProvider = WebRxSseServerTransportProvider.builder()
                 .messageEndpoint(serverProperties.getMessageEndpoint())
                 .sseEndpoint(serverProperties.getSseEndpoint())
                 .objectMapper(new ObjectMapper())
                 .build();
 
-        McpServer.AsyncSpecification mcpServerSpec = McpServer.async(mcpTransportProvider)
+        mcpServerSpec = McpServer.async(mcpTransportProvider)
                 .serverInfo(serverProperties.getName(), serverProperties.getVersion());
 
-        context.beanExtractorAdd(FunctionMapping.class, new BeanExtractor<FunctionMapping>() {
-            @Override
-            public void doExtract(BeanWrap bw, Method method, FunctionMapping anno) throws Throwable {
-                MethodChatFunction chatFunction = new MethodChatFunction(bw.raw(), method);
-            }
+        context.beanExtractorAdd(FunctionMapping.class, (bw, method, anno) -> {
+            ChatFunction chatFunction = new MethodChatFunction(bw.raw(), method);
+            addToolSpec(mcpServerSpec, chatFunction);
         });
 
-        mcpServerSpec.build();
+        mcpTransportProvider.toHttpHandler(context.app());
+
+        context.lifecycle(new Lifecycle() {
+            @Override
+            public void start() throws Throwable {
+
+            }
+
+            @Override
+            public void postStart() throws Throwable {
+                mcpServerSpec.build();
+            }
+        });
     }
 
-    private void addToolSpec(McpServer.AsyncSpecification mcpServerSpec, MethodChatFunction chatFunction) {
+
+    private void addToolSpec(McpServer.AsyncSpecification mcpServerSpec, ChatFunction chatFunction) {
+        ONode jsonSchema = buildJsonSchema(chatFunction);
+        String jsonSchemaStr = jsonSchema.toJson();
+
         McpServerFeatures.AsyncToolSpecification toolSpec = new McpServerFeatures.AsyncToolSpecification(
-                new McpSchema.Tool(chatFunction.name(), chatFunction.description(), ""),
+                new McpSchema.Tool(chatFunction.name(), chatFunction.description(), jsonSchemaStr),
                 (exchange, request) -> {
                     McpSchema.CallToolResult toolResult = null;
                     try {
@@ -78,5 +91,53 @@ public class McpServerPlugin implements Plugin {
                 });
 
         mcpServerSpec.tools(toolSpec);
+    }
+
+    protected ONode buildJsonSchema(ChatFunction chatFunction) {
+        ONode jsonSchema = new ONode();
+        jsonSchema.set("$schema", "http://json-schema.org/draft-07/schema#");
+        jsonSchema.set("type", "object");
+
+
+        ONode n4r = new ONode(jsonSchema.options()).asArray();
+        jsonSchema.getOrNew("properties").build(n5 -> {
+            for (ChatFunctionParam p1 : chatFunction.params()) {
+                n5.getOrNew(p1.name()).build(n6 -> {
+                    buildJsonSchemaParamNodeDo(p1, n6);
+                });
+
+                if (p1.required()) {
+                    n4r.add(p1.name());
+                }
+            }
+        });
+        jsonSchema.set("required", n4r);
+
+        return jsonSchema;
+    }
+
+    /**
+     * 字符串形态
+     */
+    protected void buildJsonSchemaParamNodeDo(ChatFunctionParam p1, ONode n6) {
+        String typeStr = p1.type().getSimpleName().toLowerCase();
+        if (p1.type().isArray()) {
+            n6.set("type", "array");
+            String typeItem = typeStr.substring(0, typeStr.length() - 2); //int[]
+
+            n6.getOrNew("items").set("type", typeItem);
+        } else if (p1.type().isEnum()) {
+            n6.set("type", typeStr);
+
+            n6.getOrNew("enum").build(n7 -> {
+                for (Object e : p1.type().getEnumConstants()) {
+                    n7.add(e.toString());
+                }
+            });
+        } else {
+            n6.set("type", typeStr);
+        }
+
+        n6.set("description", p1.description());
     }
 }

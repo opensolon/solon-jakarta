@@ -1,4 +1,5 @@
 
 solon.ai.mvc.server:
-  messageEndpoint: ""
-  sseEndpoint: ""
+  sseEndpoint: "/sse"
+
+solon.logging.logger.root.level: INFO
