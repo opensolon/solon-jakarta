@@ -1,5 +1,0 @@
-
-solon.ai.mcp.server:
-  sseEndpoint: "/mcp/sse"
-
-solon.logging.logger.root.level: INFO
