@@ -16,7 +16,7 @@
 
     <properties>
         <java.version>17</java.version>
-        <jakarta.logback.version>1.5.16</jakarta.logback.version>
+        <jakarta.logback.version>1.5.18</jakarta.logback.version>
     </properties>
 
     <dependencies>
