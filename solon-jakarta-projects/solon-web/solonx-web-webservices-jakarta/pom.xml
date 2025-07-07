@@ -11,38 +11,31 @@
         <relativePath />
     </parent>
 
-    <artifactId>solon-web-servlet-jakarta</artifactId>
+    <artifactId>solonx-web-webservices-jakarta</artifactId>
     <name>${project.artifactId}</name>
     <packaging>jar</packaging>
 
     <properties>
         <java.version>17</java.version>
+        <cxf.version>4.1.2</cxf.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.noear</groupId>
-            <artifactId>solon.boot</artifactId>
+            <artifactId>solon-web-servlet-jakarta</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.noear</groupId>
-            <artifactId>solon.net</artifactId>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-jaxws</artifactId>
+            <version>${cxf.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>jakarta.servlet</groupId>
-            <artifactId>jakarta.servlet-api</artifactId>
-            <version>${jakarta.servlet.version}</version>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-transports-http</artifactId>
+            <version>${cxf.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>jakarta.websocket</groupId>
-            <artifactId>jakarta.websocket-api</artifactId>
-            <version>2.0.0</version>
-            <scope>provided</scope>
-        </dependency>
-
     </dependencies>
-
 </project>
