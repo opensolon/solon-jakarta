@@ -11,24 +11,21 @@
         <relativePath />
     </parent>
 
-    <artifactId>solon-jakarta</artifactId>
+    <groupId>org.noear</groupId>
+    <artifactId>solon-jakarta-bundle1</artifactId>
+    <name>${project.artifactId}</name>
     <packaging>pom</packaging>
+
 
     <properties>
         <java.version>17</java.version>
     </properties>
 
     <modules>
-       <module>__release</module>
+        <module>../../solon-jakarta-projects/solon-data/hibernate-jakarta-solon-plugin</module>
 
-        <module>solon-jakarta-projects/solon-boot/solon-boot-jetty-add-jsp-jakarta</module>
-<!--        <module>solon-jakarta-projects/solon-boot/solon-boot-jetty-jakarta</module>-->
-        <module>solon-jakarta-projects/solon-boot/solon-boot-undertow-add-jsp-jakarta</module>
-        <module>solon-jakarta-projects/solon-boot/solon-boot-undertow-jakarta</module>
+        <module>../../solon-jakarta-projects/solon-logging/solon-logging-logback-jakarta</module>
 
-        <module>solon-jakarta-projects/solon-render/solon-view-jsp-jakarta</module>
-
-        <module>solon-jakarta-projects/solon-web/solon-web-servlet-jakarta</module>
-
+        <module>../../solon-jakarta-projects/solon-web/solon-web-webservices-jakarta</module>
     </modules>
 </project>
