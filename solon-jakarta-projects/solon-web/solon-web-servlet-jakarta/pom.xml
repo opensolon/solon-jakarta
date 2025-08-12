@@ -7,8 +7,8 @@
     <parent>
         <groupId>org.noear</groupId>
         <artifactId>solon-jakarta-parent</artifactId>
-        <version>3.4.3</version>
-        <relativePath />
+        <version>3.5.0-SNAPSHOT</version>
+        <relativePath>../../../solon-jakarta-parent/pom.xml</relativePath>
     </parent>
 
     <artifactId>solon-web-servlet-jakarta</artifactId>
@@ -18,7 +18,7 @@
     <dependencies>
         <dependency>
             <groupId>org.noear</groupId>
-            <artifactId>solon-boot</artifactId>
+            <artifactId>solon-server</artifactId>
         </dependency>
 
         <dependency>

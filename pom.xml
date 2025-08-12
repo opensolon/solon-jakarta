@@ -9,17 +9,13 @@
     <version>dev</version>
     <packaging>pom</packaging>
 
-    <properties>
-        <java.version>17</java.version>
-    </properties>
-
     <modules>
        <module>__release</module>
 
-        <module>solon-jakarta-projects/solon-boot/solon-boot-jetty-add-jsp-jakarta</module>
-<!--        <module>solon-jakarta-projects/solon-boot/solon-boot-jetty-jakarta</module>-->
-        <module>solon-jakarta-projects/solon-boot/solon-boot-undertow-add-jsp-jakarta</module>
-        <module>solon-jakarta-projects/solon-boot/solon-boot-undertow-jakarta</module>
+        <module>solon-jakarta-projects/solon-server/solon-server-jetty-add-jsp-jakarta</module>
+<!--        <module>solon-jakarta-projects/solon-server/solon-server-jetty-jakarta</module>-->
+        <module>solon-jakarta-projects/solon-server/solon-server-undertow-add-jsp-jakarta</module>
+        <module>solon-jakarta-projects/solon-server/solon-server-undertow-jakarta</module>
 
     </modules>
 </project>
