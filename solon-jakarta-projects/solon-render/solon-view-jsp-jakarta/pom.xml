@@ -15,11 +15,6 @@
     <name>${project.artifactId}</name>
     <packaging>jar</packaging>
 
-    <properties>
-        <java.version>17</java.version>
-        <jakarta.servlet.version>6.1.0</jakarta.servlet.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.noear</groupId>

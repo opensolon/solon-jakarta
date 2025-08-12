@@ -17,13 +17,6 @@
 
     <description>Java project for solon</description>
 
-    <properties>
-        <java.version>17</java.version>
-        <jetty.version>12.0.14</jetty.version>
-        <jetty-servlet.version>11.0.24</jetty-servlet.version>
-        <jetty-servlet-jstl.version>10.0.24</jetty-servlet-jstl.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>javax.servlet</groupId>

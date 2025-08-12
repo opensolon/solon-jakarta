@@ -16,11 +16,6 @@
     <name>${project.artifactId}</name>
     <packaging>pom</packaging>
 
-
-    <properties>
-        <java.version>17</java.version>
-    </properties>
-
     <modules>
         <module>../../solon-jakarta-parent</module>
 
@@ -31,9 +26,7 @@
         <module>../../solon-jakarta-projects/solon-render/solon-view-jsp-jakarta</module>
 
         <module>../../solon-jakarta-projects/solon-web/solon-web-servlet-jakarta</module>
-
         <module>../../solon-jakarta-projects/solon-web/solon-web-webservices-jakarta</module>
-
         <module>../../solon-jakarta-projects/solon-web_old/solon.web.servlet.jakarta</module>
     </modules>
 </project>

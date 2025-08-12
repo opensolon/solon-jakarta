@@ -15,11 +15,6 @@
     <name>${project.artifactId}</name>
     <packaging>jar</packaging>
 
-    <properties>
-        <java.version>17</java.version>
-        <jakarta.logback.version>1.5.18</jakarta.logback.version>
-    </properties>
-
     <dependencies>
         <!-- 提高深度优先级 -->
         <dependency>

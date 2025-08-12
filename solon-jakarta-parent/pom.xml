@@ -19,10 +19,55 @@
 
     <properties>
         <java.version>17</java.version>
+
+        <jakarta.logback.version>1.5.18</jakarta.logback.version>
+        <jakarta.servlet.version>6.1.0</jakarta.servlet.version>
+
+        <cxf.version>4.1.2</cxf.version>
+
+        <jetty.version>12.0.14</jetty.version>
+        <jetty-servlet.version>11.0.24</jetty-servlet.version>
+        <jetty-servlet-jstl.version>10.0.24</jetty-servlet-jstl.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.noear</groupId>
+                <artifactId>hibernate-jakarta-solon-plugin</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.noear</groupId>
+                <artifactId>solon-logging-logback-jakarta</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.noear</groupId>
+                <artifactId>solon-view-jsp-jakarta</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.noear</groupId>
+                <artifactId>solon-web-servlet-jakarta</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.noear</groupId>
+                <artifactId>solon-web-webservices-jakarta</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- old -->
+            <dependency>
+                <groupId>org.noear</groupId>
+                <artifactId>solon.web.servlet.jakarta</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 </project>

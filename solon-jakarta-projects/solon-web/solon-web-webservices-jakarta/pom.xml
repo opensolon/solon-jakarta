@@ -15,11 +15,6 @@
     <name>${project.artifactId}</name>
     <packaging>jar</packaging>
 
-    <properties>
-        <java.version>17</java.version>
-        <cxf.version>4.1.2</cxf.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.noear</groupId>
