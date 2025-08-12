@@ -26,9 +26,5 @@
         <module>solon-jakarta-projects/solon-boot/solon-boot-undertow-add-jsp-jakarta</module>
         <module>solon-jakarta-projects/solon-boot/solon-boot-undertow-jakarta</module>
 
-        <module>solon-jakarta-projects/solon-render/solon-view-jsp-jakarta</module>
-
-        <module>solon-jakarta-projects/solon-web/solon-web-servlet-jakarta</module>
-
     </modules>
 </project>

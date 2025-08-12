@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2024 noear.org and authors
+ * Copyright 2017-2025 noear.org and authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.noear.solon.Solon;
 import org.noear.solon.core.handle.Context;
+import org.noear.solon.core.util.MimeType;
 
 import java.io.IOException;
 
@@ -39,7 +40,7 @@ public class SolonServletHandler extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         SolonServletContext ctx = new SolonServletContext(request, response);
-        ctx.contentType("text/plain;charset=UTF-8");
+        ctx.contentType(MimeType.TEXT_PLAIN_UTF8_VALUE);
 
         preHandle(ctx);
 

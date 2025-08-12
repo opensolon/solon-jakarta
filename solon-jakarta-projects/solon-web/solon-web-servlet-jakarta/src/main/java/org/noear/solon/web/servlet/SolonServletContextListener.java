@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2024 noear.org and authors
+ * Copyright 2017-2025 noear.org and authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@ package org.noear.solon.web.servlet;
 
 import jakarta.servlet.*;
 import org.noear.solon.Solon;
-import org.noear.solon.SolonApp;
 import org.noear.solon.Utils;
 import org.noear.solon.boot.ServerProps;
 import org.noear.solon.core.Constants;
@@ -130,12 +129,8 @@ public class SolonServletContextListener implements ServletContextListener {
      */
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        // 1.获取SolonApp
-        SolonApp app = Solon.app();
-
-        // 2.阻塞关闭Solon
-        if (app.cfg().stopSafe()) {
-            Solon.stopBlock(false, app.cfg().stopDelay());
+        if (Solon.cfg().stopSafe()) {
+            Solon.stopBlock(false, Solon.cfg().stopDelay());
         } else {
             Solon.stopBlock(false, 0);
         }

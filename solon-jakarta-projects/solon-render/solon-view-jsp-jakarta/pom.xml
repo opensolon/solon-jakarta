@@ -23,12 +23,12 @@
     <dependencies>
         <dependency>
             <groupId>org.noear</groupId>
-            <artifactId>solon.view</artifactId>
+            <artifactId>solon-view</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.noear</groupId>
-            <artifactId>solon.auth</artifactId>
+            <artifactId>solon-security-auth</artifactId>
             <scope>provided</scope>
         </dependency>
 

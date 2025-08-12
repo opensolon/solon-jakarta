@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2024 noear.org and authors
+ * Copyright 2017-2025 noear.org and authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,7 +65,7 @@ public class SolonServletFilter implements Filter {
                 //重新设置当前上下文（上面会清掉）
                 ContextHolder.currentSet(ctx);
 
-                if (ctx.getHandled() == false) {
+                if (ctx.getHandled() == false && ctx.status() == 200) { //说明未处理，且状态未变
                     //如果未处理，则传递过滤链
                     filterChain.doFilter(request, response);
                 }

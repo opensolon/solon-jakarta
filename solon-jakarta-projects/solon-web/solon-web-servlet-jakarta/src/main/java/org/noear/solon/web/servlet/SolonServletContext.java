@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2024 noear.org and authors
+ * Copyright 2017-2025 noear.org and authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import jakarta.servlet.AsyncContext;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.noear.solon.Utils;
 import org.noear.solon.boot.ServerProps;
 import org.noear.solon.boot.web.*;
@@ -86,7 +87,7 @@ public class SolonServletContext extends WebContextBase {
         Object tmp = super.pull(clz);
 
         if (tmp == null) {
-            if (clz.isInstance(_request.getSession())) {
+            if (HttpSession.class.isAssignableFrom(clz)) {
                 return _request.getSession();
             }
         }
@@ -228,7 +229,7 @@ public class SolonServletContext extends WebContextBase {
     @Override
     public MultiMap<String> cookieMap() {
         if (_cookieMap == null) {
-            _cookieMap = new MultiMap<String>();
+            _cookieMap = new MultiMap<>(false);
 
             //_request.cookies() 可能不支持多个同名 cookie
             DecodeUtils.decodeCookies(this, header(Constants.HEADER_COOKIE));
