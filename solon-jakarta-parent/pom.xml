@@ -6,24 +6,23 @@
 
     <parent>
         <groupId>org.noear</groupId>
-        <artifactId>solon-jakarta-parent</artifactId>
+        <artifactId>solon-parent</artifactId>
         <version>3.4.3</version>
-        <relativePath />
+        <relativePath/>
     </parent>
 
-    <artifactId>solon.web.servlet.jakarta</artifactId>
+    <artifactId>solon-jakarta-parent</artifactId>
+    <version>3.4.3</version>
+    <packaging>pom</packaging>
+
     <name>${project.artifactId}</name>
-    <packaging>jar</packaging>
 
     <properties>
         <java.version>17</java.version>
     </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.noear</groupId>
-            <artifactId>solon-web-servlet-jakarta</artifactId>
-        </dependency>
-    </dependencies>
-
+    <dependencyManagement>
+        <dependencies>
+        </dependencies>
+    </dependencyManagement>
 </project>

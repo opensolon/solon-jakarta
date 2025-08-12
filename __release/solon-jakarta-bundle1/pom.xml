@@ -6,7 +6,7 @@
 
     <parent>
         <groupId>org.noear</groupId>
-        <artifactId>solon-parent</artifactId>
+        <artifactId>solon-jakarta-parent</artifactId>
         <version>3.4.3</version>
         <relativePath />
     </parent>
@@ -22,6 +22,8 @@
     </properties>
 
     <modules>
+        <module>../../solon-jakarta-parent</module>
+
         <module>../../solon-jakarta-projects/solon-data/hibernate-jakarta-solon-plugin</module>
 
         <module>../../solon-jakarta-projects/solon-logging/solon-logging-logback-jakarta</module>
