@@ -17,7 +17,7 @@ package org.noear.solon.web.servlet;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.Part;
-import org.noear.solon.boot.ServerProps;
+import org.noear.solon.server.ServerProps;
 import org.noear.solon.core.exception.StatusException;
 import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.UploadedFile;

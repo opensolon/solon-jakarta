@@ -21,12 +21,17 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.noear.solon.Utils;
-import org.noear.solon.boot.ServerProps;
-import org.noear.solon.boot.web.*;
+import org.noear.solon.server.ServerProps;
+import org.noear.solon.server.handle.AsyncContextState;
+import org.noear.solon.server.handle.ContextBase;
+import org.noear.solon.server.handle.HeaderNames;
+import org.noear.solon.server.http.*;
 import org.noear.solon.core.handle.ContextAsyncListener;
 import org.noear.solon.core.handle.UploadedFile;
 import org.noear.solon.core.util.IoUtil;
 import org.noear.solon.core.util.MultiMap;
+import org.noear.solon.server.util.DecodeUtils;
+import org.noear.solon.server.util.RedirectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,7 +52,7 @@ import java.util.Map;
  * @since 1.2
  * @since 2.9
  * */
-public class SolonServletContext extends WebContextBase {
+public class SolonServletContext extends ContextBase {
     static final Logger log = LoggerFactory.getLogger(SolonServletContext.class);
 
     private HttpServletRequest _request;
@@ -232,7 +237,7 @@ public class SolonServletContext extends WebContextBase {
             _cookieMap = new MultiMap<>(false);
 
             //_request.cookies() 可能不支持多个同名 cookie
-            DecodeUtils.decodeCookies(this, header(Constants.HEADER_COOKIE));
+            DecodeUtils.decodeCookies(this, header(HeaderNames.HEADER_COOKIE));
         }
 
         return _cookieMap;
@@ -355,7 +360,7 @@ public class SolonServletContext extends WebContextBase {
     public void redirect(String url, int code) {
         url = RedirectUtils.getRedirectPath(url);
 
-        headerSet(Constants.HEADER_LOCATION, url);
+        headerSet(HeaderNames.HEADER_LOCATION, url);
         statusDoSet(code);
     }
 
