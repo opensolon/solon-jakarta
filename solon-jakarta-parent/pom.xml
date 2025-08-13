@@ -21,6 +21,7 @@
         <java.version>17</java.version>
 
         <jakarta.logback.version>1.5.18</jakarta.logback.version>
+        <jakarta.servlet5.version>5.0.0</jakarta.servlet5.version>
         <jakarta.servlet.version>6.1.0</jakarta.servlet.version>
 
         <cxf.version>4.1.2</cxf.version>
