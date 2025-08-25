@@ -130,7 +130,7 @@ public class SolonServletContext extends ContextBase {
     @Override
     public URI uri() {
         if (_uri == null) {
-            _uri = URI.create(url());
+            _uri = parseURI(url());
         }
 
         return _uri;
