@@ -5,8 +5,8 @@ Solon
 </h1>
 <p align="center">
 	<strong>面向全场景的 Java 企业级应用开发框架：克制、高效、开放</strong>
-    <br/>
-    <strong>【开放原子开源基金会，孵化项目】</strong>
+   <br/>
+    <strong>克制、高效、开放</strong>
 </p>
 <p align="center">
 	<a href="https://solon.noear.org/">https://solon.noear.org</a>
