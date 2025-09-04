@@ -15,10 +15,12 @@
  */
 package org.noear.solon.boot.jetty;
 
+import jakarta.servlet.MultipartConfigElement;
+import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
+import org.eclipse.jetty.ee10.servlet.ServletHolder;
+import org.eclipse.jetty.ee10.servlet.SessionHandler;
 import org.eclipse.jetty.http.HttpVersion;
 import org.eclipse.jetty.server.*;
-import org.eclipse.jetty.server.session.SessionHandler;
-import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.noear.solon.Utils;
 import org.noear.solon.boot.ServerConstants;
@@ -40,13 +42,21 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.concurrent.Executor;
 
-abstract class JettyServerBase implements ServerLifecycle , HttpServerConfigure {
+import static org.eclipse.jetty.ee10.servlet.ServletContextHandler.getServletContext;
+
+public abstract class JettyServerBase implements ServerLifecycle , HttpServerConfigure {
     protected Executor executor;
     protected HttpServerProps props = HttpServerProps.getInstance();
     protected SslConfig sslConfig = new SslConfig(ServerConstants.SIGNAL_HTTP);
     protected boolean enableSessionState;
-
     private boolean isSecure;
+
+    private String _tempdir;
+
+    private int _fileOutputBuffer = 0;
+
+    private long _maxBodySize;
+    private long _maxFileSize;
 
     public boolean isSecure() {
         return isSecure;
@@ -58,6 +68,7 @@ abstract class JettyServerBase implements ServerLifecycle , HttpServerConfigure 
 
 
     protected Set<Integer> addHttpPorts = new LinkedHashSet<>();
+
 
 
     /**
@@ -146,9 +157,24 @@ abstract class JettyServerBase implements ServerLifecycle , HttpServerConfigure 
     }
 
     protected ServletContextHandler getServletHandler() throws IOException {
+        _tempdir = System.getenv("java.io.tmpdir");
+        _fileOutputBuffer = 1 * 1024 * 1024;
+        _maxBodySize = (ServerProps.request_maxBodySize > 0 ? ServerProps.request_maxBodySize : -1L);
+        _maxFileSize = (ServerProps.request_maxFileSize > 0 ? ServerProps.request_maxFileSize : -1L);
+
+        MultipartConfigElement multipartConfig = new MultipartConfigElement(
+                _tempdir,
+                _maxFileSize,
+                _maxBodySize,
+                _fileOutputBuffer);
+
+        ServletHolder servletHolder = new ServletHolder(new JtHttpContextServletHandler());
+        servletHolder.setAsyncSupported(true);
+        servletHolder.getRegistration().setMultipartConfig(multipartConfig);
+
         ServletContextHandler handler = new ServletContextHandler();
         handler.setContextPath("/");
-        handler.addServlet(JtHttpContextServletHandler.class, "/").setAsyncSupported(true);
+        handler.addServlet(servletHolder, "/");
 
 
         //添加session state 支持
@@ -161,7 +187,7 @@ abstract class JettyServerBase implements ServerLifecycle , HttpServerConfigure 
         }
 
         //添加容器初始器
-        handler.addLifeCycleListener(new JtContainerInitializer(handler.getServletContext()));
+        handler.addBean(new JtContainerInitializer(handler.getServletContext()));
 
 
         //添加临时文件（用于jsp编译，或文件上传）

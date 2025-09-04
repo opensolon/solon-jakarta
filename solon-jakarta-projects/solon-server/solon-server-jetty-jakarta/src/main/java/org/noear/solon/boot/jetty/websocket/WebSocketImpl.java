@@ -15,6 +15,7 @@
  */
 package org.noear.solon.boot.jetty.websocket;
 
+import org.eclipse.jetty.websocket.api.Callback;
 import org.eclipse.jetty.websocket.api.Session;
 import org.noear.solon.boot.web.DecodeUtils;
 import org.noear.solon.core.util.RunUtil;
@@ -24,6 +25,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.nio.ByteBuffer;
+import java.time.Duration;
 import java.util.concurrent.Future;
 
 /**
@@ -52,32 +54,36 @@ public class WebSocketImpl extends WebSocketBase {
 
     @Override
     public InetSocketAddress remoteAddress() throws IOException {
-        return real.getRemoteAddress();
+        return (InetSocketAddress) real.getRemoteSocketAddress();
     }
 
     @Override
     public InetSocketAddress localAddress() throws IOException {
-        return real.getLocalAddress();
+        return (InetSocketAddress) real.getLocalSocketAddress();
     }
 
     @Override
     public long getIdleTimeout() {
-        return real.getIdleTimeout();
+        return real.getIdleTimeout().toMillis();
     }
 
     @Override
     public void setIdleTimeout(long idleTimeout) {
-        real.setIdleTimeout(idleTimeout);
+        real.setIdleTimeout(Duration.ofMillis(idleTimeout));
     }
 
     @Override
     public Future<Void> send(String text) {
-        return real.getRemote().sendStringByFuture(text);
+        Callback.Completable future = new Callback.Completable();
+        real.sendText(text, future);
+        return future;
     }
 
     @Override
     public Future<Void> send(ByteBuffer binary) {
-        return real.getRemote().sendBytesByFuture(binary);
+        Callback.Completable future = new Callback.Completable();
+        real.sendBinary(binary, future);
+        return future;
     }
 
     @Override

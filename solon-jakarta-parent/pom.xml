@@ -22,13 +22,13 @@
 
         <jakarta.logback.version>1.5.18</jakarta.logback.version>
         <jakarta.servlet5.version>5.0.0</jakarta.servlet5.version>
-        <jakarta.servlet.version>6.1.0</jakarta.servlet.version>
+        <jakarta.servlet6.version>6.1.0</jakarta.servlet6.version>
 
         <cxf.version>4.1.2</cxf.version>
 
-        <jetty.version>12.0.14</jetty.version>
-        <jetty-servlet.version>11.0.24</jetty-servlet.version>
-        <jetty-servlet-jstl.version>10.0.24</jetty-servlet-jstl.version>
+        <jetty.version>12.1.0</jetty.version>
+        <jetty-servlet.version>11.0.26</jetty-servlet.version>
+        <jetty-servlet-jstl.version>10.0.26</jetty-servlet-jstl.version>
     </properties>
 
     <dependencyManagement>

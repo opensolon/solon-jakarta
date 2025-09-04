@@ -15,17 +15,19 @@
  */
 package org.noear.solon.boot.jetty;
 
-import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.session.DefaultSessionIdManager;
+import org.eclipse.jetty.session.DefaultSessionIdManager;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
+import org.eclipse.jetty.websocket.server.WebSocketUpgradeHandler;
 import org.noear.solon.boot.ServerLifecycle;
+import org.noear.solon.boot.jetty.websocket.WebSocketCreatorImpl;
 import org.noear.solon.core.event.EventBus;
 import org.noear.solon.core.util.ClassUtil;
 
 import java.io.IOException;
 
-class JettyServer extends JettyServerBase implements ServerLifecycle {
+public class JettyServer extends JettyServerBase implements ServerLifecycle {
     protected Server real = null;
 
     protected boolean enableWebSocket;
@@ -70,14 +72,17 @@ class JettyServer extends JettyServerBase implements ServerLifecycle {
 
         //session 支持
         if (enableSessionState) {
-            real.setSessionIdManager(new DefaultSessionIdManager(real));
+            real.addBean(new DefaultSessionIdManager(real));
         }
 
+        ServletContextHandler contextHandler = buildHandler();
+        real.setHandler(contextHandler);
+
         if (enableWebSocket && wsClz != null) {
-            real.setHandler(new HandlerHub(buildHandler()));
-        } else {
-            //没有ws包 或 没有开启
-            real.setHandler(buildHandler());
+            //real.setHandler(new HandlerHub(buildHandler()));
+            WebSocketUpgradeHandler wsHandler = WebSocketUpgradeHandler.from(real, contextHandler);
+            wsHandler.getServerWebSocketContainer().addMapping("/*", new WebSocketCreatorImpl());
+            real.setHandler(wsHandler);
         }
 
         //1.1:分发事件（充许外部扩展）
@@ -87,7 +92,7 @@ class JettyServer extends JettyServerBase implements ServerLifecycle {
     /**
      * 获取Server Handler
      */
-    protected Handler buildHandler() throws IOException {
+    protected ServletContextHandler buildHandler() throws IOException {
         return getServletHandler();
     }
 }

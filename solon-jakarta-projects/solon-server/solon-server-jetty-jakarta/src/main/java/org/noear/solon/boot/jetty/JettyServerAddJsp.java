@@ -15,10 +15,9 @@
  */
 package org.noear.solon.boot.jetty;
 
-import org.eclipse.jetty.jsp.JettyJspServlet;
-import org.eclipse.jetty.server.Handler;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.ee10.jsp.JettyJspServlet;
+import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
+import org.eclipse.jetty.ee10.servlet.ServletHolder;
 import org.noear.solon.boot.jetty.http.JtJspStarter;
 import org.noear.solon.boot.jetty.jsp.JspTldLocator;
 
@@ -29,13 +28,13 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Map;
 
-class JettyServerAddJsp extends JettyServer {
+public class JettyServerAddJsp extends JettyServer {
 
     /**
      * 获取Server Handler
      */
     @Override
-    protected Handler buildHandler() throws IOException {
+    protected ServletContextHandler buildHandler() throws IOException {
         ServletContextHandler handler = getServletHandler();
 
         enableJspSupport(handler);
@@ -70,7 +69,7 @@ class JettyServerAddJsp extends JettyServer {
             ServletContextHandler.JspConfig jspConfig = (ServletContextHandler.JspConfig) servletContext.getJspConfigDescriptor();
             if (jspConfig == null) {
                 jspConfig = new ServletContextHandler.JspConfig();
-                ((ServletContextHandler.Context) servletContext).setJspConfigDescriptor(jspConfig);
+                ((ServletContextHandler.ServletContextApi) servletContext).setJspConfigDescriptor(jspConfig);
             }
 
             for (TaglibDescriptor descriptor : tagLibInfos.values()) {

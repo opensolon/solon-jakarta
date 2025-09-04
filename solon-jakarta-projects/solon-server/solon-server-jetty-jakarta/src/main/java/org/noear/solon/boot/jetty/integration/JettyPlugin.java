@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.solon.boot.jetty;
+package org.noear.solon.boot.jetty.integration;
 
-import org.eclipse.jetty.server.handler.ContextHandler;
 import org.noear.solon.Solon;
 import org.noear.solon.Utils;
 import org.noear.solon.boot.ServerConstants;
 import org.noear.solon.boot.ServerProps;
+import org.noear.solon.boot.jetty.JettyServer;
+import org.noear.solon.boot.jetty.JettyServerAddJsp;
 import org.noear.solon.boot.prop.impl.HttpServerProps;
 import org.noear.solon.boot.prop.impl.WebSocketServerProps;
 import org.noear.solon.core.*;
@@ -31,7 +32,7 @@ import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.annotation.WebListener;
 import jakarta.servlet.annotation.WebServlet;
 
-public final class XPluginImp implements Plugin {
+public final class JettyPlugin implements Plugin {
     private static Signal _signal;
 
     public static Signal signal() {
@@ -42,7 +43,7 @@ public final class XPluginImp implements Plugin {
 
 
     public static String solon_boot_ver() {
-        return "jetty 9.4/" + Solon.version();
+        return "jetty 12.1/" + Solon.version();
     }
 
 
@@ -70,10 +71,10 @@ public final class XPluginImp implements Plugin {
 
         Class<?> jspClz = ClassUtil.loadClass("org.eclipse.jetty.jsp.JettyJspServlet");
 
-        if (ServerProps.request_maxBodySize > 0) {
-            System.setProperty(ContextHandler.MAX_FORM_CONTENT_SIZE_KEY,
-                    String.valueOf(ServerProps.request_maxBodySize));
-        }
+//        if (ServerProps.request_maxBodySize > 0) {
+//            System.setProperty(ContextHandler.MAX_FORM_CONTENT_SIZE_KEY,
+//                    String.valueOf(ServerProps.request_maxBodySize));
+//        }
 
         if (jspClz == null) {
             _server = new JettyServer();

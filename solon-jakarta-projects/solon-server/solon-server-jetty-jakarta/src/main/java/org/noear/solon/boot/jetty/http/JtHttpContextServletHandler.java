@@ -15,9 +15,8 @@
  */
 package org.noear.solon.boot.jetty.http;
 
-import org.eclipse.jetty.http.MultiPartFormInputStream;
 import org.noear.solon.boot.ServerProps;
-import org.noear.solon.boot.jetty.XPluginImp;
+import org.noear.solon.boot.jetty.integration.JettyPlugin;
 import org.noear.solon.core.handle.Context;
 import org.noear.solon.web.servlet.SolonServletHandler;
 
@@ -25,10 +24,9 @@ import jakarta.servlet.MultipartConfigElement;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.BufferedInputStream;
+
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 
 public class JtHttpContextServletHandler extends SolonServletHandler {
     private File _tempdir;
@@ -54,9 +52,9 @@ public class JtHttpContextServletHandler extends SolonServletHandler {
     }
 
     @Override
-    protected void preHandle(Context ctx) throws IOException {
+    protected void preHandle(Context ctx) {
         if (ServerProps.output_meta) {
-            ctx.headerSet("Solon-Boot", XPluginImp.solon_boot_ver());
+            ctx.headerSet("Solon-Boot", JettyPlugin.solon_boot_ver());
         }
     }
 
@@ -76,14 +74,14 @@ public class JtHttpContextServletHandler extends SolonServletHandler {
             if (ServerProps.request_useTempfile) {
                 //如果使用临时文件
                 //
-                InputStream in = new BufferedInputStream(request.getInputStream());
-                String ct = request.getContentType();
+                // InputStream in = new BufferedInputStream(request.getInputStream());
+                //String ct = request.getContentType();
 
 
-                MultiPartFormInputStream multiPartParser = new MultiPartFormInputStream(in, ct, config, _tempdir);
-                multiPartParser.setWriteFilesWithFilenames(true);
+//                MultiPartFormInputStream multiPartParser = new MultiPartFormInputStream(in, ct, config, _tempdir);
+//                multiPartParser.setWriteFilesWithFilenames(true);
 
-                request = new JtHttpRequestWrapper(request, multiPartParser);
+                //request = new JtHttpRequestWrapper(request, multiPartParser);
             }
         }
 

@@ -15,10 +15,8 @@
  */
 package org.noear.solon.boot.jetty.websocket;
 
+import org.eclipse.jetty.websocket.api.Callback;
 import org.eclipse.jetty.websocket.api.Session;
-//import org.eclipse.jetty.websocket.api.WebSocketAdapter;
-//import org.eclipse.jetty.websocket.api.WebSocketPingPongListener;
-import org.eclipse.jetty.websocket.api.WebSocketSessionListener;
 import org.noear.solon.core.util.RunUtil;
 import org.noear.solon.net.websocket.WebSocketRouter;
 import org.slf4j.Logger;
@@ -26,17 +24,15 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.ByteBuffer;
 
-public class WebSocketListenerImpl implements WebSocketSessionListener {
+public class WebSocketListenerImpl implements Session.Listener {
     static final Logger log = LoggerFactory.getLogger(WebSocketListenerImpl.class);
 
     private WebSocketImpl webSocket;
     private final WebSocketRouter webSocketRouter = WebSocketRouter.getInstance();
 
     @Override
-    public void onWebSocketConnect(Session session) {
-        super.onWebSocketConnect(session);
-
-        session.getPolicy().setMaxTextMessageBufferSize(17_000_000);
+    public void onWebSocketOpen(Session session) {
+        session.setMaxTextMessageSize(17_000_000);
         webSocket = new WebSocketImpl(session);
         session.getUpgradeRequest().getHeaders().forEach((k, v) -> {
             if (v.size() > 0) {
@@ -48,12 +44,13 @@ public class WebSocketListenerImpl implements WebSocketSessionListener {
     }
 
     @Override
-    public void onWebSocketBinary(byte[] payload, int offset, int len) {
+    public void onWebSocketBinary(ByteBuffer payload, Callback callback) {
         try {
-            ByteBuffer buf = ByteBuffer.wrap(payload, offset, len);
-            webSocketRouter.getListener().onMessage(webSocket, buf);
+            webSocketRouter.getListener().onMessage(webSocket, payload);
+            callback.succeed();
         } catch (Throwable e) {
             log.warn(e.getMessage(), e);
+            callback.fail(e);
         }
     }
 
@@ -75,7 +72,6 @@ public class WebSocketListenerImpl implements WebSocketSessionListener {
         }
 
         webSocketRouter.getListener().onClose(webSocket);
-        super.onWebSocketClose(statusCode, reason);
     }
 
     @Override

@@ -15,7 +15,7 @@
  */
 package org.noear.solon.boot.jetty.http;
 
-import org.eclipse.jetty.http.MultiPartFormInputStream;
+//import org.eclipse.jetty.http.MultiPartFormInputStream;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,16 +28,16 @@ import java.util.Collection;
  * @author noear
  * @since 2.7
  */
-public class JtHttpRequestWrapper extends HttpServletRequestWrapper {
-    private final MultiPartFormInputStream multiPartParser;
-
-    public JtHttpRequestWrapper(HttpServletRequest request, MultiPartFormInputStream multiPartParser) {
-        super(request);
-        this.multiPartParser = multiPartParser;
-    }
-
-    @Override
-    public Collection<Part> getParts() throws IOException, ServletException {
-        return multiPartParser.getParts();
-    }
-}
+//public class JtHttpRequestWrapper extends HttpServletRequestWrapper {
+//   // private final MultiPartFormInputStream multiPartParser;
+//
+//    public JtHttpRequestWrapper(HttpServletRequest request, MultiPartFormInputStream multiPartParser) {
+//        super(request);
+//        //this.multiPartParser = multiPartParser;
+//    }
+//
+//    @Override
+//    public Collection<Part> getParts() throws IOException, ServletException {
+//        return multiPartParser.getParts();
+//    }
+//}
