@@ -16,8 +16,8 @@
 package org.noear.solon.boot.jetty.http;
 
 import org.apache.tomcat.util.scan.StandardJarScanner;
-import org.eclipse.jetty.ee10.apache.jsp.JettyJasperInitializer;
-import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
+import org.eclipse.jetty.ee11.apache.jsp.JettyJasperInitializer;
+import org.eclipse.jetty.ee11.servlet.ServletContextHandler;
 import org.eclipse.jetty.util.component.AbstractLifeCycle;
 
 public class JtJspStarter extends AbstractLifeCycle

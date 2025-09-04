@@ -15,9 +15,9 @@
  */
 package org.noear.solon.boot.jetty;
 
-import org.eclipse.jetty.ee10.jsp.JettyJspServlet;
-import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
-import org.eclipse.jetty.ee10.servlet.ServletHolder;
+import org.eclipse.jetty.ee11.jsp.JettyJspServlet;
+import org.eclipse.jetty.ee11.servlet.ServletContextHandler;
+import org.eclipse.jetty.ee11.servlet.ServletHolder;
 import org.noear.solon.boot.jetty.http.JtJspStarter;
 import org.noear.solon.boot.jetty.jsp.JspTldLocator;
 

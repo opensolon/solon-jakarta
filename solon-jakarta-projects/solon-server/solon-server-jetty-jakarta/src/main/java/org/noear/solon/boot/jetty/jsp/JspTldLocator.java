@@ -18,7 +18,7 @@ package org.noear.solon.boot.jetty.jsp;
 import org.apache.tomcat.util.descriptor.tld.TaglibXml;
 import org.apache.tomcat.util.descriptor.tld.TldParser;
 import org.apache.tomcat.util.descriptor.tld.TldResourcePath;
-import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
+import org.eclipse.jetty.ee11.servlet.ServletContextHandler;
 import org.noear.solon.Utils;
 import org.noear.solon.core.AppClassLoader;
 import org.noear.solon.core.util.ResourceUtil;

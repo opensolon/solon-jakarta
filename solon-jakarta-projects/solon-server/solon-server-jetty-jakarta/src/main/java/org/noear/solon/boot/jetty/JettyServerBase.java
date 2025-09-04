@@ -16,9 +16,9 @@
 package org.noear.solon.boot.jetty;
 
 import jakarta.servlet.MultipartConfigElement;
-import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
-import org.eclipse.jetty.ee10.servlet.ServletHolder;
-import org.eclipse.jetty.ee10.servlet.SessionHandler;
+import org.eclipse.jetty.ee11.servlet.ServletContextHandler;
+import org.eclipse.jetty.ee11.servlet.ServletHolder;
+import org.eclipse.jetty.ee11.servlet.SessionHandler;
 import org.eclipse.jetty.http.HttpVersion;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
@@ -42,7 +42,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.concurrent.Executor;
 
-import static org.eclipse.jetty.ee10.servlet.ServletContextHandler.getServletContext;
+import static org.eclipse.jetty.ee11.servlet.ServletContextHandler.getServletContext;
 
 public abstract class JettyServerBase implements ServerLifecycle , HttpServerConfigure {
     protected Executor executor;
