@@ -29,6 +29,12 @@
         </dependency>
 
         <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>${jakarta.servlet6.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.noear</groupId>
             <artifactId>solon-web-servlet-jakarta</artifactId>
         </dependency>
