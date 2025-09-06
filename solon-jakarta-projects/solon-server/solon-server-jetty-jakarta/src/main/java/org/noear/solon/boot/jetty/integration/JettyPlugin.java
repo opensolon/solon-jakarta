@@ -15,6 +15,7 @@
  */
 package org.noear.solon.boot.jetty.integration;
 
+import org.eclipse.jetty.ee11.jsp.JettyJspServlet;
 import org.noear.solon.Solon;
 import org.noear.solon.Utils;
 import org.noear.solon.boot.ServerConstants;
@@ -69,17 +70,10 @@ public final class JettyPlugin implements Plugin {
         //初始化属性
         ServerProps.init();
 
-        Class<?> jspClz = ClassUtil.loadClass("org.eclipse.jetty.jsp.JettyJspServlet");
-
-//        if (ServerProps.request_maxBodySize > 0) {
-//            System.setProperty(ContextHandler.MAX_FORM_CONTENT_SIZE_KEY,
-//                    String.valueOf(ServerProps.request_maxBodySize));
-//        }
-
-        if (jspClz == null) {
-            _server = new JettyServer();
-        } else {
+        if (ClassUtil.hasClass(() -> JettyJspServlet.class)) {
             _server = new JettyServerAddJsp();
+        } else {
+            _server = new JettyServer();
         }
 
         _server.enableWebSocket(context.app().enableWebSocket());

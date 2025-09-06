@@ -13,19 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.solon.boot.jetty.http;
+package org.noear.solon.boot.jetty.jsp;
 
 import org.apache.tomcat.util.scan.StandardJarScanner;
 import org.eclipse.jetty.ee11.apache.jsp.JettyJasperInitializer;
 import org.eclipse.jetty.ee11.servlet.ServletContextHandler;
 import org.eclipse.jetty.util.component.AbstractLifeCycle;
 
-public class JtJspStarter extends AbstractLifeCycle
+public class JspLifeCycle extends AbstractLifeCycle
         implements ServletContextHandler.ServletContainerInitializerCaller {
     JettyJasperInitializer sci;
     ServletContextHandler context;
 
-    public JtJspStarter(ServletContextHandler context) {
+    public JspLifeCycle(ServletContextHandler context) {
 
         this.sci = new JettyJasperInitializer();
         this.context = context;
@@ -34,7 +34,6 @@ public class JtJspStarter extends AbstractLifeCycle
 
     @Override
     protected void doStart() throws Exception {
-
         ClassLoader old = Thread.currentThread().getContextClassLoader();
         Thread.currentThread().setContextClassLoader(context.getClassLoader());
         try {

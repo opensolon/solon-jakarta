@@ -2,10 +2,10 @@
   "resources": {
     "includes": [
       {
-        "pattern": "javax/servlet/LocalStrings.*\\.properties"
+        "pattern": "jakarta/servlet/LocalStrings.*\\.properties"
       },
       {
-        "pattern": "javax/servlet/http/LocalStrings.*\\.properties"
+        "pattern": "jakarta/servlet/http/LocalStrings.*\\.properties"
       }
     ]
   }

@@ -157,7 +157,7 @@ public abstract class JettyServerBase implements ServerLifecycle , HttpServerCon
     }
 
     protected ServletContextHandler getServletHandler() throws IOException {
-        _tempdir = System.getenv("java.io.tmpdir");
+        _tempdir = System.getProperty("java.io.tmpdir");
         _fileOutputBuffer = 1 * 1024 * 1024;
         _maxBodySize = (ServerProps.request_maxBodySize > 0 ? ServerProps.request_maxBodySize : -1L);
         _maxFileSize = (ServerProps.request_maxFileSize > 0 ? ServerProps.request_maxFileSize : -1L);
@@ -192,14 +192,14 @@ public abstract class JettyServerBase implements ServerLifecycle , HttpServerCon
 
         //添加临时文件（用于jsp编译，或文件上传）
         File tempDir = new File(System.getProperty("java.io.tmpdir"));
-        File scratchDir = new File(tempDir.toString(), "solon.boot.jetty");
+        File scratchDir = new File(tempDir.toString(), "solon.server.jetty");
 
         if (!scratchDir.exists()) {
             if (!scratchDir.mkdirs()) {
                 throw new IOException("Unable to create scratch directory: " + scratchDir);
             }
         }
-        handler.setAttribute("javax.servlet.context.tempdir", scratchDir);
+        handler.setAttribute("jakarta.servlet.context.tempdir", scratchDir);
 
         return handler;
     }

@@ -15,6 +15,8 @@
  */
 package org.noear.solon.view.jsp.integration;
 
+import jakarta.servlet.ServletResponse; //用于检测
+
 import org.noear.solon.core.AppContext;
 import org.noear.solon.core.Plugin;
 import org.noear.solon.core.util.ClassUtil;
@@ -25,7 +27,7 @@ public class ViewJspPlugin implements Plugin {
 
     @Override
     public void start(AppContext context) {
-        if (ClassUtil.loadClass("jakarta.servlet.ServletResponse") == null) {
+        if (ClassUtil.hasClass(() -> ServletResponse.class) == false) {
             LogUtil.global().warn("View: jakarta.servlet.ServletResponse not exists! JspRender failed to load.");
             return;
         }

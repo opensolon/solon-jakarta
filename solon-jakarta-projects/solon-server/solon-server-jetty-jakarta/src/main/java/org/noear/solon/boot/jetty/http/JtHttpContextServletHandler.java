@@ -40,7 +40,7 @@ public class JtHttpContextServletHandler extends SolonServletHandler {
     public void init() throws ServletException {
         super.init();
 
-        _tempdir = (File) getServletContext().getAttribute("javax.servlet.context.tempdir");
+        _tempdir = (File) getServletContext().getAttribute("jakarta.servlet.context.tempdir");
 
         String fileOutputBuffer = getServletConfig().getInitParameter("fileOutputBuffer");
         if (fileOutputBuffer != null) {

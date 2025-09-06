@@ -18,7 +18,7 @@ package org.noear.solon.boot.jetty;
 import org.eclipse.jetty.ee11.jsp.JettyJspServlet;
 import org.eclipse.jetty.ee11.servlet.ServletContextHandler;
 import org.eclipse.jetty.ee11.servlet.ServletHolder;
-import org.noear.solon.boot.jetty.http.JtJspStarter;
+import org.noear.solon.boot.jetty.jsp.JspLifeCycle;
 import org.noear.solon.boot.jetty.jsp.JspTldLocator;
 
 import jakarta.servlet.ServletContext;
@@ -37,13 +37,13 @@ public class JettyServerAddJsp extends JettyServer {
     protected ServletContextHandler buildHandler() throws IOException {
         ServletContextHandler handler = getServletHandler();
 
-        enableJspSupport(handler);
+        addJspSupport(handler);
         addTdlSupport(handler.getServletContext());
 
         return handler;
     }
 
-    private void enableJspSupport(ServletContextHandler handler) throws IOException {
+    private void addJspSupport(ServletContextHandler handler) throws IOException {
 
         // Set Classloader of Context to be sane (needed for JSTL)
         // JSP requires a non-System classloader, this simply wraps the
@@ -53,7 +53,7 @@ public class JettyServerAddJsp extends JettyServer {
         handler.setClassLoader(jspClassLoader);
 
         // Manually call JettyJasperInitializer on context startup
-        handler.addBean(new JtJspStarter(handler));
+        handler.addBean(new JspLifeCycle(handler));
 
         // Create / Register JSP Servlet (must be named "jsp" per spec)
         ServletHolder holderJsp = new ServletHolder("jsp", JettyJspServlet.class);
@@ -63,7 +63,7 @@ public class JettyServerAddJsp extends JettyServer {
     }
 
     private void addTdlSupport(ServletContext servletContext) throws IOException {
-        Map<String, TaglibDescriptor> tagLibInfos = JspTldLocator.createTldInfos("templates");
+        Map<String, TaglibDescriptor> tagLibInfos = JspTldLocator.createTldInfos("WEB-INF", "templates");
 
         if (tagLibInfos.size() > 0) {
             ServletContextHandler.JspConfig jspConfig = (ServletContextHandler.JspConfig) servletContext.getJspConfigDescriptor();
