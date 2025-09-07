@@ -70,6 +70,11 @@ public final class JettyPlugin implements Plugin {
         //初始化属性
         ServerProps.init();
 
+        if (org.noear.solon.server.ServerProps.request_maxBodySize > 0) {
+            System.setProperty("org.eclipse.jetty.server.Request.maxFormContentSize",
+                    String.valueOf(org.noear.solon.server.ServerProps.request_maxBodySize));
+        }
+
         if (ClassUtil.hasClass(() -> JettyJspServlet.class)) {
             _server = new JettyServerAddJsp();
         } else {

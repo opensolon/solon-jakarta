@@ -20,11 +20,11 @@ import jakarta.servlet.annotation.WebFilter;
 
 import java.util.Objects;
 
-public class FilterHodler {
+public class FilterAnnoHodler {
     public final WebFilter anno;
     public final Filter filter;
 
-    public FilterHodler(WebFilter anno, Filter filter) {
+    public FilterAnnoHodler(WebFilter anno, Filter filter) {
         this.anno = anno;
         this.filter = filter;
     }
@@ -33,7 +33,7 @@ public class FilterHodler {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        FilterHodler that = (FilterHodler) o;
+        FilterAnnoHodler that = (FilterAnnoHodler) o;
         return Objects.equals(anno, that.anno) &&
                 Objects.equals(filter, that.filter);
     }

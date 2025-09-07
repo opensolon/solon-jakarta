@@ -19,6 +19,7 @@ import org.eclipse.jetty.ee11.servlet.ServletContextHandler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.session.DefaultSessionIdManager;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
+import org.eclipse.jetty.websocket.api.UpgradeRequest;
 import org.eclipse.jetty.websocket.server.WebSocketUpgradeHandler;
 import org.noear.solon.boot.ServerLifecycle;
 import org.noear.solon.boot.jetty.websocket.WebSocketCreatorImpl;
@@ -52,9 +53,6 @@ public class JettyServer extends JettyServerBase implements ServerLifecycle {
     }
 
     protected void setup(String host, int port) throws IOException {
-        Class<?> wsClz = ClassUtil.loadClass("org.eclipse.jetty.websocket.server.WebSocketHandler");
-
-
         QueuedThreadPool threadPool = new QueuedThreadPool(
                 props.getMaxThreads(props.isIoBound()),
                 props.getCoreThreads());
@@ -78,11 +76,11 @@ public class JettyServer extends JettyServerBase implements ServerLifecycle {
         ServletContextHandler contextHandler = buildHandler();
         real.setHandler(contextHandler);
 
-        if (enableWebSocket && wsClz != null) {
+        if (enableWebSocket && ClassUtil.hasClass(() -> UpgradeRequest.class)) {
             //real.setHandler(new HandlerHub(buildHandler()));
             WebSocketUpgradeHandler wsHandler = WebSocketUpgradeHandler.from(real, contextHandler);
             wsHandler.getServerWebSocketContainer().addMapping("/*", new WebSocketCreatorImpl());
-            real.setHandler(wsHandler);
+            //real.setHandler(wsHandler);
         }
 
         //1.1:分发事件（充许外部扩展）

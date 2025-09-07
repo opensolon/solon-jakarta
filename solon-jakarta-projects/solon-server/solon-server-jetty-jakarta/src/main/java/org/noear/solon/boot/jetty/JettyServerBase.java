@@ -51,13 +51,6 @@ public abstract class JettyServerBase implements ServerLifecycle , HttpServerCon
     protected boolean enableSessionState;
     private boolean isSecure;
 
-    private String _tempdir;
-
-    private int _fileOutputBuffer = 0;
-
-    private long _maxBodySize;
-    private long _maxFileSize;
-
     public boolean isSecure() {
         return isSecure;
     }
@@ -68,7 +61,6 @@ public abstract class JettyServerBase implements ServerLifecycle , HttpServerCon
 
 
     protected Set<Integer> addHttpPorts = new LinkedHashSet<>();
-
 
 
     /**
@@ -157,10 +149,16 @@ public abstract class JettyServerBase implements ServerLifecycle , HttpServerCon
     }
 
     protected ServletContextHandler getServletHandler() throws IOException {
-        _tempdir = System.getProperty("java.io.tmpdir");
-        _fileOutputBuffer = 1 * 1024 * 1024;
-        _maxBodySize = (ServerProps.request_maxBodySize > 0 ? ServerProps.request_maxBodySize : -1L);
-        _maxFileSize = (ServerProps.request_maxFileSize > 0 ? ServerProps.request_maxFileSize : -1L);
+        File tempDir = new File(System.getProperty("java.io.tmpdir"));
+        File scratchDir = new File(tempDir.toString(), "solon-server");
+        if(scratchDir.exists() == false){
+            scratchDir.mkdirs();
+        }
+
+        String _tempdir = scratchDir.getAbsolutePath();
+        int _fileOutputBuffer = 1 * 1024 * 1024;
+        long _maxBodySize = (ServerProps.request_maxBodySize > 0 ? ServerProps.request_maxBodySize : -1L);
+        long _maxFileSize = (ServerProps.request_maxFileSize > 0 ? ServerProps.request_maxFileSize : -1L);
 
         MultipartConfigElement multipartConfig = new MultipartConfigElement(
                 _tempdir,
@@ -175,7 +173,11 @@ public abstract class JettyServerBase implements ServerLifecycle , HttpServerCon
         ServletContextHandler handler = new ServletContextHandler();
         handler.setContextPath("/");
         handler.addServlet(servletHolder, "/");
+        handler.setMaxFormContentSize((int)_maxBodySize);
 
+        if (ServerProps.request_useTempfile) {
+            handler.setTempDirectory(scratchDir);
+        }
 
         //添加session state 支持
         if (enableSessionState) {
@@ -189,11 +191,7 @@ public abstract class JettyServerBase implements ServerLifecycle , HttpServerCon
         //添加容器初始器
         handler.addBean(new JtContainerInitializer(handler.getServletContext()));
 
-
         //添加临时文件（用于jsp编译，或文件上传）
-        File tempDir = new File(System.getProperty("java.io.tmpdir"));
-        File scratchDir = new File(tempDir.toString(), "solon.server.jetty");
-
         if (!scratchDir.exists()) {
             if (!scratchDir.mkdirs()) {
                 throw new IOException("Unable to create scratch directory: " + scratchDir);
