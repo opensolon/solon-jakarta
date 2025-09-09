@@ -22,7 +22,7 @@ import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.eclipse.jetty.websocket.api.UpgradeRequest;
 import org.eclipse.jetty.websocket.server.WebSocketUpgradeHandler;
 import org.noear.solon.boot.ServerLifecycle;
-import org.noear.solon.boot.jetty.websocket.WebSocketCreatorImpl;
+import org.noear.solon.boot.jetty.websocket.WebSocketConfigurator;
 import org.noear.solon.core.event.EventBus;
 import org.noear.solon.core.util.ClassUtil;
 
@@ -74,14 +74,14 @@ public class JettyServer extends JettyServerBase implements ServerLifecycle {
         }
 
         ServletContextHandler contextHandler = buildHandler();
-        real.setHandler(contextHandler);
+
 
         if (enableWebSocket && ClassUtil.hasClass(() -> UpgradeRequest.class)) {
-            //real.setHandler(new HandlerHub(buildHandler()));
-            WebSocketUpgradeHandler wsHandler = WebSocketUpgradeHandler.from(real, contextHandler);
-            wsHandler.getServerWebSocketContainer().addMapping("/*", new WebSocketCreatorImpl());
-            //real.setHandler(wsHandler);
+            WebSocketUpgradeHandler wsHandler = WebSocketUpgradeHandler.from(real, contextHandler, new WebSocketConfigurator());
+            contextHandler.setHandler(wsHandler);
         }
+
+        real.setHandler(contextHandler);
 
         //1.1:分发事件（充许外部扩展）
         EventBus.publish(real);

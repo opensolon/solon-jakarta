@@ -43,20 +43,20 @@
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
-            <version>${jetty.version}</version>
+            <version>${jetty.jakarta.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.eclipse.jetty.ee11</groupId>
             <artifactId>jetty-ee11-servlet</artifactId>
-            <version>${jetty.version}</version>
+            <version>${jetty.jakarta.version}</version>
         </dependency>
 
         <!-- jetty web socket -->
         <dependency>
             <groupId>org.eclipse.jetty.websocket</groupId>
             <artifactId>jetty-websocket-jetty-server</artifactId>
-            <version>${jetty.version}</version>
+            <version>${jetty.jakarta.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -64,21 +64,21 @@
         <dependency>
             <groupId>org.eclipse.jetty.ee11</groupId>
             <artifactId>jetty-ee11-webapp</artifactId>
-            <version>${jetty.version}</version>
+            <version>${jetty.jakarta.version}</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.eclipse.jetty.ee11</groupId>
             <artifactId>jetty-ee11-apache-jsp</artifactId>
-            <version>${jetty.version}</version>
+            <version>${jetty.jakarta.version}</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.eclipse.jetty.ee11</groupId>
             <artifactId>jetty-ee11-glassfish-jstl</artifactId>
-            <version>${jetty.version}</version>
+            <version>${jetty.jakarta.version}</version>
             <scope>provided</scope>
         </dependency>
 

@@ -15,9 +15,6 @@
  */
 package org.noear.solon.boot.jetty.websocket;
 
-//import org.eclipse.jetty.websocket.servlet.ServletUpgradeRequest;
-//import org.eclipse.jetty.websocket.servlet.ServletUpgradeResponse;
-//import org.eclipse.jetty.websocket.servlet.WebSocketCreator;
 import org.eclipse.jetty.util.Callback;
 import org.eclipse.jetty.websocket.server.ServerUpgradeRequest;
 import org.eclipse.jetty.websocket.server.ServerUpgradeResponse;
@@ -36,18 +33,23 @@ import org.noear.solon.net.websocket.WebSocketRouter;
 public class WebSocketCreatorImpl implements WebSocketCreator {
     private final WebSocketRouter webSocketRouter = WebSocketRouter.getInstance();
 
-
     @Override
     public Object createWebSocket(ServerUpgradeRequest serverUpgradeRequest, ServerUpgradeResponse serverUpgradeResponse, Callback callback) throws Exception {
         //添加子协议支持
-        String path = DecodeUtils.rinseUri(serverUpgradeRequest.getHttpURI().getPath());
-        SubProtocolCapable subProtocolCapable = webSocketRouter.getSubProtocol(path);
-        if (subProtocolCapable != null) {
-            String protocols = subProtocolCapable.getSubProtocols(serverUpgradeRequest.getSubProtocols());
+        try {
+            String path = DecodeUtils.rinseUri(serverUpgradeRequest.getHttpURI().getPath());
+            SubProtocolCapable subProtocolCapable = webSocketRouter.getSubProtocol(path);
+            if (subProtocolCapable != null) {
+                String protocols = subProtocolCapable.getSubProtocols(serverUpgradeRequest.getSubProtocols());
 
-            if (Utils.isNotEmpty(protocols)) {
-                serverUpgradeResponse.setAcceptedSubProtocol(protocols);
+                if (Utils.isNotEmpty(protocols)) {
+                    serverUpgradeResponse.setAcceptedSubProtocol(protocols);
+                }
             }
+
+            callback.succeeded();
+        } catch (Exception ex) {
+            callback.failed(ex);
         }
 
         return new WebSocketListenerImpl();

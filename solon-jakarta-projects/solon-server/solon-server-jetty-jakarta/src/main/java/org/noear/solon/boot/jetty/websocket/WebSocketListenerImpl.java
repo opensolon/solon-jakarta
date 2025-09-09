@@ -24,7 +24,13 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.ByteBuffer;
 
-public class WebSocketListenerImpl implements Session.Listener {
+/**
+ * WebSokcet 监听器
+ *
+ * @author noear
+ * @since 3.5
+ * */
+public class WebSocketListenerImpl implements Session.Listener.AutoDemanding {
     static final Logger log = LoggerFactory.getLogger(WebSocketListenerImpl.class);
 
     private WebSocketImpl webSocket;
@@ -64,14 +70,20 @@ public class WebSocketListenerImpl implements Session.Listener {
     }
 
     @Override
-    public void onWebSocketClose(int statusCode, String reason) {
-        if (webSocket.isClosed()) {
-            return;
-        } else {
-            RunUtil.runAndTry(webSocket::close);
-        }
+    public void onWebSocketClose(int statusCode, String reason, Callback callback) {
+        try {
+            if (webSocket.isClosed()) {
+                return;
+            } else {
+                RunUtil.runAndTry(webSocket::close);
+            }
 
-        webSocketRouter.getListener().onClose(webSocket);
+            webSocketRouter.getListener().onClose(webSocket);
+            callback.succeed();
+        } catch (Throwable e) {
+            log.warn(e.getMessage(), e);
+            callback.fail(e);
+        }
     }
 
     @Override
