@@ -21,10 +21,12 @@ import org.eclipse.jetty.session.DefaultSessionIdManager;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.eclipse.jetty.websocket.api.UpgradeRequest;
 import org.eclipse.jetty.websocket.server.WebSocketUpgradeHandler;
+import org.noear.solon.Solon;
 import org.noear.solon.boot.ServerLifecycle;
 import org.noear.solon.boot.jetty.websocket.WebSocketConfiguratorImpl;
 import org.noear.solon.core.event.EventBus;
 import org.noear.solon.core.util.ClassUtil;
+import org.noear.solon.core.util.ThreadsUtil;
 
 import java.io.IOException;
 
@@ -56,6 +58,11 @@ public class JettyServer extends JettyServerBase implements ServerLifecycle {
         QueuedThreadPool threadPool = new QueuedThreadPool(
                 props.getMaxThreads(props.isIoBound()),
                 props.getCoreThreads());
+
+        //支持虚拟线程池
+        if (Solon.appIf(app -> app.cfg().isEnabledVirtualThreads())) {
+            threadPool.setVirtualThreadsExecutor(ThreadsUtil.newVirtualThreadPerTaskExecutor());
+        }
 
         real = new Server(threadPool);
 
