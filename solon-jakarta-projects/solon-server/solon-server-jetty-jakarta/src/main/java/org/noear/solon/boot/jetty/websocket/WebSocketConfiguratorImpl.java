@@ -25,7 +25,7 @@ import java.util.function.Consumer;
  * @author noear
  * @since 3.5
  */
-public class WebSocketConfigurator implements Consumer<ServerWebSocketContainer> {
+public class WebSocketConfiguratorImpl implements Consumer<ServerWebSocketContainer> {
 
     @Override
     public void accept(ServerWebSocketContainer serverWebSocketContainer) {
