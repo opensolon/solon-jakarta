@@ -7,11 +7,11 @@
     <parent>
         <groupId>org.noear</groupId>
         <artifactId>solon-jakarta-parent</artifactId>
-        <version>3.5.2-SNAPSHOT</version>
+        <version>3.5.2</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>org.noear.solon</groupId>
+    <groupId>org.noear.solon.jakart.test</groupId>
     <artifactId>__test</artifactId>
     <name>${project.artifactId}</name>
     <packaging>jar</packaging>
