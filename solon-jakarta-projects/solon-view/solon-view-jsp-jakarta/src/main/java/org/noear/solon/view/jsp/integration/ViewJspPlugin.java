@@ -20,15 +20,16 @@ import jakarta.servlet.ServletResponse; //用于检测
 import org.noear.solon.core.AppContext;
 import org.noear.solon.core.Plugin;
 import org.noear.solon.core.util.ClassUtil;
-import org.noear.solon.core.util.LogUtil;
 import org.noear.solon.view.jsp.JspRender;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ViewJspPlugin implements Plugin {
-
+    static final Logger log = LoggerFactory.getLogger(ViewJspPlugin.class);
     @Override
     public void start(AppContext context) {
         if (ClassUtil.hasClass(() -> ServletResponse.class) == false) {
-            LogUtil.global().warn("View: jakarta.servlet.ServletResponse not exists! JspRender failed to load.");
+            log.warn("View: jakarta.servlet.ServletResponse not exists! JspRender failed to load.");
             return;
         }
 
