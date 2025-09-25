@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.solon.boot.jetty.http;
+package org.noear.solon.server.jetty.http;
 
-import org.noear.solon.boot.ServerProps;
-import org.noear.solon.boot.jetty.integration.JettyPlugin;
+import org.noear.solon.server.ServerProps;
+import org.noear.solon.server.jetty.integration.JettyPlugin;
 import org.noear.solon.core.handle.Context;
 import org.noear.solon.web.servlet.SolonServletHandler;
 

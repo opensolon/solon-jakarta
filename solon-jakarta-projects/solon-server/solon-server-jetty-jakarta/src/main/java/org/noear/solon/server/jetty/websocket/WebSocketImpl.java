@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.solon.boot.jetty.websocket;
+package org.noear.solon.server.jetty.websocket;
 
 import org.eclipse.jetty.websocket.api.Callback;
 import org.eclipse.jetty.websocket.api.Session;
-import org.noear.solon.boot.web.DecodeUtils;
+import org.noear.solon.server.util.DecodeUtils;
 import org.noear.solon.core.util.RunUtil;
 import org.noear.solon.net.websocket.WebSocketBase;
 

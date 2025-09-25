@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.solon.boot.jetty.websocket;
+package org.noear.solon.server.jetty.websocket;
 
 import org.eclipse.jetty.websocket.server.ServerWebSocketContainer;
 

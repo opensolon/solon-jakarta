@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.solon.boot.jetty;
+package org.noear.solon.server.jetty;
 
 import jakarta.servlet.MultipartConfigElement;
 import org.eclipse.jetty.ee11.servlet.ServletContextHandler;
@@ -23,15 +23,15 @@ import org.eclipse.jetty.http.HttpVersion;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.noear.solon.Utils;
-import org.noear.solon.boot.ServerConstants;
-import org.noear.solon.boot.ServerLifecycle;
-import org.noear.solon.boot.ServerProps;
-import org.noear.solon.boot.http.HttpServerConfigure;
-import org.noear.solon.boot.jetty.http.JtContainerInitializer;
-import org.noear.solon.boot.jetty.http.JtHttpContextServletHandler;
-import org.noear.solon.boot.prop.impl.HttpServerProps;
-import org.noear.solon.boot.ssl.SslConfig;
-import org.noear.solon.boot.web.SessionProps;
+import org.noear.solon.server.ServerConstants;
+import org.noear.solon.server.ServerLifecycle;
+import org.noear.solon.server.ServerProps;
+import org.noear.solon.server.http.HttpServerConfigure;
+import org.noear.solon.server.jetty.http.JtContainerInitializer;
+import org.noear.solon.server.jetty.http.JtHttpContextServletHandler;
+import org.noear.solon.server.prop.impl.HttpServerProps;
+import org.noear.solon.server.ssl.SslConfig;
+import org.noear.solon.server.handle.SessionProps;
 import org.noear.solon.core.util.ResourceUtil;
 
 import javax.net.ssl.SSLContext;
@@ -41,8 +41,6 @@ import java.net.URL;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.concurrent.Executor;
-
-import static org.eclipse.jetty.ee11.servlet.ServletContextHandler.getServletContext;
 
 public abstract class JettyServerBase implements ServerLifecycle , HttpServerConfigure {
     protected Executor executor;

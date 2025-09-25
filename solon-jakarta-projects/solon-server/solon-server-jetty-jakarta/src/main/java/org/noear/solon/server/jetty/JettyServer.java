@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.solon.boot.jetty;
+package org.noear.solon.server.jetty;
 
 import org.eclipse.jetty.ee11.servlet.ServletContextHandler;
 import org.eclipse.jetty.server.Server;
@@ -22,8 +22,8 @@ import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.eclipse.jetty.websocket.api.UpgradeRequest;
 import org.eclipse.jetty.websocket.server.WebSocketUpgradeHandler;
 import org.noear.solon.Solon;
-import org.noear.solon.boot.ServerLifecycle;
-import org.noear.solon.boot.jetty.websocket.WebSocketConfiguratorImpl;
+import org.noear.solon.server.ServerLifecycle;
+import org.noear.solon.server.jetty.websocket.WebSocketConfiguratorImpl;
 import org.noear.solon.core.event.EventBus;
 import org.noear.solon.core.util.ClassUtil;
 import org.noear.solon.core.util.ThreadsUtil;

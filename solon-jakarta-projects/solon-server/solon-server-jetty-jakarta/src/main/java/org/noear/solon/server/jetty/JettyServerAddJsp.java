@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.solon.boot.jetty;
+package org.noear.solon.server.jetty;
 
 import org.eclipse.jetty.ee11.jsp.JettyJspServlet;
 import org.eclipse.jetty.ee11.servlet.ServletContextHandler;
 import org.eclipse.jetty.ee11.servlet.ServletHolder;
-import org.noear.solon.boot.jetty.jsp.JspLifeCycle;
-import org.noear.solon.boot.jetty.jsp.JspTldLocator;
+import org.noear.solon.server.jetty.jsp.JspLifeCycle;
+import org.noear.solon.server.jetty.jsp.JspTldLocator;
 
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.descriptor.TaglibDescriptor;
