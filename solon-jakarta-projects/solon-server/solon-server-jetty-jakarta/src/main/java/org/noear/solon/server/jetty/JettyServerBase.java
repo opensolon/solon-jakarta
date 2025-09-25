@@ -101,7 +101,7 @@ public abstract class JettyServerBase implements ServerLifecycle , HttpServerCon
 
         config.setSendServerVersion(false);
         // 设置 URI 合规模式，允许包含连续的斜杠（AMBIGUOUS_EMPTY_SEGMENT）
-        config.setUriCompliance(UriCompliance.UNAMBIGUOUS);
+        config.setUriCompliance(UriCompliance.LEGACY);
 
 
         HttpConnectionFactory httpFactory = new HttpConnectionFactory(config);

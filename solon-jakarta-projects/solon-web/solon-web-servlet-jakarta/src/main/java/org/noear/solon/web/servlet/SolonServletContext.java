@@ -21,6 +21,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.noear.solon.Utils;
+import org.noear.solon.core.exception.StatusException;
 import org.noear.solon.server.ServerProps;
 import org.noear.solon.server.handle.AsyncContextState;
 import org.noear.solon.server.handle.ContextBase;
@@ -179,6 +180,11 @@ public class SolonServletContext extends ContextBase {
 
     @Override
     public InputStream bodyAsStream() throws IOException {
+        if (_request.getContentLengthLong() > ServerProps.request_maxBodySize) {
+            //可兼容不同框架的情况
+            throw new StatusException("Request Entity Too Large: " + _request.getContentLengthLong(), 413);
+        }
+
         return _request.getInputStream();
     }
 
