@@ -15,42 +15,17 @@
  */
 package org.noear.solon.server.jetty.http;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.noear.solon.server.ServerProps;
 import org.noear.solon.server.jetty.integration.JettyPlugin;
 import org.noear.solon.core.handle.Context;
 import org.noear.solon.web.servlet.SolonServletHandler;
 
-import jakarta.servlet.MultipartConfigElement;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
-import java.io.File;
 import java.io.IOException;
 
 public class JtHttpContextServletHandler extends SolonServletHandler {
-    private File _tempdir;
-
-    private int _fileOutputBuffer = 0;
-
-    private long _maxBodySize;
-    private long _maxFileSize;
-
-    @Override
-    public void init() throws ServletException {
-        super.init();
-
-        _tempdir = (File) getServletContext().getAttribute("jakarta.servlet.context.tempdir");
-
-        String fileOutputBuffer = getServletConfig().getInitParameter("fileOutputBuffer");
-        if (fileOutputBuffer != null) {
-            _fileOutputBuffer = Integer.parseInt(fileOutputBuffer);
-        }
-
-        _maxBodySize = (ServerProps.request_maxBodySize > 0 ? ServerProps.request_maxBodySize : -1L);
-        _maxFileSize = (ServerProps.request_maxFileSize > 0 ? ServerProps.request_maxFileSize : -1L);
-    }
-
     @Override
     protected void preHandle(Context ctx) {
         if (ServerProps.output_meta) {
@@ -60,31 +35,6 @@ public class JtHttpContextServletHandler extends SolonServletHandler {
 
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (request.getContentType() != null && request.getContentType().startsWith("multipart/form-data")) {
-            //如果是文件上传
-            //
-            MultipartConfigElement config = new MultipartConfigElement(
-                    _tempdir.getCanonicalPath(),
-                    _maxFileSize,
-                    _maxBodySize,
-                    _fileOutputBuffer);
-
-            request.setAttribute("org.eclipse.jetty.multipartConfig", config);
-
-            if (ServerProps.request_useTempfile) {
-                //如果使用临时文件
-                //
-                // InputStream in = new BufferedInputStream(request.getInputStream());
-                //String ct = request.getContentType();
-
-
-//                MultiPartFormInputStream multiPartParser = new MultiPartFormInputStream(in, ct, config, _tempdir);
-//                multiPartParser.setWriteFilesWithFilenames(true);
-
-                //request = new JtHttpRequestWrapper(request, multiPartParser);
-            }
-        }
-
         super.service(request, response);
     }
 }

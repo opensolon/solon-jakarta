@@ -36,20 +36,14 @@ public class WebSocketCreatorImpl implements WebSocketCreator {
     @Override
     public Object createWebSocket(ServerUpgradeRequest serverUpgradeRequest, ServerUpgradeResponse serverUpgradeResponse, Callback callback) throws Exception {
         //添加子协议支持
-        try {
-            String path = DecodeUtils.rinseUri(serverUpgradeRequest.getHttpURI().getPath());
-            SubProtocolCapable subProtocolCapable = webSocketRouter.getSubProtocol(path);
-            if (subProtocolCapable != null) {
-                String protocols = subProtocolCapable.getSubProtocols(serverUpgradeRequest.getSubProtocols());
+        String path = DecodeUtils.rinseUri(serverUpgradeRequest.getHttpURI().getPath());
+        SubProtocolCapable subProtocolCapable = webSocketRouter.getSubProtocol(path);
+        if (subProtocolCapable != null) {
+            String protocols = subProtocolCapable.getSubProtocols(serverUpgradeRequest.getSubProtocols());
 
-                if (Utils.isNotEmpty(protocols)) {
-                    serverUpgradeResponse.setAcceptedSubProtocol(protocols);
-                }
+            if (Utils.isNotEmpty(protocols)) {
+                serverUpgradeResponse.setAcceptedSubProtocol(protocols);
             }
-
-            callback.succeeded();
-        } catch (Exception ex) {
-            callback.failed(ex);
         }
 
         return new WebSocketListenerImpl();

@@ -20,6 +20,7 @@ import org.eclipse.jetty.ee11.servlet.ServletContextHandler;
 import org.eclipse.jetty.ee11.servlet.ServletHolder;
 import org.eclipse.jetty.ee11.servlet.SessionHandler;
 import org.eclipse.jetty.http.HttpVersion;
+import org.eclipse.jetty.http.UriCompliance;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.noear.solon.Utils;
@@ -98,6 +99,11 @@ public abstract class JettyServerBase implements ServerLifecycle , HttpServerCon
             config.setRequestHeaderSize(ServerProps.request_maxHeaderSize);
         }
 
+        config.setSendServerVersion(false);
+        // 设置 URI 合规模式，允许包含连续的斜杠（AMBIGUOUS_EMPTY_SEGMENT）
+        config.setUriCompliance(UriCompliance.UNAMBIGUOUS);
+
+
         HttpConnectionFactory httpFactory = new HttpConnectionFactory(config);
         ServerConnector serverConnector;
 
@@ -149,7 +155,7 @@ public abstract class JettyServerBase implements ServerLifecycle , HttpServerCon
     protected ServletContextHandler getServletHandler() throws IOException {
         File tempDir = new File(System.getProperty("java.io.tmpdir"));
         File scratchDir = new File(tempDir.toString(), "solon-server");
-        if(scratchDir.exists() == false){
+        if (scratchDir.exists() == false) {
             scratchDir.mkdirs();
         }
 
@@ -161,7 +167,7 @@ public abstract class JettyServerBase implements ServerLifecycle , HttpServerCon
         MultipartConfigElement multipartConfig = new MultipartConfigElement(
                 _tempdir,
                 _maxFileSize,
-                _maxBodySize,
+                ServerProps.request_maxFileRequestSize(),
                 _fileOutputBuffer);
 
         ServletHolder servletHolder = new ServletHolder(new JtHttpContextServletHandler());
@@ -171,7 +177,11 @@ public abstract class JettyServerBase implements ServerLifecycle , HttpServerCon
         ServletContextHandler handler = new ServletContextHandler();
         handler.setContextPath("/");
         handler.addServlet(servletHolder, "/");
-        handler.setMaxFormContentSize((int)_maxBodySize);
+
+        if(_maxBodySize > Integer.MAX_VALUE) {
+            _maxBodySize =  Integer.MAX_VALUE;
+        }
+        handler.setMaxFormContentSize((int) _maxBodySize);
 
         if (ServerProps.request_useTempfile) {
             handler.setTempDirectory(scratchDir);
