@@ -19,6 +19,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>${jakarta.servlet6.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.eclipse.jetty.ee11</groupId>
             <artifactId>jetty-ee11-webapp</artifactId>
             <version>${jetty.jakarta.version}</version>
@@ -34,6 +40,12 @@
             <groupId>org.eclipse.jetty.ee11</groupId>
             <artifactId>jetty-ee11-glassfish-jstl</artifactId>
             <version>${jetty.jakarta.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.el</groupId>
+            <artifactId>jakarta.el-api</artifactId>
+            <version>6.0.1</version>
         </dependency>
     </dependencies>
 

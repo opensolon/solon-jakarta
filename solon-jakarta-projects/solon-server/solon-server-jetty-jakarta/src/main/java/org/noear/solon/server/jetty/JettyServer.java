@@ -85,10 +85,10 @@ public class JettyServer extends JettyServerBase implements ServerLifecycle {
 
         if (enableWebSocket && ClassUtil.hasClass(() -> UpgradeRequest.class)) {
             WebSocketUpgradeHandler wsHandler = WebSocketUpgradeHandler.from(real, contextHandler, new WebSocketConfiguratorImpl());
-            contextHandler.setHandler(wsHandler);
+            contextHandler.insertHandler(wsHandler);
         }
 
-        real.setHandler(contextHandler);
+        real.insertHandler(contextHandler);
 
         //1.1:分发事件（充许外部扩展）
         EventBus.publish(real);

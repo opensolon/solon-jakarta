@@ -18,11 +18,14 @@ package org.noear.solon.server.jetty;
 import org.eclipse.jetty.ee11.jsp.JettyJspServlet;
 import org.eclipse.jetty.ee11.servlet.ServletContextHandler;
 import org.eclipse.jetty.ee11.servlet.ServletHolder;
+import org.eclipse.jetty.util.resource.PathResourceFactory;
+import org.noear.solon.core.util.ResourceUtil;
 import org.noear.solon.server.jetty.jsp.JspLifeCycle;
 import org.noear.solon.server.jetty.jsp.JspTldLocator;
 
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.descriptor.TaglibDescriptor;
+
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -36,6 +39,10 @@ public class JettyServerAddJsp extends JettyServer {
     @Override
     protected ServletContextHandler buildHandler() throws IOException {
         ServletContextHandler handler = getServletHandler();
+
+        //jsp 资源的根目录
+        PathResourceFactory rf = new PathResourceFactory();
+        handler.setBaseResource(rf.newResource(ResourceUtil.getResource("/")));
 
         addJspSupport(handler);
         addTdlSupport(handler.getServletContext());
