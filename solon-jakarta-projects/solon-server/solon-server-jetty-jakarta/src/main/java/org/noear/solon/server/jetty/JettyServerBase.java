@@ -24,6 +24,7 @@ import org.eclipse.jetty.http.UriCompliance;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.noear.solon.Utils;
+import org.noear.solon.core.util.IoUtil;
 import org.noear.solon.server.ServerConstants;
 import org.noear.solon.server.ServerLifecycle;
 import org.noear.solon.server.ServerProps;
@@ -153,22 +154,13 @@ public abstract class JettyServerBase implements ServerLifecycle , HttpServerCon
     }
 
     protected ServletContextHandler getServletHandler() throws IOException {
-        File tempDir = new File(System.getProperty("java.io.tmpdir"));
-        File scratchDir = new File(tempDir.toString(), "solon-server");
-        if (scratchDir.exists() == false) {
-            scratchDir.mkdirs();
-        }
-
-        String _tempdir = scratchDir.getAbsolutePath();
-        int _fileOutputBuffer = 1 * 1024 * 1024;
-        long _maxBodySize = (ServerProps.request_maxBodySize > 0 ? ServerProps.request_maxBodySize : -1L);
-        long _maxFileSize = (ServerProps.request_maxFileSize > 0 ? ServerProps.request_maxFileSize : -1L);
+        String _tempdir = IoUtil.getTempDir("solon-server");
 
         MultipartConfigElement multipartConfig = new MultipartConfigElement(
                 _tempdir,
-                _maxFileSize,
+                ServerProps.request_maxFileSize,
                 ServerProps.request_maxFileRequestSize(),
-                _fileOutputBuffer);
+                ServerProps.request_fileSizeThreshold);
 
         ServletHolder servletHolder = new ServletHolder(new JtHttpContextServletHandler());
         servletHolder.setAsyncSupported(true);
@@ -177,14 +169,10 @@ public abstract class JettyServerBase implements ServerLifecycle , HttpServerCon
         ServletContextHandler handler = new ServletContextHandler();
         handler.setContextPath("/");
         handler.addServlet(servletHolder, "/");
-
-        if(_maxBodySize > Integer.MAX_VALUE) {
-            _maxBodySize =  Integer.MAX_VALUE;
-        }
-        handler.setMaxFormContentSize((int) _maxBodySize);
+        handler.setMaxFormContentSize(ServerProps.request_maxBodySizeAsInt());
 
         if (ServerProps.request_useTempfile) {
-            handler.setTempDirectory(scratchDir);
+            handler.setTempDirectory(new File(_tempdir));
         }
 
         //添加session state 支持
@@ -200,12 +188,7 @@ public abstract class JettyServerBase implements ServerLifecycle , HttpServerCon
         handler.addBean(new JtContainerInitializer(handler.getServletContext()));
 
         //添加临时文件（用于jsp编译，或文件上传）
-        if (!scratchDir.exists()) {
-            if (!scratchDir.mkdirs()) {
-                throw new IOException("Unable to create scratch directory: " + scratchDir);
-            }
-        }
-        handler.setAttribute("jakarta.servlet.context.tempdir", scratchDir);
+        handler.setAttribute("jakarta.servlet.context.tempdir", new File(_tempdir));
 
         return handler;
     }
