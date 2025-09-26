@@ -170,10 +170,7 @@ public abstract class JettyServerBase implements ServerLifecycle , HttpServerCon
         handler.setContextPath("/");
         handler.addServlet(servletHolder, "/");
         handler.setMaxFormContentSize(ServerProps.request_maxBodySizeAsInt());
-
-        if (ServerProps.request_useTempfile) {
-            handler.setTempDirectory(new File(_tempdir));
-        }
+        handler.setTempDirectory(new File(_tempdir));
 
         //添加session state 支持
         if (enableSessionState) {
