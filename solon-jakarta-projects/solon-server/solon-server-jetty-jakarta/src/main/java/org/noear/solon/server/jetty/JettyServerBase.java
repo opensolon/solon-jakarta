@@ -154,7 +154,7 @@ public abstract class JettyServerBase implements ServerLifecycle , HttpServerCon
     }
 
     protected ServletContextHandler getServletHandler() throws IOException {
-        String _tempdir = IoUtil.getTempDir("solon-server");
+        String _tempdir = IoUtil.getTempDirAsString("solon-server");
 
         MultipartConfigElement multipartConfig = new MultipartConfigElement(
                 _tempdir,
