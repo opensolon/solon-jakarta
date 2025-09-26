@@ -15,15 +15,10 @@
  */
 package org.noear.solon.server.jetty.http;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.noear.solon.server.ServerProps;
 import org.noear.solon.server.jetty.integration.JettyPlugin;
 import org.noear.solon.core.handle.Context;
 import org.noear.solon.web.servlet.SolonServletHandler;
-
-import java.io.IOException;
 
 public class JtHttpContextServletHandler extends SolonServletHandler {
     @Override
@@ -31,10 +26,5 @@ public class JtHttpContextServletHandler extends SolonServletHandler {
         if (ServerProps.output_meta) {
             ctx.headerSet("Solon-Boot", JettyPlugin.solon_boot_ver());
         }
-    }
-
-    @Override
-    protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        super.service(request, response);
     }
 }
