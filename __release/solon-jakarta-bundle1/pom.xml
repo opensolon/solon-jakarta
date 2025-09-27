@@ -27,7 +27,6 @@
         <module>../../solon-jakarta-projects/solon-server/solon-server-jetty-add-jsp-jakarta</module>
         <module>../../solon-jakarta-projects/solon-server/solon-server-jetty-add-websocket-jakarta</module>
 
-        <module>../../solon-jakarta-projects/solon-server/solon-server-undertow-add-jsp-jakarta</module>
         <module>../../solon-jakarta-projects/solon-server/solon-server-undertow-jakarta</module>
 
         <module>../../solon-jakarta-projects/solon-view/solon-view-jsp-jakarta</module>

@@ -312,11 +312,6 @@
                             <artifactId>solon-server-undertow-jakarta</artifactId>
                         </dependency>
 
-                        <dependency>
-                            <groupId>org.noear</groupId>
-                            <artifactId>solon-server-undertow-add-jsp-jakarta</artifactId>
-                        </dependency>
-
 
 <!--                        <dependency>-->
 <!--                            <groupId>org.noear</groupId>-->

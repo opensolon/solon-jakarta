@@ -15,8 +15,6 @@
  */
 package org.noear.solon.server.undertow.integration;
 
-import io.undertow.jsp.JspServletBuilder; //仅用于检测
-
 import org.noear.solon.Solon;
 import org.noear.solon.Utils;
 import org.noear.solon.server.ServerConstants;
@@ -24,7 +22,6 @@ import org.noear.solon.server.ServerProps;
 import org.noear.solon.server.prop.impl.HttpServerProps;
 import org.noear.solon.server.prop.impl.WebSocketServerProps;
 import org.noear.solon.server.undertow.UndertowServer;
-import org.noear.solon.server.undertow.UndertowServerAddJsp;
 import org.noear.solon.core.*;
 import org.noear.solon.core.bean.LifecycleBean;
 import org.noear.solon.core.event.EventBus;
@@ -89,12 +86,7 @@ public final class UndertowPlugin implements Plugin {
         final int _port = props.getPort();
         final String _name = props.getName();
 
-        if (ClassUtil.hasClass(() -> JspServletBuilder.class)) {
-            _server = new UndertowServerAddJsp(props);
-        } else {
-            _server = new UndertowServer(props);
-        }
-
+        _server = new UndertowServer(props);
         _server.enableWebSocket(context.app().enableWebSocket());
 
         EventBus.publish(_server);
