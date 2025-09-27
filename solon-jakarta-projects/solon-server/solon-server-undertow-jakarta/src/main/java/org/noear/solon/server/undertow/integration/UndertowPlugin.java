@@ -49,7 +49,7 @@ public final class UndertowPlugin implements Plugin {
     private UndertowServer _server = null;
 
     public static String solon_server_ver() {
-        return "undertow 2.2/" + Solon.version();
+        return "undertow 2.3/" + Solon.version();
     }
 
     @Override
