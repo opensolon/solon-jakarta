@@ -12,8 +12,5 @@
     <modules>
         <module>__release</module>
         <module>__test</module>
-
-        <module>solon-jakarta-projects/solon-server/solon-server-undertow-add-jsp-jakarta</module>
-        <module>solon-jakarta-projects/solon-server/solon-server-undertow-jakarta</module>
     </modules>
 </project>
