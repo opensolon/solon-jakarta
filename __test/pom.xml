@@ -309,8 +309,13 @@
 
                         <dependency>
                             <groupId>org.noear</groupId>
-                            <artifactId>solon-server-undertow-jakarta</artifactId>
+                            <artifactId>solon-server-tomcat-jakarta</artifactId>
                         </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>org.noear</groupId>-->
+<!--            <artifactId>solon-server-undertow-jakarta</artifactId>-->
+<!--        </dependency>-->
 
 
 <!--                        <dependency>-->
