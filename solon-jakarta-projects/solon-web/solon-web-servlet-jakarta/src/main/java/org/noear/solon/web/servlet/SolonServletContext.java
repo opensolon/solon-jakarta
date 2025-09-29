@@ -180,10 +180,7 @@ public class SolonServletContext extends ContextBase {
 
     @Override
     public InputStream bodyAsStream() throws IOException {
-        if (_request.getContentLengthLong() > ServerProps.request_maxBodySize) {
-            //可兼容不同框架的情况
-            throw new StatusException("Request Entity Too Large: " + _request.getContentLengthLong(), 413);
-        }
+        assertMaxBodySize();
 
         return _request.getInputStream();
     }
@@ -204,17 +201,22 @@ public class SolonServletContext extends ContextBase {
      */
     private void paramsMapInit() {
         if (_paramMap == null) {
-            _paramMap = new MultiMap<String>();
+            _paramMap = new MultiMap<>();
 
             try {
-                //编码窗体预处理
+                if (isFormUrlencoded()) {
+                    assertMaxBodySize();
+                }
+
+                //x-www-form-urlencoded(for put, delete ..)
                 DecodeUtils.decodeFormUrlencoded(this);
 
-                //多分段处理
+                //try form-data
                 if (autoMultipart()) {
                     loadMultipartFormData();
                 }
 
+                //queryString and x-www-form-urlencoded(for post)
                 for (Map.Entry<String, String[]> kv : _request.getParameterMap().entrySet()) {
                     String name = ServerProps.urlDecode(kv.getKey());
 
@@ -223,6 +225,16 @@ public class SolonServletContext extends ContextBase {
             } catch (Exception e) {
                 throw MultipartUtil.status4xx(this, e);
             }
+        }
+    }
+
+    /**
+     * @since 3.6
+     */
+    protected void assertMaxBodySize() {
+        if (_request.getContentLengthLong() > ServerProps.request_maxBodySize) {
+            //可兼容不同框架的情况
+            throw new StatusException("Request Entity Too Large: " + _request.getContentLengthLong(), 413);
         }
     }
 
@@ -415,7 +427,7 @@ public class SolonServletContext extends ContextBase {
 
     ///////////////////////
     // for async
-    ///////////////////////
+    /// ////////////////////
 
     protected final AsyncContextState asyncState = new AsyncContextState();
     private AsyncContext asyncContext;
