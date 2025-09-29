@@ -16,7 +16,6 @@
 package org.noear.solon.server.tomcat;
 
 import org.apache.catalina.Context;
-import org.apache.catalina.connector.Connector;
 import org.apache.catalina.startup.Tomcat;
 import org.noear.solon.Utils;
 import org.noear.solon.lang.Nullable;
@@ -33,9 +32,12 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.concurrent.Executor;
 
+
 /**
  * @author Yukai
+ * @author noear
  * @since 2022/8/26 17:01
+ * @since 3.6
  **/
 public abstract class TomcatServerBase implements ServerLifecycle, HttpServerConfigure {
     static final Logger log = LoggerFactory.getLogger(TomcatServerBase.class);
