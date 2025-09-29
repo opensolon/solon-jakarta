@@ -27,4 +27,9 @@ public class JtHttpContextServletHandler extends SolonServletHandler {
             ctx.headerSet("Solon-Boot", JettyPlugin.solon_boot_ver());
         }
     }
+
+    @Override
+    protected boolean useLimitStream() {
+        return true;
+    }
 }
