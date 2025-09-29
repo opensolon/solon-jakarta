@@ -78,7 +78,6 @@ public final class UndertowPlugin implements Plugin {
         //初始化属性
         ServerProps.init();
 
-
         long time_start = System.currentTimeMillis();
 
         HttpServerProps props = new HttpServerProps();

@@ -80,18 +80,20 @@ public class TomcatServer extends TomcatServerBase {
     }
 
     @Override
-    protected void addConnector(int port) throws Throwable {
+    protected void addConnector(int port, boolean isMain) throws Throwable {
         Connector connector = new Connector("HTTP/1.1");
 
         connector.setPort(port);
 
-        //for ssl
-        if(sslConfig.isSslEnable()) {
-            // 1. 标识 ssl
-            connector.setSecure(true);
-            connector.setScheme("https");
+        if (isMain) {
+            //for ssl
+            if (sslConfig.isSslEnable()) {
+                // 1. 标识 ssl
+                connector.setSecure(true);
+                connector.setScheme("https");
 
-            isSecure = true;
+                isSecure = true;
+            }
         }
 
         connector.setMaxPostSize(ServerProps.request_maxBodySizeAsInt());

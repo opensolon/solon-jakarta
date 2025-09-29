@@ -105,7 +105,12 @@ public abstract class TomcatServerBase implements ServerLifecycle, HttpServerCon
         initContext();
 
         //添加连接端口
-        addConnector(port);
+        addConnector(port, true);
+
+        //http add
+        for (Integer portAdd : addHttpPorts) {
+            addConnector(portAdd, false);
+        }
 
         _server.start();
     }
@@ -121,5 +126,5 @@ public abstract class TomcatServerBase implements ServerLifecycle, HttpServerCon
 
     protected abstract Context initContext() throws Throwable;
 
-    protected abstract void addConnector(int port) throws Throwable;
+    protected abstract void addConnector(int port, boolean isMain) throws Throwable;
 }
