@@ -52,7 +52,7 @@ public class ZipTest {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
 
 
-        DownloadedFile downloadedFile = new DownloadedFile("zip", inputStream, "test.json.zip");
+        DownloadedFile downloadedFile = new org.noear.solon.core.handle.DownloadedFile("zip", inputStream, "test.json.zip");
 
         ctx.outputAsFile(downloadedFile);
     }

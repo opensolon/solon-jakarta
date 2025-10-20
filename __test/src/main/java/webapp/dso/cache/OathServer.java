@@ -26,7 +26,7 @@ import java.time.LocalDateTime;
  */
 @Managed
 public class OathServer {
-    @Cache(key = "oath_test_${code}", seconds = 2592000)
+    @Cache(key = "oath_test_#{code}", seconds = 2592000)
     public Oauth queryInfoByCode(String code) {
         Oauth oauth = new Oauth();
         oauth.setCode(code);
@@ -36,12 +36,12 @@ public class OathServer {
     }
 
 
-    @CacheRemove(keys = "oath_test_${.code}")
+    @CacheRemove(keys = "oath_test_#{result.code}")
     public Oauth updateInfo2(Oauth oauth) {
         return oauth;
     }
 
-    @CacheRemove(keys = "oath_test_${oauth.code}")
+    @CacheRemove(keys = "oath_test_#{oauth.code}")
     public void updateInfo(Oauth oauth) {
 
     }
