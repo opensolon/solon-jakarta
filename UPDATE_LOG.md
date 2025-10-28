@@ -1,4 +1,8 @@
 
+### v3.7.0
+
+* 移除 solon.xxx 和 nami.xxx 风格的发布包
+
 ### v3.6.0
 
 * 新增 solon-server-undertow-jakarta 插件
