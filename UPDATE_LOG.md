@@ -2,6 +2,7 @@
 ### v3.7.0
 
 * 移除 solon.xxx 和 nami.xxx 风格的发布包
+* jakarta.logback 升为 1.5.20
 
 ### v3.6.0
 
