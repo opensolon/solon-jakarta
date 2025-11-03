@@ -53,12 +53,12 @@ public class WebSocketImpl extends WebSocketBase {
     }
 
     @Override
-    public InetSocketAddress remoteAddress() throws IOException {
+    public InetSocketAddress remoteAddress() {
         return (InetSocketAddress) real.getRemoteSocketAddress();
     }
 
     @Override
-    public InetSocketAddress localAddress() throws IOException {
+    public InetSocketAddress localAddress() {
         return (InetSocketAddress) real.getLocalSocketAddress();
     }
 
