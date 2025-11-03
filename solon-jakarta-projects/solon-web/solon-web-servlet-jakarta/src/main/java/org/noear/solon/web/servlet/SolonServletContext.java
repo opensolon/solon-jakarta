@@ -124,6 +124,11 @@ public class SolonServletContext extends ContextBase {
     }
 
     @Override
+    public int localPort() {
+        return _request.getLocalPort();
+    }
+
+    @Override
     public String method() {
         return _request.getMethod();
     }
