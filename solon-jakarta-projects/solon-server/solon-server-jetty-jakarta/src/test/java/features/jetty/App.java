@@ -12,7 +12,7 @@ import org.noear.solon.core.handle.Context;
 @Controller
 public class App {
     public static void main(String[] args) {
-        Solon.start(ServerText.class, args);
+        Solon.start(ServerTest.class, args);
     }
 
     @Mapping("hello")
@@ -36,7 +36,7 @@ public class App {
     }
 
     @Mapping("session")
-    public Object session(Context ctx, @Param("name") String name) {
+    public Object session(Context ctx, @Param(value = "name",required = false) String name) {
         if (name == null) {
             return ctx.session("name");
         } else {
