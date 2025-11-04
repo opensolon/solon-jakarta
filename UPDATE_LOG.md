@@ -1,4 +1,9 @@
 
+
+### v3.6.3
+
+* 优化 solon-server 不再默认输出 TEXT_PLAIN_UTF8_VALUE（允许空 content-type）
+
 ### v3.6.0
 
 * 新增 solon-server-undertow-jakarta 插件
