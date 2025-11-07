@@ -1,6 +1,7 @@
 
 ### v3.7.0
 
+* 优化 solon-server 不再默认输出 TEXT_PLAIN_UTF8_VALUE（允许空 content-type）
 * 移除 solon.xxx 和 nami.xxx 风格的发布包
 * jakarta.logback 升为 1.5.20
 
