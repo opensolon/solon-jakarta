@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2024 noear.org and authors
+ * Copyright 2017-2025 noear.org and authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package ch.qos.logback.solon.integration;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
-import ch.qos.logback.core.joran.spi.JoranException;
 import ch.qos.logback.core.status.Status;
 import ch.qos.logback.core.status.StatusUtil;
 import ch.qos.logback.core.util.StatusPrinter;
@@ -27,14 +26,14 @@ import org.fusesource.jansi.AnsiConsole;
 import org.noear.solon.Solon;
 import org.noear.solon.Utils;
 import org.noear.solon.core.runtime.NativeDetector;
-import org.noear.solon.core.util.*;
+import org.noear.solon.core.util.ClassUtil;
+import org.noear.solon.core.util.JavaUtil;
+import org.noear.solon.core.util.ResourceUtil;
 import org.noear.solon.logging.LogIncubator;
 import org.noear.solon.logging.LogOptions;
 import org.noear.solon.logging.model.LoggerLevelEntity;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
@@ -45,7 +44,6 @@ import java.util.List;
  * @since 2.4
  */
 public class LogIncubatorImpl implements LogIncubator {
-
     @Override
     public void incubate() throws Throwable {
         if (JavaUtil.IS_WINDOWS && Solon.cfg().isFilesMode() == false) {
@@ -65,6 +63,12 @@ public class LogIncubatorImpl implements LogIncubator {
         //尝试从配置里获取
         URL url = getUrlOfConfig();
 
+        //加载配置文件
+        doLoadUrl(url);
+        doInit();
+    }
+
+    protected void doLoadUrl(URL url) throws Exception {
         //尝试包内定制加载
         if (url == null) {
             //检查是否有原生配置文件
@@ -72,40 +76,42 @@ public class LogIncubatorImpl implements LogIncubator {
                 //如果有直接返回（不支持对它进行 Solon 扩展）
                 return;
             }
-        }
 
-        //1::尝试应用环境加载
-        if (url == null) {
-            if (Utils.isNotEmpty(Solon.cfg().env())) {
-                url = ResourceUtil.getResource("logback-solon-" + Solon.cfg().env() + ".xml");
+            //1::尝试应用环境加载
+            if (url == null) {
+                if (Utils.isNotEmpty(Solon.cfg().env())) {
+                    url = ResourceUtil.getResource("logback-solon-" + Solon.cfg().env() + ".xml");
+                }
+            }
+
+            //2::尝试应用加载
+            if (url == null) {
+                url = ResourceUtil.getResource("logback-solon.xml");
             }
         }
 
-        //2::尝试应用加载
-        if (url == null) {
-            url = ResourceUtil.getResource("logback-solon.xml");
-        }
+        /// ///////////
 
-        initDo(url);
+        LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+
+        loggerContext.reset();
+
+        SolonConfigurator configurator = new SolonConfigurator();
+        configurator.setContext(loggerContext);
+
+        if (url == null) {
+            //::尝试默认加载
+            DefaultLogbackConfiguration configuration = new DefaultLogbackConfiguration();
+            configuration.apply(new LogbackConfigurator(loggerContext));
+        } else {
+            //::加载 xml url
+            configurator.doConfigure(url);
+        }
     }
 
-    private void initDo(URL url) {
+    protected void doInit() {
         try {
             LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-
-            loggerContext.reset();
-
-            SolonConfigurator configurator = new SolonConfigurator();
-            configurator.setContext(loggerContext);
-
-            if (url == null) {
-                //::尝试默认加载
-                DefaultLogbackConfiguration configuration = new DefaultLogbackConfiguration();
-                configuration.apply(new LogbackConfigurator(loggerContext));
-            } else {
-                //::加载url
-                configurator.doConfigure(url);
-            }
 
             //同步 logger level 配置
             if (LogOptions.getLoggerLevels().size() > 0) {
@@ -118,17 +124,18 @@ public class LogIncubatorImpl implements LogIncubator {
             if (NativeDetector.inNativeImage()) {
                 reportConfigurationErrorsIfNecessary(loggerContext);
             }
-        } catch (JoranException e) {
+        } catch (Exception e) {
             throw new IllegalStateException(e);
         }
     }
 
+
     /**
      * 报告配置错误（原生运行时）
-     *
      */
     private void reportConfigurationErrorsIfNecessary(LoggerContext loggerContext) {
         List<Status> statuses = loggerContext.getStatusManager().getCopyOfStatusList();
+
         StringBuilder errors = new StringBuilder();
         for (Status status : statuses) {
             if (status.getLevel() == Status.ERROR) {
@@ -149,16 +156,15 @@ public class LogIncubatorImpl implements LogIncubator {
     /**
      * 基于配置，获取日志配置文件
      */
-    private URL getUrlOfConfig() throws MalformedURLException {
+    private URL getUrlOfConfig() {
         String logConfig = Solon.cfg().get("solon.logging.config");
 
         if (Utils.isNotEmpty(logConfig)) {
-            File logConfigFile = new File(logConfig);
-            if (logConfigFile.exists()) {
-                return logConfigFile.toURI().toURL();
+            URL logConfigUrl = ResourceUtil.findResource(logConfig);
+            if (logConfigUrl != null) {
+                return logConfigUrl;
             } else {
-                //改成异步，不然 LogUtil.global() 初始化未完成
-                System.err.println("Props: No log config file: " + logConfig);
+                System.err.println("Props: No logging config file exists: " + logConfig);
             }
         }
 
