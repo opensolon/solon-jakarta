@@ -18,10 +18,10 @@ package org.noear.solon.server.jetty.websocket;
 import org.eclipse.jetty.websocket.api.Callback;
 import org.eclipse.jetty.websocket.api.Session;
 import org.noear.solon.server.util.DecodeUtils;
-import org.noear.solon.core.util.RunUtil;
 import org.noear.solon.net.websocket.WebSocketBase;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.nio.ByteBuffer;
@@ -33,6 +33,7 @@ import java.util.concurrent.Future;
  * @since 2.6
  */
 public class WebSocketImpl extends WebSocketBase {
+    private static final Logger log = LoggerFactory.getLogger(WebSocketImpl.class);
     private final Session real;
 
     public WebSocketImpl(Session real) {
@@ -89,6 +90,25 @@ public class WebSocketImpl extends WebSocketBase {
     @Override
     public void close() {
         super.close();
-        RunUtil.runAndTry(real::close);
+
+        if (real.isOpen()) {
+            real.close();
+        }
+    }
+
+    @Override
+    public void close(int code, String reason) {
+        super.close(code, reason);
+
+        if (real.isOpen()) {
+            real.close(code, reason, new Callback() {
+                @Override
+                public void fail(Throwable ignore) {
+                    if (log.isDebugEnabled()) {
+                        log.debug("Close failure: {}", ignore.getMessage());
+                    }
+                }
+            });
+        }
     }
 }
