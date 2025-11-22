@@ -7,12 +7,12 @@
     <parent>
         <groupId>org.noear</groupId>
         <artifactId>solon-parent</artifactId>
-        <version>3.7.2</version>
+        <version>3.7.3-SNAPSHOT</version>
         <relativePath/>
     </parent>
 
     <artifactId>solon-jakarta-parent</artifactId>
-    <version>3.7.2</version>
+    <version>3.7.3-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>${project.artifactId}</name>
@@ -24,6 +24,8 @@
         <jakarta.servlet5.version>5.0.0</jakarta.servlet5.version>
         <jakarta.servlet6.version>6.1.0</jakarta.servlet6.version>
         <jakarta.websocket2.version>2.2.0</jakarta.websocket2.version>
+
+        <jackson3.version>3.0.1</jackson3.version>
 
         <cxf.version>4.1.2</cxf.version>
 
@@ -112,4 +114,25 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <repositories>
+        <repository>
+            <id>sonatype-snapshots</id>
+            <name>Sonatype Snapshots</name>
+            <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>sonatype-snapshots</id>
+            <name>Sonatype Snapshots</name>
+            <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </pluginRepository>
+    </pluginRepositories>
 </project>
