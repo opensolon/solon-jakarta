@@ -4,8 +4,8 @@
 Solon
 </h1>
 <p align="center">
-	<strong>面向全场景的 Java 企业级应用开发框架：克制、高效、开放</strong>
-   <br/>
+	<strong>面向全场景的 Java 企业级应用开发框架</strong>
+    <br/>
     <strong>克制、高效、开放</strong>
 </p>
 <p align="center">
