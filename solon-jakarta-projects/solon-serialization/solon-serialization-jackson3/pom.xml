@@ -33,6 +33,17 @@
             <artifactId>jackson-databind</artifactId>
             <version>${jackson3.version}</version>
         </dependency>
+        <!-- https://github.com/FasterXML/jackson-modules-java8 -->
+        <dependency>
+            <groupId>tools.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>3.0.0-rc2</version>
+        </dependency>
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-annotations</artifactId>
+		    <version>3.0-rc5</version>
+		</dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
