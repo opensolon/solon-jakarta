@@ -53,8 +53,8 @@ public class SerializationJackson3Plugin implements Plugin {
 
 
         //::renderTypedFactory
-        JacksonRenderTypedFactory renderTypedFactory = new JacksonRenderTypedFactory();
-        context.wrapAndPut(JacksonRenderTypedFactory.class, renderTypedFactory); //用于扩展
+        Jackson3RenderTypedFactory renderTypedFactory = new Jackson3RenderTypedFactory();
+        context.wrapAndPut(Jackson3RenderTypedFactory.class, renderTypedFactory); //用于扩展
         context.app().renders().register(renderTypedFactory);
         context.app().serializers().register(SerializerNames.AT_JSON_TYPED, renderTypedFactory.getSerializer());
     }

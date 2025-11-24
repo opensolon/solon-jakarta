@@ -37,7 +37,7 @@ import tools.jackson.datatype.jsr310.JavaTimeModule;
  * @deprecated 3.5
  */
 @Deprecated
-public class JacksonRenderTypedFactory extends Jackson3RenderFactoryBase {
+public class Jackson3RenderTypedFactory extends Jackson3RenderFactoryBase {
     public JacksonRenderTypedFactory() {
         super(new Jackson3StringSerializer());
         ObjectMapper mapper = serializer.getSerializeConfig().getMapper();
