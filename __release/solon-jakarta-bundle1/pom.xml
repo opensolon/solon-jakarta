@@ -24,6 +24,7 @@
         <module>../../solon-jakarta-projects/solon-logging/solon-logging-logback-jakarta</module>
 
         <module>../../solon-jakarta-projects/solon-serialization/solon-serialization-jackson3</module>
+        <module>../../solon-jakarta-projects/solon-serialization/solon-serialization-jackson3-xml</module>
 
         <module>../../solon-jakarta-projects/solon-server/solon-server-jetty-jakarta</module>
         <module>../../solon-jakarta-projects/solon-server/solon-server-jetty-add-jsp-jakarta</module>

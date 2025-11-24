@@ -20,12 +20,12 @@
     <properties>
         <java.version>17</java.version>
 
-        <jakarta.logback.version>1.5.20</jakarta.logback.version>
+        <jakarta.logback.version>1.5.21</jakarta.logback.version>
         <jakarta.servlet5.version>5.0.0</jakarta.servlet5.version>
         <jakarta.servlet6.version>6.1.0</jakarta.servlet6.version>
         <jakarta.websocket2.version>2.2.0</jakarta.websocket2.version>
 
-        <jackson3.version>3.0.1</jackson3.version>
+        <jackson3.version>3.0.2</jackson3.version>
 
         <cxf.version>4.1.2</cxf.version>
 
@@ -35,7 +35,7 @@
         <undertow.jastow.jakarta.version>2.2.8.Final</undertow.jastow.jakarta.version>
         <undertow.jboss-metadata.jakarta.version>16.1.0.Final</undertow.jboss-metadata.jakarta.version>
 
-        <tomcat.jakarta.version>11.0.11</tomcat.jakarta.version>
+        <tomcat.jakarta.version>11.0.14</tomcat.jakarta.version>
     </properties>
 
     <dependencyManagement>
