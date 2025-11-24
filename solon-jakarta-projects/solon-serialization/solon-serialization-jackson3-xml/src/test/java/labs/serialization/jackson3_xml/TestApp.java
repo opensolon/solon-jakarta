@@ -25,8 +25,9 @@ import java.util.Map;
 import org.noear.solon.Solon;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Mapping;
-import org.noear.solon.serialization.jackson3.xml.Jackson3XmlRenderFactory;
 
+import org.noear.solon.serialization.jackson3.xml.Jackson3XmlEntityConverter;
+import org.noear.solon.serialization.jackson3.xml.Jackson3XmlStringSerializer;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.JsonGenerator;
 import tools.jackson.databind.SerializationContext;
@@ -39,22 +40,22 @@ import tools.jackson.databind.ValueSerializer;
 public class TestApp {
     public static void main(String[] args) {
         Solon.start(TestApp.class, args, app -> {
-            app.onEvent(Jackson3XmlRenderFactory.class, factory->initMvcJsonCustom(factory));
+            app.onEvent(Jackson3XmlStringSerializer.class, factory->initMvcJsonCustom(factory));
         });
     }
 
     /**
      * 初始化json定制（需要在插件运行前定制）
      */
-    private static void initMvcJsonCustom(Jackson3XmlRenderFactory factory) {
+    private static void initMvcJsonCustom(Jackson3XmlStringSerializer serializer) {
         //通过转换器，做简单类型的定制
-        factory.addConvertor(Date.class, s -> s.getTime());
+        serializer.addEncoder(Date.class, s -> s.getTime());
 
-        factory.addConvertor(LocalDate.class, s -> s.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+        serializer.addEncoder(LocalDate.class, s -> s.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 
-        factory.addConvertor(LocalDateTime.class, s -> s.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+        serializer.addEncoder(LocalDateTime.class, s -> s.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
 
-        factory.addEncoder(Date.class, new ValueSerializer<Date>() {
+        serializer.addEncoder(Date.class, new ValueSerializer<Date>() {
                     @Override
                     public void serialize(Date date, JsonGenerator out, SerializationContext sp) throws JacksonException {
                         out.writeNumber(date.getTime());

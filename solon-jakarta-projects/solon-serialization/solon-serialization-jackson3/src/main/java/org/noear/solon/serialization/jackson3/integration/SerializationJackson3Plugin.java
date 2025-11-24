@@ -22,7 +22,6 @@ import org.noear.solon.serialization.jackson3.*;
 import org.noear.solon.serialization.prop.JsonProps;
 
 public class SerializationJackson3Plugin implements Plugin {
-
     @Override
     public void start(AppContext context) {
         JsonProps jsonProps = JsonProps.create(context);
@@ -38,24 +37,5 @@ public class SerializationJackson3Plugin implements Plugin {
 
         //会自动转为 executor, renderer
         context.app().chains().addEntityConverter(entityConverter);
-
-
-        //===> 以下将弃用 v3.6
-
-        //::renderFactory
-        //绑定属性
-        Jackson3RenderFactory renderFactory = new Jackson3RenderFactory(entityConverter);
-        context.wrapAndPut(Jackson3RenderFactory.class, renderFactory); //用于扩展
-
-        //支持 json 内容类型执行
-        Jackson3ActionExecutor actionExecutor = new Jackson3ActionExecutor(entityConverter);
-        context.wrapAndPut(Jackson3ActionExecutor.class, actionExecutor); //用于扩展
-
-
-        //::renderTypedFactory
-        Jackson3RenderTypedFactory renderTypedFactory = new Jackson3RenderTypedFactory();
-        context.wrapAndPut(Jackson3RenderTypedFactory.class, renderTypedFactory); //用于扩展
-        context.app().renders().register(renderTypedFactory);
-        context.app().serializers().register(SerializerNames.AT_JSON_TYPED, renderTypedFactory.getSerializer());
     }
 }

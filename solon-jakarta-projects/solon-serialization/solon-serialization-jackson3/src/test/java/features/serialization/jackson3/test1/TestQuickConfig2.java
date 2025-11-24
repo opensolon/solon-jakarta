@@ -24,7 +24,7 @@ import org.noear.snack4.ONode;
 import org.noear.solon.annotation.Import;
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.core.handle.ContextEmpty;
-import org.noear.solon.serialization.jackson3.Jackson3RenderFactory;
+import org.noear.solon.serialization.jackson3.Jackson3EntityConverter;
 import org.noear.solon.test.SolonTest;
 
 import features.serialization.jackson3.model.UserDo;
@@ -36,7 +36,7 @@ import features.serialization.jackson3.model.UserDo;
 @SolonTest
 public class TestQuickConfig2 {
     @Inject
-    Jackson3RenderFactory renderFactory;
+    Jackson3EntityConverter entityConverter;
 
     @Test
     public void hello2() throws Throwable{
@@ -51,7 +51,7 @@ public class TestQuickConfig2 {
         userDo.setMap1(data);
 
         ContextEmpty ctx = new ContextEmpty();
-        renderFactory.create().render(userDo, ctx);
+        entityConverter.write(userDo, ctx);
         String output = ctx.attr("output");
 
         System.out.println(output);

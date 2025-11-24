@@ -22,13 +22,11 @@ import org.noear.solon.serialization.jackson3.xml.*;
 import org.noear.solon.serialization.prop.JsonProps;
 
 /**
- * Xml XPluginImp
  *
  * @author painter
  * @since 2.8
  */
 public class SerializationJackson3XmlPlugin implements Plugin {
-
     @Override
     public void start(AppContext context) {
         JsonProps jsonProps = JsonProps.create(context);
@@ -44,24 +42,5 @@ public class SerializationJackson3XmlPlugin implements Plugin {
 
         //会自动转为 executor, renderer
         context.app().chains().addEntityConverter(entityConverter);
-
-
-        //===> 以下将弃用 v3.6
-
-        //::renderFactory
-        //绑定属性
-        Jackson3XmlRenderFactory renderFactory = new Jackson3XmlRenderFactory(entityConverter);
-        context.wrapAndPut(Jackson3XmlRenderFactory.class, renderFactory); //用于扩展
-
-        //支持 xml 内容类型执行
-        Jackson3XmlActionExecutor actionExecutor = new Jackson3XmlActionExecutor(entityConverter);
-        context.wrapAndPut(Jackson3XmlActionExecutor.class, actionExecutor); //用于扩展
-
-
-        //::renderTypedFactory
-        Jackson3XmlRenderTypedFactory renderTypedFactory = new Jackson3XmlRenderTypedFactory();
-        context.wrapAndPut(Jackson3XmlRenderTypedFactory.class, renderTypedFactory); //用于扩展
-        context.app().renders().register(renderTypedFactory);
-        context.app().serializers().register(SerializerNames.AT_XML_TYPED, renderTypedFactory.getSerializer());
     }
 }

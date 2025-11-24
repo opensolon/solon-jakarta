@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.noear.solon.annotation.Import;
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.core.handle.ContextEmpty;
-import org.noear.solon.serialization.jackson3.xml.Jackson3XmlRenderFactory;
+import org.noear.solon.serialization.jackson3.xml.Jackson3XmlEntityConverter;
 import org.noear.solon.test.SolonTest;
 
 import features.serialization.jackson3_xml.model.UserDo;
@@ -35,7 +35,7 @@ import java.util.Map;
 @SolonTest
 public class TestQuickConfig2 {
     @Inject
-    Jackson3XmlRenderFactory renderFactory;
+    Jackson3XmlEntityConverter entityConverter;
 
     @Test
     public void hello2() throws Throwable{
@@ -50,7 +50,7 @@ public class TestQuickConfig2 {
         userDo.setMap1(data);
 
         ContextEmpty ctx = new ContextEmpty();
-        renderFactory.create().render(userDo, ctx);
+        entityConverter.write(userDo, ctx);
         String output = ctx.attr("output");
 
         System.out.println(output);

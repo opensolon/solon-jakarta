@@ -16,7 +16,7 @@
 package demo.serialization.jackson3.demo3;
 
 import org.noear.solon.Solon;
-import org.noear.solon.serialization.jackson3.Jackson3ActionExecutor;
+import org.noear.solon.serialization.jackson3.Jackson3StringSerializer;
 
 /**
  * @author noear 2022/10/31 created
@@ -24,7 +24,7 @@ import org.noear.solon.serialization.jackson3.Jackson3ActionExecutor;
 public class DemoApp {
     public static void main(String[] args) {
         Solon.start(demo.serialization.jackson3.demo2.DemoApp.class, args, app -> {
-            app.onEvent(Jackson3ActionExecutor.class, executor -> {
+            app.onEvent(Jackson3StringSerializer.class, serializer -> {
                 //executor.config().addHandler();
             });
         });

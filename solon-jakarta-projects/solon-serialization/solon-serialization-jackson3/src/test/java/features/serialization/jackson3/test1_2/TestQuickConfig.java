@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.noear.solon.annotation.Import;
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.core.handle.ContextEmpty;
-import org.noear.solon.serialization.jackson3.Jackson3RenderFactory;
+import org.noear.solon.serialization.jackson3.Jackson3EntityConverter;
 import org.noear.solon.test.SolonTest;
 
 import features.serialization.jackson3.model.CustomDateDo;
@@ -33,7 +33,7 @@ import java.util.Date;
 @SolonTest
 public class TestQuickConfig {
     @Inject
-    Jackson3RenderFactory renderFactory;
+    Jackson3EntityConverter entityConverter;
 
     @Test
     public void hello2() throws Throwable{
@@ -46,7 +46,7 @@ public class TestQuickConfig {
         dateDo.setVal2("2");
 
         ContextEmpty ctx = new ContextEmpty();
-        renderFactory.create().render(dateDo, ctx);
+        entityConverter.write(dateDo, ctx);
         String output = ctx.attr("output");
 
         System.out.println(output);
