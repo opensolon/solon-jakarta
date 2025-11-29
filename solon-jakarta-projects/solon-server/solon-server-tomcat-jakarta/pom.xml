@@ -31,7 +31,54 @@
             <artifactId>tomcat-embed-core</artifactId>
             <version>${tomcat.jakarta.version}</version>
         </dependency>
-
+        
+        <!--非必要特性：JSP支持-->
+        <dependency>
+		    <groupId>org.apache.tomcat.embed</groupId>
+		    <artifactId>tomcat-embed-jasper</artifactId>
+		    <version>${tomcat.jakarta.version}</version>
+		    <scope>provided</scope>
+		    <optional>true</optional>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/jakarta.servlet.jsp.jstl/jakarta.servlet.jsp.jstl-api -->
+		<!--非必要模块，用于支持jsp jstl标签-->
+		<dependency>
+		    <groupId>jakarta.servlet.jsp.jstl</groupId>
+		    <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+		    <version>3.0.2</version>
+		    <scope>provided</scope>
+		    <optional>true</optional>
+		    <exclusions>
+		        <!-- 在tomcat-embed-core已经包含jakarta.servlet-api -->
+		    	<exclusion>
+		    		<groupId>jakarta.servlet</groupId>
+		    		<artifactId>jakarta.servlet-api</artifactId>
+		    	</exclusion>
+		    </exclusions>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/jakarta.servlet.jsp/jakarta.servlet.jsp-api -->
+		<!--tomcat-embed-jasper已经包含以下jakarta.servlet.jsp-api-->
+		<!--<dependency>
+		    <groupId>jakarta.servlet.jsp</groupId>
+		    <artifactId>jakarta.servlet.jsp-api</artifactId>
+		    <version>4.0.0</version>
+		    <scope>provided</scope>
+		    <optional>true</optional>
+		</dependency>-->
+		<!--solon-view-jsp-->
+		<dependency>
+            <groupId>org.noear</groupId>
+            <artifactId>solon-view-jsp-jakarta</artifactId>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+        
+	<dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>org.noear</groupId>
             <artifactId>solon-test</artifactId>
