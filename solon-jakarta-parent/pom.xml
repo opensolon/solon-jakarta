@@ -78,6 +78,12 @@
 
             <dependency>
                 <groupId>org.noear</groupId>
+                <artifactId>solon-server-tomcat-add-jsp-jakarta</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.noear</groupId>
                 <artifactId>solon-server-undertow-jakarta</artifactId>
                 <version>${project.version}</version>
             </dependency>

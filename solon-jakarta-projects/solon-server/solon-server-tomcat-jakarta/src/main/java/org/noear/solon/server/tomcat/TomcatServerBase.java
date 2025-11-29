@@ -109,7 +109,7 @@ public abstract class TomcatServerBase implements ServerLifecycle, HttpServerCon
         }
 
         //初始化上下文
-        Context ctxt = initContext();
+        initContext();
 
         //添加连接端口
         addConnector(port, true);
@@ -118,11 +118,7 @@ public abstract class TomcatServerBase implements ServerLifecycle, HttpServerCon
         for (Integer portAdd : addHttpPorts) {
             addConnector(portAdd, false);
         }
-        
-        //jsp
-        addJasperInitializerIfExists(ctxt);
-//        errorReportValve(ctxt,false);
-        
+
         _server.start();
     }
 
@@ -134,81 +130,23 @@ public abstract class TomcatServerBase implements ServerLifecycle, HttpServerCon
             _server = null;
         }
     }
-    
-    /**
-     * 使用反射动态检查JasperInitializer类是否存在，并添加到StandardContext中
-     */
-    private void addJasperInitializerIfExists(Context ctxt) {
-        try {
-            // 1. 检查JasperInitializer类是否存在
-            Class<?> jasperClass = Class.forName("org.apache.jasper.servlet.JasperInitializer");
-            log.debug("JasperInitializer类存在，准备创建实例");
-            
-            addDefaultServlet(ctxt);
-            addJspServlet(ctxt);
-            // 2. 获取构造函数并创建实例
-            Constructor<?> constructor = jasperClass.getDeclaredConstructor();
-            Object jasperInstance = constructor.newInstance();
-            // 3. 反射调用addServletContainerInitializer方法
-            Method addMethod = Context.class.getMethod(
-                "addServletContainerInitializer", 
-                jakarta.servlet.ServletContainerInitializer.class, 
-                java.util.Set.class
-            );
-            addMethod.invoke(ctxt, jasperInstance, null);
-            
-            log.debug("已成功添加JasperInitializer到ServletContext");
-            // Configure the defaults and then tweak the JSP servlet settings
-            // Note: Min value for maxLoadedJsps is 2
-//            Tomcat.initWebappDefaults(ctxt);
-        } catch (ClassNotFoundException e) {
-        	log.debug("JasperInitializer类不存在: " + e.getMessage());
-        	log.debug("当前环境可能不支持JSP");
-//        	e.printStackTrace();
-        } catch (Exception e) {
-        	log.debug("执行过程中出现错误: " + e.getMessage());
-//            e.printStackTrace();
-        }
-    }
-    
-    private void addDefaultServlet(Context context) {
-		Wrapper defaultServlet = context.createWrapper();
-		defaultServlet.setName("default");
-		defaultServlet.setServletClass("org.apache.catalina.servlets.DefaultServlet");
-		defaultServlet.addInitParameter("debug", "0");
-		defaultServlet.addInitParameter("listings", "false");
-		defaultServlet.setLoadOnStartup(1);
-		
-		defaultServlet.setOverridable(true);
-		context.addChild(defaultServlet);
-		context.addServletMappingDecoded("/", "default");
-	}
-    
-    private void addJspServlet(Context context) {
-		Wrapper jspServlet = context.createWrapper();
-		jspServlet.setName("jsp");
-		jspServlet.setServletClass("org.apache.jasper.servlet.JspServlet");
-		jspServlet.addInitParameter("fork", "false");
-		jspServlet.addInitParameter("xpoweredBy", "false");
-		jspServlet.setLoadOnStartup(3);
-		context.addChild(jspServlet);
-		context.addServletMappingDecoded("*.jsp", "jsp");
-		context.addServletMappingDecoded("*.jspx", "jsp");
-	}
-    
 
-    protected abstract Context initContext() throws IOException;
+    protected void initContext() throws IOException {
+        getContext();
+    }
+
+    protected abstract Context getContext() throws IOException;
 
     protected abstract void addConnector(int port, boolean isMain) throws IOException;
-    
-    protected void errorReportValve(Context ctxt,boolean flag) {
-    	if(flag) {
-    		return;
-    	}
-    	 //以下是屏蔽tomcat的版本信息和具体报错信息输出到页面
+
+    protected void errorReportValve(Context ctxt, boolean flag) {
+        if (flag) {
+            return;
+        }
+        //以下是屏蔽tomcat的版本信息和具体报错信息输出到页面
         ErrorReportValve valve = new ErrorReportValve();
-		valve.setShowServerInfo(false);
-		valve.setShowReport(false);
-		ctxt.getParent().getPipeline().addValve(valve);
+        valve.setShowServerInfo(false);
+        valve.setShowReport(false);
+        ctxt.getParent().getPipeline().addValve(valve);
     }
 }

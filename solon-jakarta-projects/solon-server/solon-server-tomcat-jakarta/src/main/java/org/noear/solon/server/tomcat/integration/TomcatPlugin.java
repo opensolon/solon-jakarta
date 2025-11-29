@@ -16,9 +16,11 @@
 package org.noear.solon.server.tomcat.integration;
 
 import org.apache.catalina.util.ServerInfo;
+import org.apache.jasper.servlet.JasperInitializer;
 import org.noear.solon.Solon;
 import org.noear.solon.Utils;
 import org.noear.solon.core.event.EventBus;
+import org.noear.solon.core.util.ClassUtil;
 import org.noear.solon.server.ServerConstants;
 import org.noear.solon.server.ServerProps;
 import org.noear.solon.server.prop.impl.HttpServerProps;
@@ -26,6 +28,7 @@ import org.noear.solon.core.*;
 
 import org.noear.solon.server.prop.impl.WebSocketServerProps;
 import org.noear.solon.server.tomcat.TomcatServer;
+import org.noear.solon.server.tomcat.TomcatServerJsp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +48,7 @@ public final class TomcatPlugin implements Plugin {
     private TomcatServer _server = null;
 
     public static String solon_server_ver() {
-    	return ServerInfo.getServerInfo() + "/" + Solon.version();
+        return ServerInfo.getServerInfo() + "/" + Solon.version();
     }
 
     @Override
@@ -77,7 +80,12 @@ public final class TomcatPlugin implements Plugin {
         final int _port = props.getPort();
         final String _name = props.getName();
 
-        _server = new TomcatServer(props);
+        if (ClassUtil.hasClass((() -> JasperInitializer.class))) {
+            _server = new TomcatServerJsp(props);
+        } else {
+            _server = new TomcatServer(props);
+        }
+
         _server.enableWebSocket(context.app().enableWebSocket());
 
         EventBus.publish(_server);

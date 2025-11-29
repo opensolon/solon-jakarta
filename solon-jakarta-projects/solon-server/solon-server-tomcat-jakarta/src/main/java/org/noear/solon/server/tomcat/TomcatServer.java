@@ -59,7 +59,7 @@ public class TomcatServer extends TomcatServerBase {
     }
 
     @Override
-    protected Context initContext() {
+    protected Context getContext() {
         String _tempdir = IoUtil.getTempDirAsString("solon-server");
 
         // servlet 临时目录（用于生成 jsp 之类）

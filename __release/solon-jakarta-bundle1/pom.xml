@@ -33,6 +33,7 @@
         <module>../../solon-jakarta-projects/solon-server/solon-server-undertow-jakarta</module>
 
         <module>../../solon-jakarta-projects/solon-server/solon-server-tomcat-jakarta</module>
+        <module>../../solon-jakarta-projects/solon-server/solon-server-tomcat-add-jsp-jakarta</module>
 
         <module>../../solon-jakarta-projects/solon-view/solon-view-jsp-jakarta</module>
 

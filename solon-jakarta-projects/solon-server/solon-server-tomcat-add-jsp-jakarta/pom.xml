@@ -11,28 +11,17 @@
         <relativePath>../../../solon-jakarta-parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>solon-server-tomcat-jakarta</artifactId>
+    <artifactId>solon-server-tomcat-add-jsp-jakarta</artifactId>
     <name>${project.artifactId}</name>
     <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
-            <groupId>org.noear</groupId>
-            <artifactId>solon-server</artifactId>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>${jakarta.servlet6.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.noear</groupId>
-            <artifactId>solon-web-servlet-jakarta</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.tomcat.embed</groupId>
-            <artifactId>tomcat-embed-core</artifactId>
-            <version>${tomcat.jakarta.version}</version>
-        </dependency>
-
-        <!-- tomcat jsp -->
         <dependency>
 		    <groupId>org.apache.tomcat.embed</groupId>
 		    <artifactId>tomcat-embed-jasper</artifactId>
@@ -54,23 +43,5 @@
 		    	</exclusion>
 		    </exclusions>
 		</dependency>
-        
-	    <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.noear</groupId>
-            <artifactId>solon-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.noear</groupId>
-            <artifactId>solon-logging-simple</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 </project>
