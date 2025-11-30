@@ -31,7 +31,7 @@
 
         <jetty.jakarta.version>12.1.1</jetty.jakarta.version>
 
-        <undertow.jakarta.version>2.3.19.Final</undertow.jakarta.version>
+        <undertow.jakarta.version>2.3.20.Final</undertow.jakarta.version>
         <undertow.jastow.jakarta.version>2.2.8.Final</undertow.jastow.jakarta.version>
         <undertow.jboss-metadata.jakarta.version>16.1.0.Final</undertow.jboss-metadata.jakarta.version>
 

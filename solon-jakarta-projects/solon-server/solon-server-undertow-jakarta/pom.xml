@@ -51,7 +51,92 @@
         </dependency>
 
         <!-- server core end -->
+        <!--jsp-->
+		<!--<dependency>
+		    <groupId>org.mortbay.jasper</groupId>
+		    <artifactId>mortbay-apache-jsp</artifactId>
+		    <version>11.0.10.1</version>
+		    <scope>provided</scope>
+		</dependency>-->
+		<!--<dependency>
+		    <groupId>org.jboss.spec.javax.servlet</groupId>
+		    <artifactId>jboss-servlet-api_4.0_spec</artifactId>
+		    <version>2.0.0.Final</version>
+		</dependency>-->
+		<dependency>
+		    <groupId>io.undertow.jastow</groupId>
+		    <artifactId>jastow</artifactId>
+		    <version>${undertow.jastow.jakarta.version}</version>
+		    <exclusions>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>io.undertow</groupId>
+                    <artifactId>undertow-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>io.undertow</groupId>
+                    <artifactId>undertow-servlet</artifactId>
+                </exclusion>
+            </exclusions>
+		    <scope>provided</scope>
+		</dependency>
+		<!--<dependency>
+		    <groupId>org.jboss.metadata</groupId>
+		    <artifactId>jboss-metadata-common</artifactId>
+		    <version>${undertow.jboss-metadata.jakarta.version}</version>
+		    <scope>provided</scope>
+		</dependency>-->
+		<dependency>
+		    <groupId>org.jboss.metadata</groupId>
+		    <artifactId>jboss-metadata-web</artifactId>
+		    <version>${undertow.jboss-metadata.jakarta.version}</version>
+		    <scope>provided</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.eclipse.jdt</groupId>
+		    <artifactId>ecj</artifactId>
+		    <version>3.43.0</version>
+		    <scope>provided</scope>
+		</dependency>
+		<!--<dependency>
+		    <groupId>jakarta.el</groupId>
+		    <artifactId>jakarta.el-api</artifactId>
+		    <version>6.0.1</version>
+		    <scope>provided</scope>
+		</dependency>-->
+		<dependency>
+		    <groupId>org.glassfish.expressly</groupId>
+		    <artifactId>expressly</artifactId>
+		    <version>6.0.0</version>
+		    <scope>provided</scope>
+		</dependency>
+        <dependency>
+            <groupId>jakarta.servlet.jsp.jstl</groupId>
+            <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+            <version>3.0.2</version>
+            <scope>provided</scope>
+        </dependency>
+		<dependency>
+		    <groupId>com.sun.el</groupId>
+		    <artifactId>el-ri</artifactId>
+		    <version>3.0.4</version>
+		    <scope>provided</scope>
+		</dependency>
+        <dependency>
+            <groupId>jakarta.servlet.jsp</groupId>
+            <artifactId>jakarta.servlet.jsp-api</artifactId>
+            <version>3.1.1</version>
+            <scope>provided</scope>
+        </dependency>
 
+		<dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>org.noear</groupId>
             <artifactId>solon-test</artifactId>
@@ -61,6 +146,11 @@
         <dependency>
             <groupId>org.noear</groupId>
             <artifactId>solon-logging-simple</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.noear</groupId>
+            <artifactId>solon-view-jsp-jakarta</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
