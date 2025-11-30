@@ -14,7 +14,7 @@ import org.noear.solon.annotation.SolonMain;
 @SolonMain
 public class WebApp {
     public static void main(String[] args) {
-//    	AntCompiler
+//    	System.setProperty("jdk.module.illegalAccess", "permit");
         Solon.start(WebApp.class, args);
     }
 }

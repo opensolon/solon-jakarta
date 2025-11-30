@@ -40,7 +40,7 @@ import java.util.Set;
  * @since 2.6
  */
 public class JspTldLocator {
-    static final Logger log = LoggerFactory.getLogger(JspTldLocator.class);
+    private static final Logger log = LoggerFactory.getLogger(JspTldLocator.class);
 
     public static Map<String, TaglibDescriptor> createTldInfos(String... dltDirs) throws IOException {
         HashMap<String, TaglibDescriptor> tagLibInfos = new HashMap<>();
