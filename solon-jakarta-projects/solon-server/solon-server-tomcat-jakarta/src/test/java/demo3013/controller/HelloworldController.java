@@ -33,4 +33,25 @@ public class HelloworldController {
 
         return vm;
     }
+    
+    @Mapping("/hellotld")
+    public Object hellotld(Context ctx){
+        UserModel m = new UserModel();
+        m.setId(11);
+        m.setName("刘之西东2");
+        m.setSex(2);
+
+        ModelAndView vm = new ModelAndView("helloworld2.jsp");
+
+        vm.put("title","demo2");
+        vm.put("message","hello world2!");
+
+        vm.put("m",m);
+
+        vm.put("user", user);
+
+        vm.put("ctx",ctx);
+
+        return vm;
+    }
 }
