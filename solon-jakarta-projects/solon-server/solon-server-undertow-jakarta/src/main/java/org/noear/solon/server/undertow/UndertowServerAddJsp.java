@@ -58,7 +58,7 @@ public class UndertowServerAddJsp extends UndertowServer {
         jspServlet.addInitParam("fork", "false");
         jspServlet.addInitParam("xpoweredBy", "false");
         jspServlet.addInitParam("development", "false"); 
-        
+//        jspServlet.addInitParam("taglibLocations", "/WEB-INF/,/templates/");
         builder.setResourceManager(new JspResourceManager(AppClassLoader.global(), fileRoot))
                 .addServlet(new ServletInfo("ACTServlet", UtHttpContextServletHandler.class).addMapping("/").setAsyncSupported(true))
                 .addServlet(jspServlet);
@@ -81,6 +81,7 @@ public class UndertowServerAddJsp extends UndertowServer {
         deploymentInfo.addServletContextAttribute("org.apache.jasper.SERVLET_VERSION", deploymentInfo.getMajorVersion() + "." + deploymentInfo.getMinorVersion());
         deploymentInfo.addServletContextAttribute("org.apache.jasper.JSP_PROPERTY_GROUPS", propertyGroups);
         deploymentInfo.addServletContextAttribute("org.apache.jasper.JSP_TAG_LIBRARIES", tagLibraries);
+//        deploymentInfo.addServletContextAttribute("jakarta.servlet.context.tldScan", true);
         deploymentInfo.addServletContextAttribute(InstanceManager.class.getName(), instanceManager);
         deploymentInfo.addServletContainerInitializers(new ServletContainerInitializerInfo(
                 JasperInitializer.class,
