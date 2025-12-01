@@ -19,14 +19,21 @@ import org.eclipse.jetty.ee11.jsp.JettyJspServlet;
 import org.eclipse.jetty.ee11.servlet.ServletContextHandler;
 import org.eclipse.jetty.ee11.servlet.ServletHolder;
 import org.eclipse.jetty.util.resource.PathResourceFactory;
+import org.noear.solon.Solon;
+import org.noear.solon.core.AppClassLoader;
+import org.noear.solon.core.runtime.NativeDetector;
 import org.noear.solon.core.util.ResourceUtil;
 import org.noear.solon.server.jetty.jsp.JspLifeCycle;
 import org.noear.solon.server.jetty.jsp.JspTldLocator;
 
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.descriptor.TaglibDescriptor;
+import org.noear.solon.server.util.DebugUtils;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Map;
@@ -41,8 +48,8 @@ public class JettyServerAddJsp extends JettyServer {
         ServletContextHandler handler = getServletHandler();
 
         //jsp 资源的根目录
-        PathResourceFactory rf = new PathResourceFactory();
-        handler.setBaseResource(rf.newResource(ResourceUtil.getResource("/")));
+        String resRoot = getResourceRoot();
+        handler.setBaseResourceAsString(resRoot);
 
         addJspSupport(handler);
         addTdlSupport(handler.getServletContext());
@@ -82,6 +89,52 @@ public class JettyServerAddJsp extends JettyServer {
             for (TaglibDescriptor descriptor : tagLibInfos.values()) {
                 jspConfig.addTaglibDescriptor(descriptor);
             }
+        }
+    }
+
+    private String getResourceRoot() throws FileNotFoundException {
+        URL rootURL = getRootPath();
+
+        if (rootURL == null) {
+            if (NativeDetector.inNativeImage()) {
+                return "";
+            }
+
+            throw new FileNotFoundException("Unable to find root");
+        }
+
+        if (Solon.cfg().isDebugMode() && Solon.cfg().isFilesMode()) {
+            File dir = DebugUtils.getDebugLocation(AppClassLoader.global(), "/");
+            if (dir != null) {
+                return dir.toURI().getPath();
+            }
+        }
+
+        return rootURL.getPath();
+    }
+
+    private URL getRootPath() {
+        URL root = ResourceUtil.getResource("/");
+        if (root != null) {
+            return root;
+        }
+
+        try {
+            URL temp = ResourceUtil.getResource(""); //有些环境，/ 取不到根
+            if (temp == null) {
+                return null;
+            }
+
+            String path = temp.toString();
+            if (path.startsWith("jar:")) {
+                int endIndex = path.indexOf("!");
+                path = path.substring(0, endIndex + 1) + "/";
+            } else {
+                return null;
+            }
+            return new URL(path);
+        } catch (MalformedURLException e) {
+            return null;
         }
     }
 }

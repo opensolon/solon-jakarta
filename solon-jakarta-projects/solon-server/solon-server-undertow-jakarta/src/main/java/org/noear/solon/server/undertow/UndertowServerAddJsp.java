@@ -21,13 +21,21 @@ import io.undertow.server.HttpHandler;
 import io.undertow.servlet.api.*;
 import org.apache.jasper.deploy.JspPropertyGroup;
 import org.apache.jasper.deploy.TagLibraryInfo;
+import org.noear.solon.Solon;
+import org.noear.solon.core.runtime.NativeDetector;
+import org.noear.solon.core.util.ResourceUtil;
 import org.noear.solon.server.prop.impl.HttpServerProps;
 import org.noear.solon.server.undertow.http.UtHttpContextServletHandler;
 import org.noear.solon.server.undertow.jsp.JspResourceManager;
 import org.noear.solon.server.undertow.jsp.JspServletEx;
 import org.noear.solon.server.undertow.jsp.JspTldLocator;
 import org.noear.solon.core.AppClassLoader;
+import org.noear.solon.server.util.DebugUtils;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -68,5 +76,51 @@ public class UndertowServerAddJsp extends UndertowServer {
         manager.deploy();
 
         return manager.start();
+    }
+
+    private String getResourceRoot() throws FileNotFoundException {
+        URL rootURL = getRootPath();
+
+        if (rootURL == null) {
+            if (NativeDetector.inNativeImage()) {
+                return "";
+            }
+
+            throw new FileNotFoundException("Unable to find root");
+        }
+
+        if (Solon.cfg().isDebugMode() && Solon.cfg().isFilesMode()) {
+            File dir = DebugUtils.getDebugLocation(AppClassLoader.global(), "/");
+            if (dir != null) {
+                return dir.toURI().getPath();
+            }
+        }
+
+        return rootURL.getPath();
+    }
+
+    private URL getRootPath() {
+        URL root = ResourceUtil.getResource("/");
+        if (root != null) {
+            return root;
+        }
+
+        try {
+            URL temp = ResourceUtil.getResource(""); //有些环境，/ 取不到根
+            if (temp == null) {
+                return null;
+            }
+
+            String path = temp.toString();
+            if (path.startsWith("jar:")) {
+                int endIndex = path.indexOf("!");
+                path = path.substring(0, endIndex + 1) + "/";
+            } else {
+                return null;
+            }
+            return new URL(path);
+        } catch (MalformedURLException e) {
+            return null;
+        }
     }
 }

@@ -15,6 +15,7 @@
  */
 package org.noear.solon.server.tomcat;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -29,6 +30,7 @@ import org.apache.catalina.startup.Tomcat;
 import org.apache.jasper.servlet.JasperInitializer;
 import org.noear.solon.Solon;
 import org.noear.solon.Utils;
+import org.noear.solon.core.AppClassLoader;
 import org.noear.solon.core.runtime.NativeDetector;
 import org.noear.solon.core.util.ResourceUtil;
 import org.noear.solon.server.prop.impl.HttpServerProps;
@@ -36,6 +38,7 @@ import org.noear.solon.server.tomcat.jsp.JspTldLocator;
 
 import jakarta.servlet.descriptor.JspConfigDescriptor;
 import jakarta.servlet.descriptor.TaglibDescriptor;
+import org.noear.solon.server.util.DebugUtils;
 
 /**
  * @author noear 2025/11/29 created
@@ -51,11 +54,8 @@ public class TomcatServerJsp extends TomcatServer {
         
         //jsp
         try {
-        	String resourcePath = getResourceRoot();
-        	if(Utils.isBlank(resourcePath)) {
-        		resourcePath = getClass().getClassLoader().getResource("").getPath();        		
-        	}
-            ctx.setDocBase(resourcePath);
+        	String resRoot = getResourceRoot();
+            ctx.setDocBase(resRoot);
         	addJspSupport(ctx);
         	addTldSupport(ctx);
         } catch (Exception e) {
@@ -91,9 +91,10 @@ public class TomcatServerJsp extends TomcatServer {
 //            ctx.getServletContext().setAttribute("jakarta.servlet.context.tldScan", true);
         }
     }
-    
+
     private String getResourceRoot() throws FileNotFoundException {
         URL rootURL = getRootPath();
+
         if (rootURL == null) {
             if (NativeDetector.inNativeImage()) {
                 return "";
@@ -102,14 +103,14 @@ public class TomcatServerJsp extends TomcatServer {
             throw new FileNotFoundException("Unable to find root");
         }
 
-        String resURL = rootURL.toString();
-
-        if (Solon.cfg().isDebugMode() && (resURL.startsWith("jar:") == false)) {
-            int endIndex = resURL.indexOf("target");
-            return resURL.substring(0, endIndex) + "src/main/resources/";
+        if (Solon.cfg().isDebugMode() && Solon.cfg().isFilesMode()) {
+            File dir = DebugUtils.getDebugLocation(AppClassLoader.global(), "/");
+            if (dir != null) {
+                return dir.toURI().getPath();
+            }
         }
 
-        return "";
+        return rootURL.getPath();
     }
 
     private URL getRootPath() {
@@ -117,8 +118,9 @@ public class TomcatServerJsp extends TomcatServer {
         if (root != null) {
             return root;
         }
+
         try {
-            URL temp = ResourceUtil.getResource("");
+            URL temp = ResourceUtil.getResource(""); //有些环境，/ 取不到根
             if (temp == null) {
                 return null;
             }

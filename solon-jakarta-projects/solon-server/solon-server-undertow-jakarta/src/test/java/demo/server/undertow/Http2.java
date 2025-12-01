@@ -13,26 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package demo.boot.undertow;
+package demo.server.undertow;
 
+import io.undertow.Undertow;
+import io.undertow.UndertowOptions;
 import org.noear.solon.Solon;
-import org.noear.solon.server.http.HttpServerConfigure;
 
 /**
- * @author noear 2023/5/11 created
+ * @author noear 2023/3/23 created
  */
-public class SeverDemo {
+public class Http2 {
     public static void main(String[] args) {
-        Solon.start(SeverDemo.class, args, app -> {
-            if (app.cfg().argx().containsKey("ssl")) {
-                //如果有 https ，就再加个 http
-                app.onEvent(HttpServerConfigure.class, e -> {
-                    e.addHttpPort(8082);
-                });
-            }
-
-            app.get("/", ctx -> {
-                ctx.output("Hello World");
+        Solon.start(Http2.class, args, app -> {
+            app.onEvent(Undertow.Builder.class, e -> {
+                //启用 http2
+                e.setServerOption(UndertowOptions.ENABLE_HTTP2, true);
+                //再加个 http 监听（server.port 被 https 占了）//如果不需要，则不加
+                e.addHttpListener(8081, "0.0.0.0");
             });
         });
     }
