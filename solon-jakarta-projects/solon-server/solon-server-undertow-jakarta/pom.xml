@@ -52,12 +52,12 @@
 
         <!-- server core end -->
         <!--jsp-->
-		<!--<dependency>
+		<dependency>
 		    <groupId>org.mortbay.jasper</groupId>
 		    <artifactId>mortbay-apache-jsp</artifactId>
 		    <version>11.0.10.1</version>
 		    <scope>provided</scope>
-		</dependency>-->
+		</dependency>
 		<!--<dependency>
 		    <groupId>org.jboss.spec.javax.servlet</groupId>
 		    <artifactId>jboss-servlet-api_4.0_spec</artifactId>
@@ -101,30 +101,24 @@
 		    <version>3.43.0</version>
 		    <scope>provided</scope>
 		</dependency>
-		<!--<dependency>
+		<dependency>
 		    <groupId>jakarta.el</groupId>
 		    <artifactId>jakarta.el-api</artifactId>
 		    <version>6.0.1</version>
 		    <scope>provided</scope>
-		</dependency>-->
-		<dependency>
+		</dependency>
+		<!--<dependency>
 		    <groupId>org.glassfish.expressly</groupId>
 		    <artifactId>expressly</artifactId>
 		    <version>6.0.0</version>
 		    <scope>provided</scope>
-		</dependency>
+		</dependency>-->
         <dependency>
             <groupId>jakarta.servlet.jsp.jstl</groupId>
             <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
             <version>3.0.2</version>
             <scope>provided</scope>
         </dependency>
-		<dependency>
-		    <groupId>com.sun.el</groupId>
-		    <artifactId>el-ri</artifactId>
-		    <version>3.0.4</version>
-		    <scope>provided</scope>
-		</dependency>
         <dependency>
             <groupId>jakarta.servlet.jsp</groupId>
             <artifactId>jakarta.servlet.jsp-api</artifactId>
