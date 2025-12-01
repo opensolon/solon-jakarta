@@ -27,7 +27,10 @@ import jakarta.servlet.ServletResponse;
 
 public class JspServletEx extends JspServlet {
 
-    public static ServletInfo createServlet(String name, String path) {
+	private static final long serialVersionUID = 1L;
+
+
+	public static ServletInfo createServlet(String name, String path) {
         ServletInfo servlet = new ServletInfo(name, JspServletEx.class);
         servlet.addMapping(path);
         servlet.setRequireWelcomeFileMapping(true);
