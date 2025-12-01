@@ -15,29 +15,28 @@
  */
 package org.noear.solon.server.undertow;
 
-import io.undertow.jsp.HackInstanceManager;
-import io.undertow.jsp.JspServletBuilder;
-import io.undertow.server.HttpHandler;
-import io.undertow.servlet.api.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.jasper.deploy.JspPropertyGroup;
 import org.apache.jasper.deploy.TagLibraryInfo;
-import org.noear.solon.Solon;
-import org.noear.solon.core.runtime.NativeDetector;
-import org.noear.solon.core.util.ResourceUtil;
+import org.apache.jasper.servlet.JasperInitializer;
+import org.apache.tomcat.InstanceManager;
+import org.noear.solon.core.AppClassLoader;
 import org.noear.solon.server.prop.impl.HttpServerProps;
 import org.noear.solon.server.undertow.http.UtHttpContextServletHandler;
 import org.noear.solon.server.undertow.jsp.JspResourceManager;
 import org.noear.solon.server.undertow.jsp.JspServletEx;
 import org.noear.solon.server.undertow.jsp.JspTldLocator;
-import org.noear.solon.core.AppClassLoader;
-import org.noear.solon.server.util.DebugUtils;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
+import io.undertow.jsp.HackInstanceManager;
+import io.undertow.server.HttpHandler;
+import io.undertow.servlet.api.DeploymentInfo;
+import io.undertow.servlet.api.DeploymentManager;
+import io.undertow.servlet.api.ServletContainer;
+import io.undertow.servlet.api.ServletContainerInitializerInfo;
+import io.undertow.servlet.api.ServletInfo;
 
 /**
  * @author by: Yukai
@@ -58,7 +57,7 @@ public class UndertowServerAddJsp extends UndertowServer {
         ServletInfo jspServlet = JspServletEx.createServlet("JSPServlet", "*.jsp");
         jspServlet.addInitParam("fork", "false");
         jspServlet.addInitParam("xpoweredBy", "false");
-        jspServlet.addInitParam("development", "true"); 
+        jspServlet.addInitParam("development", "false"); 
         
         builder.setResourceManager(new JspResourceManager(AppClassLoader.global(), fileRoot))
                 .addServlet(new ServletInfo("ACTServlet", UtHttpContextServletHandler.class).addMapping("/").setAsyncSupported(true))
@@ -67,7 +66,7 @@ public class UndertowServerAddJsp extends UndertowServer {
 
         //添加taglib支持
         Map<String, TagLibraryInfo> tagLibraryMap = JspTldLocator.createTldInfos("WEB-INF", "templates");
-        JspServletBuilder.setupDeployment(builder, new HashMap<String, JspPropertyGroup>(), tagLibraryMap, new HackInstanceManager());
+        setupDeployment(builder, new HashMap<String, JspPropertyGroup>(), tagLibraryMap, new HackInstanceManager());
 
 
         //开始部署
@@ -77,50 +76,15 @@ public class UndertowServerAddJsp extends UndertowServer {
 
         return manager.start();
     }
-
-    private String getResourceRoot() throws FileNotFoundException {
-        URL rootURL = getRootPath();
-
-        if (rootURL == null) {
-            if (NativeDetector.inNativeImage()) {
-                return "";
-            }
-
-            throw new FileNotFoundException("Unable to find root");
-        }
-
-        if (Solon.cfg().isDebugMode() && Solon.cfg().isFilesMode()) {
-            File dir = DebugUtils.getDebugLocation(AppClassLoader.global(), "/");
-            if (dir != null) {
-                return dir.toURI().getPath();
-            }
-        }
-
-        return rootURL.getPath();
-    }
-
-    private URL getRootPath() {
-        URL root = ResourceUtil.getResource("/");
-        if (root != null) {
-            return root;
-        }
-
-        try {
-            URL temp = ResourceUtil.getResource(""); //有些环境，/ 取不到根
-            if (temp == null) {
-                return null;
-            }
-
-            String path = temp.toString();
-            if (path.startsWith("jar:")) {
-                int endIndex = path.indexOf("!");
-                path = path.substring(0, endIndex + 1) + "/";
-            } else {
-                return null;
-            }
-            return new URL(path);
-        } catch (MalformedURLException e) {
-            return null;
-        }
+    
+    private static void setupDeployment(final DeploymentInfo deploymentInfo, final Map<String, JspPropertyGroup> propertyGroups, final Map<String, TagLibraryInfo> tagLibraries, final InstanceManager instanceManager) {
+        deploymentInfo.addServletContextAttribute("org.apache.jasper.SERVLET_VERSION", deploymentInfo.getMajorVersion() + "." + deploymentInfo.getMinorVersion());
+        deploymentInfo.addServletContextAttribute("org.apache.jasper.JSP_PROPERTY_GROUPS", propertyGroups);
+        deploymentInfo.addServletContextAttribute("org.apache.jasper.JSP_TAG_LIBRARIES", tagLibraries);
+        deploymentInfo.addServletContextAttribute(InstanceManager.class.getName(), instanceManager);
+        deploymentInfo.addServletContainerInitializers(new ServletContainerInitializerInfo(
+                JasperInitializer.class,
+                Collections.emptySet()
+        ));
     }
 }

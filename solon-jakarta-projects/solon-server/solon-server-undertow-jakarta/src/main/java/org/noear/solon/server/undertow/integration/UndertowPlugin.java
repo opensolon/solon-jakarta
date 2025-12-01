@@ -15,23 +15,26 @@
  */
 package org.noear.solon.server.undertow.integration;
 
+import org.apache.jasper.servlet.JspServlet;
 import org.noear.solon.Solon;
 import org.noear.solon.Utils;
+import org.noear.solon.core.AppContext;
+import org.noear.solon.core.Plugin;
+import org.noear.solon.core.Signal;
+import org.noear.solon.core.SignalSim;
+import org.noear.solon.core.SignalType;
+import org.noear.solon.core.bean.LifecycleBean;
+import org.noear.solon.core.event.EventBus;
+import org.noear.solon.core.util.ClassUtil;
 import org.noear.solon.server.ServerConstants;
 import org.noear.solon.server.ServerProps;
 import org.noear.solon.server.prop.impl.HttpServerProps;
 import org.noear.solon.server.prop.impl.WebSocketServerProps;
 import org.noear.solon.server.undertow.UndertowServer;
 import org.noear.solon.server.undertow.UndertowServerAddJsp;
-import org.noear.solon.core.*;
-import org.noear.solon.core.bean.LifecycleBean;
-import org.noear.solon.core.event.EventBus;
-import org.noear.solon.core.util.ClassUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.undertow.jsp.JspServletBuilder;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.annotation.WebListener;
 import jakarta.servlet.annotation.WebServlet;
@@ -87,7 +90,7 @@ public final class UndertowPlugin implements Plugin {
         final int _port = props.getPort();
         final String _name = props.getName();
 
-        if (ClassUtil.hasClass(() -> JspServletBuilder.class)) {
+        if (ClassUtil.hasClass(() -> JspServlet.class)) {
             _server = new UndertowServerAddJsp(props);
         } else {
             _server = new UndertowServer(props);
