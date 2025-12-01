@@ -13,6 +13,7 @@ import org.noear.solon.core.handle.ModelAndView;
 @Controller
 public class App {
     public static void main(String[] args) {
+//    	TagFileProcessor
         Solon.start(App.class, args);
     }
 
