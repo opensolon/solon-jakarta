@@ -52,6 +52,13 @@
 		    	</exclusion>
 		    </exclusions>
 		</dependency>
+		
+		<dependency>
+		    <groupId>org.apache.tomcat.embed</groupId>
+		    <artifactId>tomcat-embed-websocket</artifactId>
+		    <version>${tomcat.jakarta.version}</version>
+		    <scope>provided</scope>
+		</dependency>
 
         <dependency>
             <groupId>org.noear</groupId>
@@ -69,5 +76,6 @@
             <artifactId>solon-view-jsp-jakarta</artifactId>
             <scope>test</scope>
         </dependency>
-    </dependencies>
+    
+   </dependencies>
 </project>
