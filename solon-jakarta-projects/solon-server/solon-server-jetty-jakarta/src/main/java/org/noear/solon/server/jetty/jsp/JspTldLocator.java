@@ -45,7 +45,7 @@ public class JspTldLocator {
     public static Map<String, TaglibDescriptor> createTldInfos(String... dltDirs) throws IOException {
         HashMap<String, TaglibDescriptor> tagLibInfos = new HashMap<>();
 
-        TldParser tldParser = new TldParser(true, true, true);
+        TldParser tldParser = new TldParser(true, false, false);
 
         for (String dltDir : dltDirs) {
             //加载模板目录下的 tdl
