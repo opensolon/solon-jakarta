@@ -312,15 +312,15 @@
         <!--        </dependency>-->
 
 
-        <dependency>
-            <groupId>org.noear</groupId>
-            <artifactId>solon-server-tomcat-jakarta</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.noear</groupId>-->
+<!--            <artifactId>solon-server-tomcat-jakarta</artifactId>-->
+<!--        </dependency>-->
 
-        <dependency>
-            <groupId>org.noear</groupId>
-            <artifactId>solon-server-tomcat-add-jsp-jakarta</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.noear</groupId>-->
+<!--            <artifactId>solon-server-tomcat-add-jsp-jakarta</artifactId>-->
+<!--        </dependency>-->
 
 <!--        <dependency>-->
 <!--            <groupId>org.noear</groupId>-->
@@ -328,20 +328,20 @@
 <!--        </dependency>-->
 
 
-<!--                        <dependency>-->
-<!--                            <groupId>org.noear</groupId>-->
-<!--                            <artifactId>solon-server-jetty-jakarta</artifactId>-->
-<!--                        </dependency>-->
+                        <dependency>
+                            <groupId>org.noear</groupId>
+                            <artifactId>solon-server-jetty-jakarta</artifactId>
+                        </dependency>
 
-<!--                        <dependency>-->
-<!--                            <groupId>org.noear</groupId>-->
-<!--                            <artifactId>solon-server-jetty-add-websocket-jakarta</artifactId>-->
-<!--                        </dependency>-->
+                        <dependency>
+                            <groupId>org.noear</groupId>
+                            <artifactId>solon-server-jetty-add-websocket-jakarta</artifactId>
+                        </dependency>
 
-<!--                        <dependency>-->
-<!--                            <groupId>org.noear</groupId>-->
-<!--                            <artifactId>solon-server-jetty-add-jsp-jakarta</artifactId>-->
-<!--                        </dependency>-->
+                        <dependency>
+                            <groupId>org.noear</groupId>
+                            <artifactId>solon-server-jetty-add-jsp-jakarta</artifactId>
+                        </dependency>
 
 
         <dependency>
