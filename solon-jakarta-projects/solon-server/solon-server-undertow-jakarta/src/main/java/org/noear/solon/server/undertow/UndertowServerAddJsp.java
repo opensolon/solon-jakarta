@@ -15,8 +15,10 @@
  */
 package org.noear.solon.server.undertow;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.jasper.deploy.JspPropertyGroup;
@@ -37,6 +39,8 @@ import io.undertow.servlet.api.DeploymentManager;
 import io.undertow.servlet.api.ServletContainer;
 import io.undertow.servlet.api.ServletContainerInitializerInfo;
 import io.undertow.servlet.api.ServletInfo;
+import jakarta.servlet.descriptor.JspConfigDescriptor;
+import jakarta.servlet.descriptor.TaglibDescriptor;
 
 /**
  * @author by: Yukai
@@ -87,5 +91,27 @@ public class UndertowServerAddJsp extends UndertowServer {
                 JasperInitializer.class,
                 Collections.emptySet()
         ));
+        
+//        Map<String, TaglibDescriptor> tagLibInfos = new HashMap<>();
+//        tagLibraries.forEach((k,v)->{
+//        	String taglibUri = v.getUri();
+//        	String taglibLocation = v.getLocation();
+//        	TaglibDescriptor descriptor = new TaglibDescriptor() {
+//                @Override
+//                public String getTaglibURI() {
+//                    return taglibUri;
+//                }
+//
+//                @Override
+//                public String getTaglibLocation() {
+//                    return taglibLocation;
+//                }
+//            };
+//            tagLibInfos.put(k, descriptor);
+//        });
+//        List<TaglibDescriptor> taglibs = new ArrayList<>(tagLibInfos.values());
+//        JspConfigDescriptor jspConfigDescriptor = new org.apache.tomcat.util.descriptor.web.JspConfigDescriptorImpl(
+//            new ArrayList<>(), taglibs);
+//        deploymentInfo.setJspConfigDescriptor(jspConfigDescriptor);
     }
 }

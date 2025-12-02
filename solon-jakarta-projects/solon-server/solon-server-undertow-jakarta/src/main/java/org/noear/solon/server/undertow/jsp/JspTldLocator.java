@@ -91,7 +91,7 @@ public class JspTldLocator {
                             loadTagLibraryInfo(tagLibInfos, () -> {
                                 JarEntry fileEntry = jarFile.getJarEntry(entry.getName());
                                 return jarFile.getInputStream(fileEntry);
-                            });
+                            },file_uri);
                         }
                     }
                 } catch (Throwable e) {
@@ -105,7 +105,7 @@ public class JspTldLocator {
         try {
             for (String dltDir : dltDirs) {
                 ScanUtil.scan(AppClassLoader.global(), dltDir, n -> n.endsWith(".tld")).forEach((uri) -> {
-                    loadTagLibraryInfo(tagLibInfos, () -> ResourceUtil.getResource(uri).openStream());
+                    loadTagLibraryInfo(tagLibInfos, () -> ResourceUtil.getResource(uri).openStream(),uri);
                 });
             }
         } catch (Throwable e) {
@@ -149,7 +149,7 @@ public class JspTldLocator {
         return urls;
     }
 
-    static void loadTagLibraryInfo(HashMap<String, TagLibraryInfo> tagLibInfos, SupplierEx<InputStream> supplier) {
+    static void loadTagLibraryInfo(HashMap<String, TagLibraryInfo> tagLibInfos, SupplierEx<InputStream> supplier,String location) {
         InputStream is = null;
 
         try {
@@ -165,6 +165,8 @@ public class JspTldLocator {
             XMLStreamReader xmlReader = inputFactory.createXMLStreamReader(is);
             TldMetaData tldMetadata = TldMetaDataParser.parse(xmlReader);
             TagLibraryInfo taglibInfo = getTagLibraryInfo(tldMetadata);
+            taglibInfo.setLocation(location);
+            taglibInfo.setPath(location);
             if (!tagLibInfos.containsKey(taglibInfo.getUri())) {
                 tagLibInfos.put(taglibInfo.getUri(), taglibInfo);
             }

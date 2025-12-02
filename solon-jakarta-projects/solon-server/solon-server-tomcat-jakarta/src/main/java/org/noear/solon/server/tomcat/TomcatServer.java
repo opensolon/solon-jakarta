@@ -15,6 +15,10 @@
  */
 package org.noear.solon.server.tomcat;
 
+import java.io.IOException;
+
+import javax.net.ssl.SSLContext;
+
 import org.apache.catalina.Context;
 import org.apache.catalina.Wrapper;
 import org.apache.catalina.connector.Connector;
@@ -29,12 +33,10 @@ import org.noear.solon.server.ServerProps;
 import org.noear.solon.server.handle.SessionProps;
 import org.noear.solon.server.prop.impl.HttpServerProps;
 import org.noear.solon.server.tomcat.http.TCHttpContextHandler;
+import org.noear.solon.server.tomcat.ssl.TomcatSslContext;
+import org.noear.solon.server.tomcat.websocket.TcWebSocketManager;
 
 import jakarta.servlet.MultipartConfigElement;
-import org.noear.solon.server.tomcat.ssl.TomcatSslContext;
-
-import javax.net.ssl.SSLContext;
-import java.io.IOException;
 
 /**
  * @author Yukai
@@ -73,6 +75,7 @@ public class TomcatServer extends TomcatServerBase {
         if (SessionProps.session_timeout > 0) {
             context.setSessionTimeout(SessionProps.session_timeout);
         }
+        
 
         // for http
         MultipartConfigElement multipartConfig = new MultipartConfigElement(
@@ -86,7 +89,11 @@ public class TomcatServer extends TomcatServerBase {
         servlet.setMultipartConfigElement(multipartConfig);
 
         context.addServletMappingDecoded("/", "solon");//Servlet与对应uri映射
-
+        
+        if (enableWebSocket) {
+            TcWebSocketManager.init(context);
+        }
+        
         return context;
     }
 
@@ -158,4 +165,5 @@ public class TomcatServer extends TomcatServerBase {
         sslHostConfig.addCertificate(sslHostConfigCertificate);
         return sslHostConfig;
     }
+    
 }

@@ -47,8 +47,11 @@ public class JspResourceManager implements ResourceManager {
 
     @Override
     public Resource getResource(String path) throws IOException {
-        if (path == null || path.endsWith(".jsp") == false) {
+        if (path == null) {
             return null;
+        }
+        if(path.endsWith(".jsp") == false && path.endsWith(".tld")== false) {
+        	return null;
         }
 
         if(Context.current() == null){

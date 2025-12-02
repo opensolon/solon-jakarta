@@ -49,7 +49,7 @@ public class TomcatServerJsp extends TomcatServer {
     }
 
     @Override
-    protected void initContext() throws IOException {
+    protected Context initContext() throws IOException {
         Context ctx = getContext();
         
         //jsp
@@ -61,6 +61,7 @@ public class TomcatServerJsp extends TomcatServer {
         } catch (Exception e) {
             log.debug(e.getMessage(), e);
         }
+        return ctx;
     }
 
     
@@ -69,6 +70,7 @@ public class TomcatServerJsp extends TomcatServer {
         Wrapper jspServlet = Tomcat.addServlet(context, "jsp", "org.apache.jasper.servlet.JspServlet");
         jspServlet.addInitParameter("fork", "false");
         jspServlet.addInitParameter("xpoweredBy", "false");
+        jspServlet.setLoadOnStartup(3);
 //        jspServlet.addInitParameter("development", "true"); // 开发模式，便于调试
         
         // 设置JSP文件映射
