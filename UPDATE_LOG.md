@@ -1,4 +1,9 @@
 
+### v3.7.3
+
+* 修复 solon-server-jetty-jakarta jsp 支持
+* 添加 solon-server-tomcat-jakarta jsp 支持
+
 ### v3.7.0
 
 * 优化 solon-server 不再默认输出 TEXT_PLAIN_UTF8_VALUE（允许空 content-type）
