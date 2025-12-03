@@ -1,8 +1,10 @@
 
 ### v3.7.3
 
+* 新增 xxljob3-solon-cloud-plugin 插件
 * 修复 solon-server-jetty-jakarta jsp 支持
 * 添加 solon-server-tomcat-jakarta jsp 支持
+* 添加 solon-server-tomcat-jakarta websocket 支持
 
 ### v3.7.0
 

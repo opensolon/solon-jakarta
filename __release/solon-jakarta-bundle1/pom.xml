@@ -41,5 +41,8 @@
 
         <module>../../solon-jakarta-projects/solon-web/solon-web-servlet-jakarta</module>
         <module>../../solon-jakarta-projects/solon-web/solon-web-webservices-jakarta</module>
+
+
+        <module>../../solon-jakarta-projects/solon-cloud/xxljob3-solon-cloud-plugin</module>
     </modules>
 </project>
