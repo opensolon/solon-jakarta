@@ -30,16 +30,23 @@ import jakarta.websocket.Session;
  * Tomcat WebSocket端点实现
  *
  * @author 小xu中年
- * @since 3.7
+ * @since 3.7.3
  */
 public class TcWebSocketEndpoint extends Endpoint {
-    private final String SESSION_KEY = "session";
+    private final String SESSION_KEY = "session"; 
     private static final WebSocketRouter webSocketRouter = WebSocketRouter.getInstance();
 
     @Override
     public void onOpen(Session session, EndpointConfig endpointConfig) {
+        // 设置最大消息大小，与Jetty保持一致
+        session.setMaxTextMessageBufferSize(17_000_000);
+        session.setMaxBinaryMessageBufferSize(17_000_000);
+        
+        // 创建WebSocket实例
         WebSocket socket = new WebSocketImpl(session);
         session.getUserProperties().put(SESSION_KEY, socket);
+        
+        // 注册消息处理器
         session.addMessageHandler(new BufferMessageHandler(socket));
         session.addMessageHandler(new TextMessageHandler(socket));
         
@@ -71,9 +78,9 @@ public class TcWebSocketEndpoint extends Endpoint {
         }
 
         @Override
-        public void onMessage(String s) {
+        public void onMessage(String text) {
             try {
-                webSocketRouter.getListener().onMessage(socket, s);
+                webSocketRouter.getListener().onMessage(socket, text);
             } catch (Throwable e) {
                 webSocketRouter.getListener().onError(socket, e);
             }
@@ -88,9 +95,9 @@ public class TcWebSocketEndpoint extends Endpoint {
         }
 
         @Override
-        public void onMessage(ByteBuffer s) {
+        public void onMessage(ByteBuffer buffer) {
             try {
-                webSocketRouter.getListener().onMessage(socket, s);
+                webSocketRouter.getListener().onMessage(socket, buffer);
             } catch (Throwable e) {
                 webSocketRouter.getListener().onError(socket, e);
             }

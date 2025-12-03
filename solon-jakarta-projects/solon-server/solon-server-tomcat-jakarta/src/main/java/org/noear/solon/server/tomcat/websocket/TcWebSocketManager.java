@@ -28,22 +28,26 @@ import jakarta.websocket.server.ServerEndpointConfig;
 
 /**
  * Tomcat WebSocket 管理器
- *
+ * 
  * @author 小xu中年
- * @since 3.7
+ * @since 3.7.3
  */
 public class TcWebSocketManager {
     private static final Logger log = LoggerFactory.getLogger(TcWebSocketManager.class);
+    private static boolean enableWebSocket = false;
     
     private TcWebSocketManager() {}
-    
-    private static boolean enableWebSocket = false;
     
     /**
      * 在Tomcat上下文中初始化WebSocket支持
      * 注意：此方法需要在上下文初始化之前调用
      */
     public static void init(Context context) {
+        if (context == null) {
+            log.error("Tomcat Context is null, cannot initialize WebSocket");
+            return;
+        }
+        
         try {
             // 注册WebSocket容器初始化器
             context.addServletContainerInitializer(new WsSci(), null);
@@ -59,17 +63,19 @@ public class TcWebSocketManager {
      * 注意：此方法需要在服务器启动后调用
      */
     public static void registerEndpoints(Context context) {
+        if (context == null) {
+            log.error("Tomcat Context is null, cannot register WebSocket endpoints");
+            return;
+        }
+        
         try {
-        	if (context == null) {
-                log.error("Tomcat Context is null, cannot register WebSocket endpoints");
-                return;
-            }
             // 获取ServerContainer
             ServerContainer serverContainer = (ServerContainer) context.getServletContext()
                     .getAttribute("jakarta.websocket.server.ServerContainer");
             
             if (serverContainer == null) {
-                throw new IllegalStateException("Missing jakarta.websocket.server.ServerContainer");
+                log.error("Tomcat Context Missing jakarta.websocket.server.ServerContainer");
+                return;
             }
 
             // 获取所有注册的路径
@@ -77,21 +83,37 @@ public class TcWebSocketManager {
 
             for (String path : paths) {
                 if (path.startsWith("/")) {
+                    // 使用自定义配置器创建端点配置
                     ServerEndpointConfig endpointConfig = ServerEndpointConfig.Builder
                             .create(TcWebSocketEndpoint.class, path)
+                            .configurator(new TcWebSocketConfigurator())
                             .build();
+                    
                     serverContainer.addEndpoint(endpointConfig);
                     log.info("Tomcat Registered WebSocket endpoint: {}", path);
                 }
             }
         } catch (Throwable e) {
-            log.error("Failed to register WebSocket endpoints", e);
-            throw new RuntimeException(e);
+            log.error("Failed to register Tomcat WebSocket endpoints", e);
         }
     }
 
-	public static boolean isEnableWebSocket() {
-		return enableWebSocket;
-	}
+    /**
+     * 检查WebSocket是否已启用
+     */
+    public static boolean isEnableWebSocket() {
+        return enableWebSocket;
+    }
     
+    /**
+     * 获取WebSocket容器
+     */
+//    public static ServerContainer getServerContainer(Context context) {
+//        if (context == null) {
+//            return null;
+//        }
+//        
+//        return (ServerContainer) context.getServletContext()
+//                .getAttribute("jakarta.websocket.server.ServerContainer");
+//    }
 }

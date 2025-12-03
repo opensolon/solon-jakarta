@@ -15,33 +15,49 @@
  */
 package org.noear.solon.server.tomcat.websocket;
 
-import jakarta.websocket.CloseReason;
-import jakarta.websocket.Session;
-import org.noear.solon.net.websocket.WebSocketBase;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.net.InetSocketAddress;
+import java.net.URI;
 import java.nio.ByteBuffer;
 import java.util.concurrent.Future;
 
+import org.noear.solon.net.websocket.WebSocketBase;
+import org.noear.solon.server.util.DecodeUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import jakarta.websocket.CloseReason;
+import jakarta.websocket.Session;
+
 /**
- *
- * @author 小xu中年
- * @since 3.7
- * */
+ * Tomcat WebSocket 实现
+ * 
+ * @author noear
+ * @since 3.7.3
+ */
 public class WebSocketImpl extends WebSocketBase {
     private static final Logger log = LoggerFactory.getLogger(WebSocketImpl.class);
-    private Session real;
+    private final Session real;
 
     public WebSocketImpl(Session real) {
         this.real = real;
-        this.init(real.getRequestURI());
+        String uri = DecodeUtils.rinseUri(real.getRequestURI().toString());
+        this.init(URI.create(uri));
+        
+        // 从会话属性中获取请求头信息
+        for (String key : real.getUserProperties().keySet()) {
+            if (key.startsWith("header.")) {
+                String headerName = key.substring(7); // 移除"header."前缀
+                Object value = real.getUserProperties().get(key);
+                if (value instanceof String) {
+                    this.param(headerName, (String) value);
+                }
+            }
+        }
     }
 
     @Override
     public boolean isValid() {
-        return isClosed() == false && real.isOpen();
+        return !isClosed() && real.isOpen();
     }
 
     @Override
@@ -51,13 +67,11 @@ public class WebSocketImpl extends WebSocketBase {
 
     @Override
     public InetSocketAddress remoteAddress() {
-        // Tomcat的Session不直接提供远程地址，这里返回null
         return null;
     }
 
     @Override
     public InetSocketAddress localAddress() {
-        // Tomcat的Session不直接提供本地地址，这里返回null
         return null;
     }
 
