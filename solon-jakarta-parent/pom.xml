@@ -118,10 +118,15 @@
                 <version>${project.version}</version>
             </dependency>
 
-            <!-- old -->
             <dependency>
                 <groupId>org.noear</groupId>
-                <artifactId>solon.web.servlet.jakarta</artifactId>
+                <artifactId>solon-serialization-jackson3</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.noear</groupId>
+                <artifactId>solon-serialization-jackson3-xml</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
