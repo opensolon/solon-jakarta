@@ -34,9 +34,6 @@ import jakarta.websocket.server.ServerEndpointConfig;
  */
 public class TcWebSocketManager {
     private static final Logger log = LoggerFactory.getLogger(TcWebSocketManager.class);
-    private static boolean enableWebSocket = false;
-    
-    private TcWebSocketManager() {}
     
     /**
      * 在Tomcat上下文中初始化WebSocket支持
@@ -51,7 +48,6 @@ public class TcWebSocketManager {
         try {
             // 注册WebSocket容器初始化器
             context.addServletContainerInitializer(new WsSci(), null);
-            enableWebSocket = true;
             log.info("Tomcat WebSocket initialized");
         } catch (Exception e) {
             log.error("Failed to initialize Tomcat WebSocket", e);
@@ -97,23 +93,4 @@ public class TcWebSocketManager {
             log.error("Failed to register Tomcat WebSocket endpoints", e);
         }
     }
-
-    /**
-     * 检查WebSocket是否已启用
-     */
-    public static boolean isEnableWebSocket() {
-        return enableWebSocket;
-    }
-    
-    /**
-     * 获取WebSocket容器
-     */
-//    public static ServerContainer getServerContainer(Context context) {
-//        if (context == null) {
-//            return null;
-//        }
-//        
-//        return (ServerContainer) context.getServletContext()
-//                .getAttribute("jakarta.websocket.server.ServerContainer");
-//    }
 }
