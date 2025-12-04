@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.annotation.WebListener;
 import jakarta.servlet.annotation.WebServlet;
+import org.slf4j.bridge.SLF4JBridgeHandler;
 
 public final class TomcatPlugin implements Plugin {
     static final Logger log = LoggerFactory.getLogger(TomcatPlugin.class);
@@ -70,6 +71,9 @@ public final class TomcatPlugin implements Plugin {
     }
 
     private void start0(AppContext context) throws Throwable {
+        SLF4JBridgeHandler.removeHandlersForRootLogger();
+        SLF4JBridgeHandler.install();
+
         //初始化属性
         ServerProps.init();
 
