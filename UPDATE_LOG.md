@@ -1,4 +1,8 @@
 
+### v3.7.4
+
+* 优化 `solon-server-undertow-jakarta` 请求大小控制
+
 ### v3.7.3
 
 * 新增 xxljob3-solon-cloud-plugin 插件
