@@ -282,8 +282,12 @@ public class TldScanner {
     }
     
     private void scanMyTemplatesTlds() {
-    	String tldDir = "templates";
-    	// 扫描指定目录下的TLD文件
+        scanMyTemplatesTldsDo("WEB-INF"); //兼容早期版本
+        scanMyTemplatesTldsDo("templates");
+    }
+
+    private void scanMyTemplatesTldsDo(String tldDir) {
+        // 扫描指定目录下的TLD文件
         Set<String> urls = ScanUtil.scan(AppClassLoader.global(), tldDir, n -> n.endsWith(".tld"));
         if (Utils.isNotEmpty(urls)) {
             for (String uri : urls) {

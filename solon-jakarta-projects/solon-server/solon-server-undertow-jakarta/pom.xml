@@ -59,13 +59,6 @@
 		    <scope>provided</scope>
 		</dependency>
 
-		<!--<dependency>
-		    <groupId>org.jboss.metadata</groupId>
-		    <artifactId>jboss-metadata-web</artifactId>
-		    <version>${undertow.jboss-metadata.jakarta.version}</version>
-		    <scope>provided</scope>
-		</dependency>-->
-
 		<dependency>
 		    <groupId>org.eclipse.jdt</groupId>
 		    <artifactId>ecj</artifactId>

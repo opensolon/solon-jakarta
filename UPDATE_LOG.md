@@ -1,6 +1,9 @@
 
 ### v3.7.4
 
+* 添加 `solon-server-tomcat-jakarta` ssl 支持
+* 添加 `solon-server-undertow-jakarta` jsp 支持
+* 添加 `solon-server-undertow-jakarta` ssl 支持
 * 优化 `solon-server-undertow-jakarta` 请求大小控制
 
 ### v3.7.3
