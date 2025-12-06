@@ -1,16 +1,26 @@
 package features.jetty.https;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
+import org.noear.solon.Solon;
 import org.noear.solon.core.util.MimeType;
+import org.noear.solon.net.http.HttpUtils;
+import org.noear.solon.net.http.impl.HttpSslSupplierAny;
 import org.noear.solon.test.HttpTester;
 import org.noear.solon.test.SolonTest;
 
 @SolonTest(App.class)
 public class ServerTest extends HttpTester {
+    @AfterAll
+    public static void aftAll() {
+        if (Solon.app() != null) {
+            Solon.stopBlock();
+        }
+    }
 
     @Override
-    public String defaultProtocol() {
-        return "https";
+    public HttpUtils path(String path) {
+        return super.path("https", path).ssl(HttpSslSupplierAny.getInstance());
     }
 
     @Test

@@ -1,4 +1,4 @@
-package features.undertow.ws;
+package lab.undertow.ws;
 
 import org.noear.solon.Solon;
 import org.noear.solon.net.annotation.ServerEndpoint;

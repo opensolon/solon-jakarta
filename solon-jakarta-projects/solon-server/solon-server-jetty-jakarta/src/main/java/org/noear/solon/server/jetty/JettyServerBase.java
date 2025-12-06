@@ -109,32 +109,7 @@ public abstract class JettyServerBase implements ServerLifecycle , HttpServerCon
         ServerConnector serverConnector;
 
         if (sslConfig.isSslEnable() && autoSsl) {
-
-            String sslKeyStore = sslConfig.getProps().getSslKeyStore();
-            String sslKeyStoreType = sslConfig.getProps().getSslKeyType();
-            String sslKeyStorePassword = sslConfig.getProps().getSslKeyPassword();
-
-            SslContextFactory.Server contextFactory = new SslContextFactory.Server();
-
-            if (Utils.isNotEmpty(sslKeyStore)) {
-                URL url = ResourceUtil.findResource(sslKeyStore);
-                if (url != null) {
-                    sslKeyStore = url.toString();
-                }
-
-                contextFactory.setKeyStorePath(sslKeyStore);
-            }
-
-            if (Utils.isNotEmpty(sslKeyStoreType)) {
-                contextFactory.setKeyStoreType(sslKeyStoreType);
-            }
-
-            if (Utils.isNotEmpty(sslKeyStorePassword)) {
-                contextFactory.setKeyStorePassword(sslKeyStorePassword);
-            }
-
-            SslConnectionFactory sslFactory = new SslConnectionFactory(contextFactory, HttpVersion.HTTP_1_1.asString());
-
+            SslConnectionFactory sslFactory = getSslConnectionFactory();
             serverConnector = new ServerConnector(server, executor, null, null, -1, -1, sslFactory, httpFactory);
             //this(server, (Executor)null, (Scheduler)null, (ByteBufferPool)null, -1, -1, factories);
             isSecure = true;
@@ -151,6 +126,55 @@ public abstract class JettyServerBase implements ServerLifecycle , HttpServerCon
         }
 
         return serverConnector;
+    }
+
+    protected SslConnectionFactory getSslConnectionFactory() {
+        String sslKeyStoreType = sslConfig.getProps().getSslKeyStoreType();
+        String sslKeyStore = sslConfig.getProps().getSslKeyStore();
+        String sslKeyStorePassword = sslConfig.getProps().getSslKeyStorePassword();
+        String sslTrustStore = sslConfig.getProps().getSslTrustStore();
+        String sslTrustStorePassword = sslConfig.getProps().getSslTrustStorePassword();
+        String sslTrustStoreType = sslConfig.getProps().getSslTrustStoreType();
+
+        SslContextFactory.Server contextFactory = new SslContextFactory.Server();
+
+        if (Utils.isNotEmpty(sslKeyStore)) {
+            URL url = ResourceUtil.findResource(sslKeyStore);
+            if (url != null) {
+                sslKeyStore = url.getFile();
+            }
+
+            contextFactory.setKeyStorePath(sslKeyStore);
+        }
+
+        if (Utils.isNotEmpty(sslKeyStoreType)) {
+            contextFactory.setKeyStoreType(sslKeyStoreType);
+        }
+
+        if (Utils.isNotEmpty(sslKeyStorePassword)) {
+            contextFactory.setKeyStorePassword(sslKeyStorePassword);
+        }
+
+        if (Utils.isNotEmpty(sslTrustStore)) {
+            URL url = ResourceUtil.findResource(sslTrustStore);
+            if (url != null) {
+                sslTrustStore = url.getFile();
+            }
+
+            contextFactory.setTrustStorePath(sslTrustStore);
+        }
+
+        if (Utils.isNotEmpty(sslTrustStoreType)) {
+            contextFactory.setTrustStoreType(sslTrustStoreType);
+        }
+
+        if (Utils.isNotEmpty(sslTrustStorePassword)) {
+            contextFactory.setTrustStorePassword(sslTrustStorePassword);
+        }
+
+        /// //////////
+
+        return new SslConnectionFactory(contextFactory, HttpVersion.HTTP_1_1.asString());
     }
 
     protected ServletContextHandler getServletHandler() throws IOException {

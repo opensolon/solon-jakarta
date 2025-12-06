@@ -1,4 +1,4 @@
-package features.undertow.http;
+package labs.jetty.http;
 
 import org.noear.solon.Solon;
 import org.noear.solon.annotation.Controller;
@@ -36,7 +36,7 @@ public class App {
     }
 
     @Mapping("session")
-    public Object session(Context ctx, @Param(value = "name", required = false) String name) {
+    public Object session(Context ctx, @Param(value = "name",required = false) String name) {
         if (name == null) {
             return ctx.session("name");
         } else {

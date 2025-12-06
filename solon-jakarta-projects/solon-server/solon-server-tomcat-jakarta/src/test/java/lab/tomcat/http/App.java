@@ -1,14 +1,16 @@
-package features.jetty.http;
+package lab.tomcat.http;
 
 import org.noear.solon.Solon;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Mapping;
 import org.noear.solon.annotation.Param;
+import org.noear.solon.annotation.SolonMain;
 import org.noear.solon.core.handle.Context;
 
 /**
  * @author noear 2024/10/1 created
  */
+@SolonMain
 @Controller
 public class App {
     public static void main(String[] args) {

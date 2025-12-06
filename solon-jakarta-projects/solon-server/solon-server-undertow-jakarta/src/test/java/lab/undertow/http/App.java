@@ -1,16 +1,14 @@
-package features.tomcat.http;
+package lab.undertow.http;
 
 import org.noear.solon.Solon;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Mapping;
 import org.noear.solon.annotation.Param;
-import org.noear.solon.annotation.SolonMain;
 import org.noear.solon.core.handle.Context;
 
 /**
  * @author noear 2024/10/1 created
  */
-@SolonMain
 @Controller
 public class App {
     public static void main(String[] args) {
@@ -38,7 +36,7 @@ public class App {
     }
 
     @Mapping("session")
-    public Object session(Context ctx, @Param(value = "name",required = false) String name) {
+    public Object session(Context ctx, @Param(value = "name", required = false) String name) {
         if (name == null) {
             return ctx.session("name");
         } else {

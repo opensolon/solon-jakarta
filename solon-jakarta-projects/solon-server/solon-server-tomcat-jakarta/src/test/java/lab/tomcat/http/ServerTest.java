@@ -1,4 +1,4 @@
-package features.undertow.http;
+package lab.tomcat.http;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
@@ -11,6 +11,12 @@ import org.noear.solon.test.SolonTest;
 
 @SolonTest(App.class)
 public class ServerTest extends HttpTester {
+    @AfterAll
+    public static void aftAll() {
+        if (Solon.app() != null) {
+            Solon.stopBlock();
+        }
+    }
 
     @Test
     public void test() throws Exception {
@@ -51,13 +57,5 @@ public class ServerTest extends HttpTester {
     public void ct1() {
         assert path("/hello").exec("GET").contentType()
                 .startsWith(MimeType.TEXT_PLAIN_VALUE);
-    }
-
-    @AfterAll
-    public static void allAft() {
-        //避免与同项目的，边上的 app 冲突
-        if (Solon.app() != null) {
-            Solon.stopBlock();
-        }
     }
 }
