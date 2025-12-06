@@ -15,32 +15,23 @@
  */
 package org.noear.solon.server.undertow;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import org.apache.jasper.deploy.JspPropertyGroup;
-import org.apache.jasper.deploy.TagLibraryInfo;
 import org.apache.jasper.servlet.JasperInitializer;
 import org.apache.tomcat.InstanceManager;
+import org.apache.tomcat.SimpleInstanceManager;
 import org.noear.solon.core.AppClassLoader;
 import org.noear.solon.server.prop.impl.HttpServerProps;
 import org.noear.solon.server.undertow.http.UtHttpContextServletHandler;
 import org.noear.solon.server.undertow.jsp.JspResourceManager;
 import org.noear.solon.server.undertow.jsp.JspServletEx;
-import org.noear.solon.server.undertow.jsp.JspTldLocator;
 
-import io.undertow.jsp.HackInstanceManager;
 import io.undertow.server.HttpHandler;
 import io.undertow.servlet.api.DeploymentInfo;
 import io.undertow.servlet.api.DeploymentManager;
 import io.undertow.servlet.api.ServletContainer;
 import io.undertow.servlet.api.ServletContainerInitializerInfo;
 import io.undertow.servlet.api.ServletInfo;
-import jakarta.servlet.descriptor.JspConfigDescriptor;
-import jakarta.servlet.descriptor.TaglibDescriptor;
 
 /**
  * @author by: Yukai
@@ -69,9 +60,9 @@ public class UndertowServerAddJsp extends UndertowServer {
 
 
         //添加taglib支持
-        Map<String, TagLibraryInfo> tagLibraryMap = JspTldLocator.createTldInfos("WEB-INF", "templates");
-        setupDeployment(builder, new HashMap<String, JspPropertyGroup>(), tagLibraryMap, new HackInstanceManager());
-
+//        Map<String, TagLibraryInfo> tagLibraryMap = JspTldLocator.createTldInfos("WEB-INF", "templates");
+//        setupDeployment(builder, new HashMap<String, JspPropertyGroup>(), tagLibraryMap, new HackInstanceManager());
+        setupDeployment(builder,new SimpleInstanceManager());
 
         //开始部署
         final ServletContainer container = ServletContainer.Factory.newInstance();
@@ -81,37 +72,19 @@ public class UndertowServerAddJsp extends UndertowServer {
         return manager.start();
     }
     
-    private static void setupDeployment(final DeploymentInfo deploymentInfo, final Map<String, JspPropertyGroup> propertyGroups, final Map<String, TagLibraryInfo> tagLibraries, final InstanceManager instanceManager) {
-        deploymentInfo.addServletContextAttribute("org.apache.jasper.SERVLET_VERSION", deploymentInfo.getMajorVersion() + "." + deploymentInfo.getMinorVersion());
-        deploymentInfo.addServletContextAttribute("org.apache.jasper.JSP_PROPERTY_GROUPS", propertyGroups);
-        deploymentInfo.addServletContextAttribute("org.apache.jasper.JSP_TAG_LIBRARIES", tagLibraries);
-//        deploymentInfo.addServletContextAttribute("jakarta.servlet.context.tldScan", true);
-        deploymentInfo.addServletContextAttribute(InstanceManager.class.getName(), instanceManager);
-        deploymentInfo.addServletContainerInitializers(new ServletContainerInitializerInfo(
-                JasperInitializer.class,
-                Collections.emptySet()
-        ));
-        
-//        Map<String, TaglibDescriptor> tagLibInfos = new HashMap<>();
-//        tagLibraries.forEach((k,v)->{
-//        	String taglibUri = v.getUri();
-//        	String taglibLocation = v.getLocation();
-//        	TaglibDescriptor descriptor = new TaglibDescriptor() {
-//                @Override
-//                public String getTaglibURI() {
-//                    return taglibUri;
-//                }
-//
-//                @Override
-//                public String getTaglibLocation() {
-//                    return taglibLocation;
-//                }
-//            };
-//            tagLibInfos.put(k, descriptor);
-//        });
-//        List<TaglibDescriptor> taglibs = new ArrayList<>(tagLibInfos.values());
-//        JspConfigDescriptor jspConfigDescriptor = new org.apache.tomcat.util.descriptor.web.JspConfigDescriptorImpl(
-//            new ArrayList<>(), taglibs);
-//        deploymentInfo.setJspConfigDescriptor(jspConfigDescriptor);
-    }
+	private static void setupDeployment(final DeploymentInfo deploymentInfo, final InstanceManager instanceManager) {
+		deploymentInfo.addServletContextAttribute(InstanceManager.class.getName(), instanceManager);
+		deploymentInfo.addServletContainerInitializers(
+				new ServletContainerInitializerInfo(JasperInitializer.class, Collections.emptySet()));
+	}
+//    private static void setupDeployment(final DeploymentInfo deploymentInfo, final Map<String, JspPropertyGroup> propertyGroups, final Map<String, TagLibraryInfo> tagLibraries, final InstanceManager instanceManager) {
+//        deploymentInfo.addServletContextAttribute("org.apache.jasper.SERVLET_VERSION", deploymentInfo.getMajorVersion() + "." + deploymentInfo.getMinorVersion());
+//        deploymentInfo.addServletContextAttribute("org.apache.jasper.JSP_PROPERTY_GROUPS", propertyGroups);
+//        deploymentInfo.addServletContextAttribute("org.apache.jasper.JSP_TAG_LIBRARIES", tagLibraries);
+//        deploymentInfo.addServletContextAttribute(InstanceManager.class.getName(), instanceManager);
+//        deploymentInfo.addServletContainerInitializers(new ServletContainerInitializerInfo(
+//                JasperInitializer.class,
+//                Collections.emptySet()
+//        ));
+//    }
 }
