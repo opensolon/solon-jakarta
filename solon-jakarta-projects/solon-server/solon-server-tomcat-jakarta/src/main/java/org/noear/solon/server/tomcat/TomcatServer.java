@@ -16,6 +16,7 @@
 package org.noear.solon.server.tomcat;
 
 import java.io.IOException;
+import java.net.URL;
 
 import javax.net.ssl.SSLContext;
 
@@ -28,7 +29,9 @@ import org.apache.coyote.http11.Http11NioProtocol;
 import org.apache.coyote.http2.Http2Protocol;
 import org.apache.tomcat.util.net.SSLHostConfig;
 import org.apache.tomcat.util.net.SSLHostConfigCertificate;
+import org.noear.solon.Utils;
 import org.noear.solon.core.util.IoUtil;
+import org.noear.solon.core.util.ResourceUtil;
 import org.noear.solon.server.ServerProps;
 import org.noear.solon.server.handle.SessionProps;
 import org.noear.solon.server.prop.impl.HttpServerProps;
@@ -101,9 +104,9 @@ public class TomcatServer extends TomcatServerBase {
         //::protocol
         ProtocolHandler protocol = createHttp11Protocol(isMain);
 
-        if (isMain && enableHttp2) {
-            protocol.addUpgradeProtocol(new Http2Protocol());
-        }
+//        if (isMain && enableHttp2) {
+//            protocol.addUpgradeProtocol(new Http2Protocol());
+//        }
 
 
         //::connector
@@ -139,13 +142,21 @@ public class TomcatServer extends TomcatServerBase {
         }
 
         protocol.setRelaxedQueryChars("[]|{}");
+        
+        if (isMain && enableHttp2) {
+            protocol.addUpgradeProtocol(new Http2Protocol());
+        }
 
         if (isMain) {
             //for protocol ssl
             if (sslConfig.isSslEnable()) {
                 protocol.setSSLEnabled(true);
                 protocol.setSecure(true);
-                protocol.addSslHostConfig(createSSLHostConfig(sslConfig.getSslContext()));
+//                protocol.addSslHostConfig(createSSLHostConfig(sslConfig.getSslContext()));
+               // 获取SSL上下文，支持传入SSLContext或从sslConfig加载配置
+                SSLContext sslContext = sslConfig.getSslContext();
+                protocol.addSslHostConfig(createSSLHostConfig(sslContext));
+                
                 isSecure = true;
             }
         }
@@ -154,12 +165,41 @@ public class TomcatServer extends TomcatServerBase {
     }
 
 
-    private static SSLHostConfig createSSLHostConfig(final SSLContext sslContext) {
-        final SSLHostConfig sslHostConfig = new SSLHostConfig();
+    private SSLHostConfig createSSLHostConfig(final SSLContext sslContext) {
+    	final SSLHostConfig sslHostConfig = new SSLHostConfig();
 
         final SSLHostConfigCertificate sslHostConfigCertificate =
                 new SSLHostConfigCertificate(sslHostConfig, SSLHostConfigCertificate.Type.RSA);
-        sslHostConfigCertificate.setSslContext(new TomcatSslContext(sslContext));
+        
+        if (sslContext != null) {
+            sslHostConfigCertificate.setSslContext(new TomcatSslContext(sslContext));
+        } else if (sslConfig.isSslEnable() && sslConfig.getProps() != null) {
+            // 从sslConfig加载证书配置，参考Jetty的实现方式
+            try {
+                String sslKeyStore = sslConfig.getProps().getSslKeyStore();
+                String sslKeyStoreType = sslConfig.getProps().getSslKeyType();
+                String sslKeyStorePassword = sslConfig.getProps().getSslKeyPassword();
+                
+                // 查找资源文件
+                if (Utils.isNotEmpty(sslKeyStore)) {
+                    URL url = ResourceUtil.findResource(sslKeyStore);
+                    if (url != null) {
+                        sslKeyStore = url.toString();
+                    }
+                    sslHostConfigCertificate.setCertificateKeystoreFile(sslKeyStore);
+                }
+                
+                if (Utils.isNotEmpty(sslKeyStorePassword)) {
+                	sslHostConfigCertificate.setCertificateKeystorePassword(sslKeyStorePassword);
+                }
+                
+                if (Utils.isNotEmpty(sslKeyStoreType)) {
+                	sslHostConfigCertificate.setCertificateKeystoreType(sslKeyStoreType);
+                }
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to setup SSL configuration", e);
+            }
+        }
 
         sslHostConfig.addCertificate(sslHostConfigCertificate);
         return sslHostConfig;
