@@ -27,7 +27,9 @@ import org.noear.solon.server.ssl.SslConfig;
 import org.noear.solon.server.undertow.http.UtContainerInitializer;
 import org.noear.solon.server.http.HttpServerConfigure;
 import org.noear.solon.server.undertow.integration.UndertowPlugin;
+import org.noear.solon.server.util.DebugUtils;
 import org.noear.solon.server.handle.SessionProps;
+import org.noear.solon.core.AppClassLoader;
 import org.noear.solon.core.runtime.NativeDetector;
 import org.noear.solon.core.util.ResourceUtil;
 import org.noear.solon.lang.Nullable;
@@ -38,6 +40,7 @@ import javax.net.ssl.SSLContext;
 
 import jakarta.servlet.MultipartConfigElement;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -128,6 +131,7 @@ abstract class UndertowServerBase implements ServerLifecycle, HttpServerConfigur
 
     protected String getResourceRoot() throws FileNotFoundException {
         URL rootURL = getRootPath();
+
         if (rootURL == null) {
             if (NativeDetector.inNativeImage()) {
                 return "";
@@ -136,14 +140,14 @@ abstract class UndertowServerBase implements ServerLifecycle, HttpServerConfigur
             throw new FileNotFoundException("Unable to find root");
         }
 
-        String resURL = rootURL.toString();
-
-        if (Solon.cfg().isDebugMode() && (resURL.startsWith("jar:") == false)) {
-            int endIndex = resURL.indexOf("target");
-            return resURL.substring(0, endIndex) + "src/main/resources/";
+        if (Solon.cfg().isDebugMode() && Solon.cfg().isFilesMode()) {
+            File dir = DebugUtils.getDebugLocation(AppClassLoader.global(), "/");
+            if (dir != null) {
+                return dir.toURI().getPath();
+            }
         }
 
-        return "";
+        return rootURL.getPath();
     }
 
     protected URL getRootPath() {

@@ -35,11 +35,11 @@
             <version>11.0.10.1</version>
         </dependency>
 
-        <dependency>
+        <!--<dependency>
             <groupId>org.jboss.metadata</groupId>
             <artifactId>jboss-metadata-web</artifactId>
             <version>${undertow.jboss-metadata.jakarta.version}</version>
-        </dependency>
+        </dependency>-->
 
         <dependency>
             <groupId>org.eclipse.jdt</groupId>
@@ -63,6 +63,11 @@
             <groupId>jakarta.servlet.jsp</groupId>
             <artifactId>jakarta.servlet.jsp-api</artifactId>
             <version>4.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.web</groupId>
+            <artifactId>jakarta.servlet.jsp.jstl</artifactId>
+            <version>3.0.1</version>
         </dependency>
         <!--jsp end-->
 
