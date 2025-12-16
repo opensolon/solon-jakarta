@@ -4,6 +4,7 @@
 * 添加 `solon-server-tomcat-jakarta` ssl 支持
 * 添加 `solon-server-undertow-jakarta` jsp 支持
 * 添加 `solon-server-undertow-jakarta` ssl 支持
+* 添加 `hibernate-jakarta-solon-plugin` EntityManager 注入支持
 * 优化 `solon-server-undertow-jakarta` 请求大小控制
 * 修复 `hibernate-jakarta-solon-plugin` 无法自动建表的问题,修改SessionFactory初始化时机
 
@@ -12,6 +13,7 @@
 * 添加 `solon-server-tomcat-jakarta` ssl 支持
 * 添加 `solon-server-undertow-jakarta` jsp 支持
 * 添加 `solon-server-undertow-jakarta` ssl 支持
+* 添加 `hibernate-jakarta-solon-plugin` EntityManager 注入支持
 * 优化 `solon-server-undertow-jakarta` 请求大小控制
 * 修复 `hibernate-jakarta-solon-plugin` 无法自动建表的问题,修改SessionFactory初始化时机
 
