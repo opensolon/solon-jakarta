@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.noear</groupId>
-    <artifactId>solon-jakarta-framework</artifactId>
+    <artifactId>solon-java17</artifactId>
     <version>dev</version>
     <packaging>pom</packaging>
 

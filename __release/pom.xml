@@ -18,6 +18,6 @@
     </properties>
 
     <modules>
-        <module>solon-jakarta-bundle1</module>
+        <module>solon-java17-bundle1</module>
     </modules>
 </project>
