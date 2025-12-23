@@ -2,7 +2,7 @@
 ### v3.8.0
 
 * 添加 `solon-server-tomcat-jakarta` ssl、vthread 支持
-* 添加 `solon-server-undertow-jakarta` jsp、ssl 支持
+* 添加 `solon-server-undertow-jakarta` jsp、ssl、vthread 支持
 * 添加 `hibernate-jakarta-solon-plugin` EntityManager 注入支持
 * 优化 `solon-server-undertow-jakarta` 请求大小控制
 * 优化 `solon-web-servlet-jakarta` 启用 ContextHolder:currentWith 替代 currentSet（兼容 ScopedValue 切换）
@@ -15,7 +15,7 @@ http-server 情况汇总
 |-------------------------------|------|-----|---------|
 | solon-server-tomcat-jakarta   | 1    | 1   | 1       |
 | solon-server-jetty-jakarta    | 1    | 1   | 1       |
-| solon-server-undertow-jakarta | 1    | 1   | 0       |
+| solon-server-undertow-jakarta | 1    | 1   | 1       |
 
 
 

@@ -20,7 +20,9 @@ import io.undertow.UndertowOptions;
 import io.undertow.server.HttpHandler;
 import io.undertow.servlet.Servlets;
 import io.undertow.servlet.api.*;
+import org.noear.solon.Solon;
 import org.noear.solon.Utils;
+import org.noear.solon.core.util.ThreadsUtil;
 import org.noear.solon.server.ServerLifecycle;
 import org.noear.solon.server.ServerProps;
 import org.noear.solon.server.prop.impl.HttpServerProps;
@@ -102,6 +104,7 @@ public class UndertowServer extends UndertowServerBase implements ServerLifecycl
         }
 
         if (isEnableHttp2()) {
+            //支持 http2
             builder.setServerOption(UndertowOptions.ENABLE_HTTP2, true);
         }
 
@@ -127,6 +130,12 @@ public class UndertowServer extends UndertowServerBase implements ServerLifecycl
 
     protected HttpHandler buildHandler() throws Exception {
         DeploymentInfo builder = initDeploymentInfo();
+
+        if (Solon.appIf(app -> app.cfg().isEnabledVirtualThreads())) {
+            //支持虚拟线程池
+            builder.setExecutor(ThreadsUtil.newVirtualThreadPerTaskExecutor());
+            builder.setAsyncExecutor(ThreadsUtil.newVirtualThreadPerTaskExecutor());
+        }
 
         //添加servlet
         builder.addServlet(new ServletInfo("ACTServlet", UtHttpContextServletHandler.class).addMapping("/").setAsyncSupported(true));
