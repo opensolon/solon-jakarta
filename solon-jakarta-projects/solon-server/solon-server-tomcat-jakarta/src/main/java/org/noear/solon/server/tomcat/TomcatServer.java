@@ -29,9 +29,9 @@ import org.apache.coyote.http11.Http11NioProtocol;
 import org.apache.coyote.http2.Http2Protocol;
 import org.apache.tomcat.util.net.SSLHostConfig;
 import org.apache.tomcat.util.net.SSLHostConfigCertificate;
-import org.noear.solon.Utils;
+import org.noear.solon.Solon;
 import org.noear.solon.core.util.IoUtil;
-import org.noear.solon.core.util.ResourceUtil;
+import org.noear.solon.core.util.ThreadsUtil;
 import org.noear.solon.server.ServerProps;
 import org.noear.solon.server.handle.SessionProps;
 import org.noear.solon.server.prop.impl.HttpServerProps;
@@ -104,9 +104,15 @@ public class TomcatServer extends TomcatServerBase {
         //::protocol
         ProtocolHandler protocol = createHttp11Protocol(isMain);
 
-//        if (isMain && enableHttp2) {
-//            protocol.addUpgradeProtocol(new Http2Protocol());
-//        }
+        if (isMain && enableHttp2) {
+            //支持 http2
+            protocol.addUpgradeProtocol(new Http2Protocol());
+        }
+
+        if (Solon.appIf(app -> app.cfg().isEnabledVirtualThreads())) {
+            //支持虚拟线程池
+            protocol.setExecutor(ThreadsUtil.newVirtualThreadPerTaskExecutor());
+        }
 
 
         //::connector
