@@ -20,7 +20,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.noear.solon.Solon;
 import org.noear.solon.core.handle.Context;
-import org.noear.solon.core.handle.ContextHolder;
 import org.noear.solon.core.handle.Handler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,9 +50,7 @@ public class SolonServletFilter implements Filter {
             //
             // 临时对接，parseMultipart=false 免得对数据有影响
             //
-            Context ctx = new SolonServletContext((HttpServletRequest) request, (HttpServletResponse) response);
-
-            ContextHolder.currentWith(ctx, () -> {
+            Context.currentWith(new SolonServletContext((HttpServletRequest) request, (HttpServletResponse) response), (ctx) -> {
                 try {
                     //过滤开始
                     doFilterStart(ctx);
@@ -77,7 +74,6 @@ public class SolonServletFilter implements Filter {
                     doFilterEnd(ctx);
                 }
             });
-
         } else {
             filterChain.doFilter(request, response);
         }
