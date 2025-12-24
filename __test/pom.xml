@@ -19,6 +19,7 @@
     <description>java project for solon test</description>
 
     <properties>
+        <java.version>17</java.version>
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
     </properties>
