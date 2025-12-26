@@ -1,4 +1,8 @@
 
+### v3.8.1
+
+* 新增 solon-net-httputils17 插件
+
 ### v3.8.0
 
 * 添加 `solon-server-tomcat-jakarta` ssl、vthread 支持
