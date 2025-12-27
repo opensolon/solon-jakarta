@@ -17,6 +17,7 @@ package org.noear.solon.net.http;
 
 import org.noear.solon.Utils;
 
+import java.net.URI;
 import java.net.URL;
 
 /**

@@ -1,7 +1,7 @@
 
 ### v3.8.1
 
-* 新增 solon-net-httputils17 插件
+* 新增 `solon-net-httputils-java11` 插件
 
 ### v3.8.0
 

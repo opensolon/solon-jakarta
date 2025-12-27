@@ -11,7 +11,7 @@
         <relativePath>../../../solon-java17-parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>solon-net-httputils17</artifactId>
+    <artifactId>solon-net-httputils-java11</artifactId>
     <name>${project.artifactId}</name>
     <packaging>jar</packaging>
 

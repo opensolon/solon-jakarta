@@ -13,28 +13,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.noear.solon.net.http.impl.okhttp;
+package org.noear.solon.net.http.impl.jdk;
 
-import okhttp3.Dispatcher;
+import org.noear.solon.Solon;
 import org.noear.solon.Utils;
+import org.noear.solon.core.util.NamedThreadFactory;
+import org.noear.solon.core.util.ThreadsUtil;
+
+import java.util.concurrent.*;
 
 /**
  * Http 调度加载器（用于懒加载）
  *
  * @author noear
- * @since 3.4
+ * @since 3.8.1
  */
-public class OkHttpDispatcherLoader {
-    private Dispatcher dispatcher;
+public class JdkHttpDispatcherLoader {
+    private ExecutorService dispatcher;
 
-    public Dispatcher getDispatcher() {
+    public ExecutorService getDispatcher() {
         if (dispatcher == null) {
             Utils.locker().lock();
             try {
                 if (dispatcher == null) {
-                    dispatcher = new Dispatcher();
-                    dispatcher.setMaxRequests(Integer.MAX_VALUE);
-                    dispatcher.setMaxRequestsPerHost(10000);
+                    if (Solon.appIf(app -> app.cfg().isEnabledVirtualThreads())) {
+                        dispatcher = ThreadsUtil.newVirtualThreadPerTaskExecutor();
+                    } else {
+                        dispatcher = new ThreadPoolExecutor(0, Integer.MAX_VALUE,
+                                60, TimeUnit.SECONDS,
+                                new SynchronousQueue<>()
+                                , new NamedThreadFactory("http-dispatcher").daemon(false));
+                    }
                 }
             } finally {
                 Utils.locker().unlock();
