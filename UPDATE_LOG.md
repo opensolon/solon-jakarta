@@ -1,7 +1,7 @@
 
 ### v3.8.1
 
-* 新增 `solon-net-httputils-java11` 插件
+* 新增 `solon-net-httputils-java11` 插件 //还有问题
 * 调整 项目的默认 java 版本改为 11；需要 17 的模块则指定 17 
 
 ### v3.8.0
