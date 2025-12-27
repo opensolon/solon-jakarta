@@ -59,6 +59,11 @@ Solon for java17 adaptation
 
 <hr />
 
+本仓库 java 版本管理情况：
+
+* 目标 java 版本：默认为 java11 ，部分模块为 java17（比如 jackson3）
+* 编译 java 版本：java17
+
 ## 主要代码仓库
 
 
