@@ -111,7 +111,7 @@ public class TomcatServer extends TomcatServerBase {
 
         if (Solon.appIf(app -> app.cfg().isEnabledVirtualThreads())) {
             //支持虚拟线程池
-            protocol.setExecutor(ThreadsUtil.newVirtualThreadPerTaskExecutor());
+            protocol.setExecutor(ThreadsUtil.newVirtualThreadPerTaskExecutor("tomcat-"));
         }
 
 

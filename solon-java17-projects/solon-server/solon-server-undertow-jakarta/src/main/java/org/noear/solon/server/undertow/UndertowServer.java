@@ -133,8 +133,8 @@ public class UndertowServer extends UndertowServerBase implements ServerLifecycl
 
         if (Solon.appIf(app -> app.cfg().isEnabledVirtualThreads())) {
             //支持虚拟线程池
-            builder.setExecutor(ThreadsUtil.newVirtualThreadPerTaskExecutor());
-            builder.setAsyncExecutor(ThreadsUtil.newVirtualThreadPerTaskExecutor());
+            builder.setExecutor(ThreadsUtil.newVirtualThreadPerTaskExecutor("undertow-"));
+            builder.setAsyncExecutor(ThreadsUtil.newVirtualThreadPerTaskExecutor("undertow-async-"));
         }
 
         //添加servlet

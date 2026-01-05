@@ -61,7 +61,7 @@ public class JettyServer extends JettyServerBase implements ServerLifecycle {
 
         //支持虚拟线程池
         if (Solon.appIf(app -> app.cfg().isEnabledVirtualThreads())) {
-            threadPool.setVirtualThreadsExecutor(ThreadsUtil.newVirtualThreadPerTaskExecutor());
+            threadPool.setVirtualThreadsExecutor(ThreadsUtil.newVirtualThreadPerTaskExecutor("jetty-"));
         }
 
         real = new Server(threadPool);
