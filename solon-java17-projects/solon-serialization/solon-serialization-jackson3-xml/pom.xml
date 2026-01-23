@@ -61,6 +61,11 @@
             <artifactId>solon-server-smarthttp</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.noear</groupId>
+            <artifactId>solon-serialization-jackson3</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 </project>

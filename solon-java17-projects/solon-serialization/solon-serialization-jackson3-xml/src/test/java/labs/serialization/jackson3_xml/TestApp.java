@@ -15,25 +15,23 @@
  */
 package labs.serialization.jackson3_xml;
 
+import org.noear.solon.Solon;
+import org.noear.solon.annotation.Controller;
+import org.noear.solon.annotation.Mapping;
+import org.noear.solon.annotation.Produces;
+import org.noear.solon.core.util.MimeType;
+import org.noear.solon.serialization.jackson3.xml.Jackson3XmlStringSerializer;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ValueSerializer;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import org.noear.solon.Solon;
-import org.noear.solon.annotation.Controller;
-import org.noear.solon.annotation.Mapping;
-
-import org.noear.solon.annotation.Produces;
-import org.noear.solon.core.util.MimeType;
-import org.noear.solon.serialization.jackson3.xml.Jackson3XmlEntityConverter;
-import org.noear.solon.serialization.jackson3.xml.Jackson3XmlStringSerializer;
-import tools.jackson.core.JacksonException;
-import tools.jackson.core.JsonGenerator;
-import tools.jackson.databind.SerializationContext;
-import tools.jackson.databind.ValueSerializer;
 
 /**
  * @author noear 2021/10/12 created
@@ -42,7 +40,7 @@ import tools.jackson.databind.ValueSerializer;
 public class TestApp {
     public static void main(String[] args) {
         Solon.start(TestApp.class, args, app -> {
-            app.onEvent(Jackson3XmlStringSerializer.class, factory->initMvcJsonCustom(factory));
+            app.onEvent(Jackson3XmlStringSerializer.class, factory -> initMvcJsonCustom(factory));
         });
     }
 
@@ -80,7 +78,6 @@ public class TestApp {
     }
 
     @Mapping("/hello")
-    @Produces(MimeType.APPLICATION_XML_VALUE)
     public Object hello(String name) {
         return name;
     }

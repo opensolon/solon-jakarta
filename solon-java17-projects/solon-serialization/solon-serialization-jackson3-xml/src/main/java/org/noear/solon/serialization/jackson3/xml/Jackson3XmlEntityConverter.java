@@ -75,8 +75,6 @@ public class Jackson3XmlEntityConverter extends AbstractStringEntityConverter<Ja
     public XmlMapper newDeMapper(XmlMapper mapper) {
         return mapper.rebuild()
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-                // 允许使用未带引号的字段名
-                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
                 // xml空节点处理
                 .configure(XmlReadFeature.EMPTY_ELEMENT_AS_NULL, true)
                 .changeDefaultVisibility(vc -> vc.withVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY))
