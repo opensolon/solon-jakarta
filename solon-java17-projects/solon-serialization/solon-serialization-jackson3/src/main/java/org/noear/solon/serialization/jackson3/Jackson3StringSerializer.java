@@ -309,8 +309,8 @@ public class Jackson3StringSerializer implements EntityStringSerializer {
                 builder.serializerFactory().withNullValueSerializer(new NullValueSerializerImpl(jsonProps));
             }
 
-            if (jsonProps.enumAsName) {
-                builder.configure(EnumFeature.WRITE_ENUMS_USING_TO_STRING, true);
+            if (!jsonProps.enumAsName) {
+                builder.configure(EnumFeature.WRITE_ENUMS_USING_INDEX, true);
             }
         }
 

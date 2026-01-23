@@ -308,8 +308,8 @@ public class Jackson3XmlStringSerializer implements EntityStringSerializer {
                 builder.serializerFactory(serializerFactory);
             }
 
-            if (jsonProps.enumAsName) {
-            	builder.configure(EnumFeature.WRITE_ENUMS_USING_TO_STRING, true);
+            if (!jsonProps.enumAsName) {
+                builder.configure(EnumFeature.WRITE_ENUMS_USING_INDEX, true);
             }
         }
 
