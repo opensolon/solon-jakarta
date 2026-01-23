@@ -17,6 +17,7 @@ package org.noear.solon.serialization.jackson3.integration;
 
 import org.noear.solon.core.AppContext;
 import org.noear.solon.core.Plugin;
+import org.noear.solon.core.event.EventBus;
 import org.noear.solon.serialization.SerializerNames;
 import org.noear.solon.serialization.jackson3.*;
 import org.noear.solon.serialization.prop.JsonProps;
@@ -30,6 +31,7 @@ public class SerializationJackson3Plugin implements Plugin {
         Jackson3StringSerializer serializer = new Jackson3StringSerializer(jsonProps);
         context.wrapAndPut(Jackson3StringSerializer.class, serializer); //用于扩展
         context.app().serializers().register(SerializerNames.AT_JSON, serializer);
+        EventBus.publish(serializer);
 
         //::entityConverter
         Jackson3EntityConverter entityConverter = new Jackson3EntityConverter(serializer);

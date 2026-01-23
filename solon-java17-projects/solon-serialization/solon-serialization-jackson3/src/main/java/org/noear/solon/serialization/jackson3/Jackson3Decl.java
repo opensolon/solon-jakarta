@@ -15,30 +15,28 @@
  */
 package org.noear.solon.serialization.jackson3;
 
+import org.noear.solon.core.util.Assert;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.SerializationFeature;
+import tools.jackson.databind.cfg.ConfigFeature;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.module.SimpleModule;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-
-import org.noear.solon.core.util.Assert;
-
-import tools.jackson.databind.DeserializationFeature;
-import tools.jackson.databind.ObjectMapper;
-import tools.jackson.databind.SerializationFeature;
-import tools.jackson.databind.cfg.ConfigFeature;
-import tools.jackson.databind.cfg.MapperBuilder;
-import tools.jackson.databind.module.SimpleModule;
 
 /**
  * @author noear
  * @since 3.6
  */
 public class Jackson3Decl<F extends ConfigFeature> {
-    private ObjectMapper mapper;
+    private JsonMapper mapper;
     private Set<F> featuresSet;
     private SimpleModule customModule;
 
     public Jackson3Decl() {
-        this.mapper = new ObjectMapper();
+        this.mapper = new JsonMapper();
         this.featuresSet = new HashSet<>();
         this.customModule = new SimpleModule();
     }
@@ -46,14 +44,14 @@ public class Jackson3Decl<F extends ConfigFeature> {
     /**
      * 获取映射器
      */
-    public ObjectMapper getMapper() {
+    public JsonMapper getMapper() {
         return mapper;
     }
 
     /**
      * 设置映射器
      */
-    public void setMapper(ObjectMapper mapper) {
+    public void setMapper(JsonMapper mapper) {
         Assert.notNull(mapper, "mapper can't be null");
         this.mapper = mapper;
     }
@@ -88,17 +86,17 @@ public class Jackson3Decl<F extends ConfigFeature> {
     }
 
     protected void refresh() {
-    	MapperBuilder builder  = mapper.rebuild();
+        JsonMapper.Builder builder = mapper.rebuild();
         for (ConfigFeature f1 : featuresSet) {
             if (f1 instanceof SerializationFeature) {
-            	builder.configure((SerializationFeature)f1, true);
+                builder.configure((SerializationFeature) f1, true);
             } else if (f1 instanceof DeserializationFeature) {
-            	builder.configure((DeserializationFeature) f1,true);
+                builder.configure((DeserializationFeature) f1, true);
             }
         }
 
         if (customModule != null) {
-        	builder.addModule(customModule);
+            builder.addModule(customModule);
 //        	mapper.registeredModules().add(customModule);
         }
         mapper = builder.build();
