@@ -26,6 +26,8 @@ import org.noear.solon.Solon;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Mapping;
 
+import org.noear.solon.annotation.Produces;
+import org.noear.solon.core.util.MimeType;
 import org.noear.solon.serialization.jackson3.xml.Jackson3XmlEntityConverter;
 import org.noear.solon.serialization.jackson3.xml.Jackson3XmlStringSerializer;
 import tools.jackson.core.JacksonException;
@@ -56,17 +58,18 @@ public class TestApp {
         serializer.addEncoder(LocalDateTime.class, s -> s.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
 
         serializer.addEncoder(Date.class, new ValueSerializer<Date>() {
-                    @Override
-                    public void serialize(Date date, JsonGenerator out, SerializationContext sp) throws JacksonException {
-                        out.writeNumber(date.getTime());
-                    }
-                });
+            @Override
+            public void serialize(Date date, JsonGenerator out, SerializationContext sp) throws JacksonException {
+                out.writeNumber(date.getTime());
+            }
+        });
 
 
         //factory.config().addHandler();
     }
 
     @Mapping("/")
+    @Produces(MimeType.APPLICATION_XML_VALUE)
     public Object home() {
         Map<String, Object> data = new LinkedHashMap<>();
         data.put("time1", LocalDateTime.now());
@@ -77,6 +80,7 @@ public class TestApp {
     }
 
     @Mapping("/hello")
+    @Produces(MimeType.APPLICATION_XML_VALUE)
     public Object hello(String name) {
         return name;
     }

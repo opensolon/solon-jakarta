@@ -1,7 +1,7 @@
 package features.serialization.jackson3.props;
 
 import org.junit.jupiter.api.Test;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.Properties;
 
@@ -18,7 +18,7 @@ public class PropsTest {
         properties.setProperty("user.tags[0]", "a");
         properties.setProperty("user.tags[2]", "b");
 
-        ObjectMapper mapper = new ObjectMapper();
+        JsonMapper mapper = new JsonMapper();
         String tmp = mapper.writeValueAsString(properties);
         System.out.println(tmp);
     }

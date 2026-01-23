@@ -15,13 +15,8 @@
  */
 package org.noear.solon.serialization.jackson3;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import org.noear.solon.core.util.LazyReference;
 import org.noear.solon.core.wrap.MethodWrap;
 import org.noear.solon.core.wrap.ParamWrap;
@@ -29,17 +24,19 @@ import org.noear.solon.serialization.AbstractStringEntityConverter;
 import org.noear.solon.serialization.SerializerNames;
 import org.noear.solon.serialization.jackson3.impl.TimeDeserializer;
 import org.noear.solon.serialization.jackson3.impl.TypeReferenceImpl;
-
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-
 import tools.jackson.core.json.JsonReadFeature;
 import tools.jackson.databind.DefaultTyping;
 import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.cfg.DateTimeFeature;
-import tools.jackson.datatype.jsr310.JavaTimeModule;
+import tools.jackson.databind.json.JsonMapper;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Jackson 实体转换器
@@ -50,18 +47,16 @@ import tools.jackson.datatype.jsr310.JavaTimeModule;
 public class Jackson3EntityConverter extends AbstractStringEntityConverter<Jackson3StringSerializer> {
     public Jackson3EntityConverter(Jackson3StringSerializer serializer) {
         super(serializer);
-
-        serializer.getDeserializeConfig().setMapper(newMapper(new JavaTimeModule()));
+        JsonMapper deMapper = serializer.getDeserializeConfig().getMapper();
+        serializer.getDeserializeConfig().setMapper(newDeMapper(deMapper));
 
         serializer.getDeserializeConfig().getCustomModule().addDeserializer(LocalDateTime.class, new TimeDeserializer<>(LocalDateTime.class));
         serializer.getDeserializeConfig().getCustomModule().addDeserializer(LocalDate.class, new TimeDeserializer<>(LocalDate.class));
         serializer.getDeserializeConfig().getCustomModule().addDeserializer(LocalTime.class, new TimeDeserializer<>(LocalTime.class));
         serializer.getDeserializeConfig().getCustomModule().addDeserializer(Date.class, new TimeDeserializer<>(Date.class));
 
-        ObjectMapper mapper = serializer.getSerializeConfig().getMapper();
-        mapper.serializationConfig().with(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS);
-//        mapper.registeredModules().add(new JavaTimeModule());
-        serializer.getSerializeConfig().setMapper(mapper);
+        JsonMapper seMapper = serializer.getSerializeConfig().getMapper();
+        serializer.getSerializeConfig().setMapper(newSeMapper(seMapper));
     }
 
     /**
@@ -71,28 +66,29 @@ public class Jackson3EntityConverter extends AbstractStringEntityConverter<Jacks
     public String[] mappings() {
         return new String[]{SerializerNames.AT_JSON};
     }
-    
+
     /**
      * 初始化
-     *
-     * @param modules 配置模块
      */
-    public ObjectMapper newMapper(tools.jackson.databind.JacksonModule... modules) {
-        ObjectMapper mapper = new ObjectMapper();
-     
-        ObjectMapper customMapper = mapper.rebuild()
-        		.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-        		.changeDefaultVisibility(vc -> vc.withVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY))
-        		.activateDefaultTypingAsProperty(mapper._deserializationContext().getConfig().getPolymorphicTypeValidator(),
-        				DefaultTyping.JAVA_LANG_OBJECT, "@type")
-        		.addModules(modules).build();// 注册 JavaTimeModule ，以适配 java.time 下的时间类型
-        // 允许使用未带引号的字段名
-        customMapper.serializationConfig().with(JsonReadFeature.ALLOW_UNQUOTED_PROPERTY_NAMES);
-        // 允许使用单引号
-        customMapper.serializationConfig().with(JsonReadFeature.ALLOW_SINGLE_QUOTES);	
-        return customMapper;
+    public JsonMapper newSeMapper(JsonMapper mapper) {
+        return mapper.rebuild()
+                .configure(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS, true).build();
     }
 
+    /**
+     * 初始化
+     */
+    public JsonMapper newDeMapper(JsonMapper mapper) {
+        return mapper.rebuild()
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                // 允许使用未带引号的字段名
+                .configure(JsonReadFeature.ALLOW_UNQUOTED_PROPERTY_NAMES, true)
+                // 允许使用单引号
+                .configure(JsonReadFeature.ALLOW_SINGLE_QUOTES, true)
+                .changeDefaultVisibility(vc -> vc.withVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY))
+                .activateDefaultTypingAsProperty(mapper._deserializationContext().getConfig().getPolymorphicTypeValidator(),
+                        DefaultTyping.JAVA_LANG_OBJECT, "@type").build();
+    }
 
     /**
      * 转换 body
@@ -102,7 +98,7 @@ public class Jackson3EntityConverter extends AbstractStringEntityConverter<Jacks
      */
     @Override
     protected Object changeBody(org.noear.solon.core.handle.Context ctx, MethodWrap mWrap) throws Exception {
-    	 return serializer.deserializeFromBody(ctx);
+        return serializer.deserializeFromBody(ctx);
     }
 
     /**
