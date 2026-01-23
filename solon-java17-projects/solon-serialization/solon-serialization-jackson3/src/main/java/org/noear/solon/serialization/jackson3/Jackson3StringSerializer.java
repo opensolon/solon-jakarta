@@ -15,12 +15,7 @@
  */
 package org.noear.solon.serialization.jackson3;
 
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.Date;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.UnaryOperator;
-
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.noear.solon.Utils;
 import org.noear.solon.core.convert.Converter;
 import org.noear.solon.core.handle.Context;
@@ -32,22 +27,18 @@ import org.noear.solon.serialization.jackson3.impl.NullValueSerializerImpl;
 import org.noear.solon.serialization.jackson3.impl.TypeReferenceImpl;
 import org.noear.solon.serialization.prop.JsonProps;
 import org.noear.solon.serialization.prop.JsonPropsUtil2;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.JsonGenerator;
-import tools.jackson.core.JsonParser;
 import tools.jackson.core.json.JsonReadFeature;
-import tools.jackson.databind.DeserializationFeature;
-import tools.jackson.databind.MapperFeature;
-import tools.jackson.databind.ObjectMapper;
-import tools.jackson.databind.SerializationContext;
-import tools.jackson.databind.SerializationFeature;
-import tools.jackson.databind.ValueSerializer;
+import tools.jackson.databind.*;
 import tools.jackson.databind.cfg.EnumFeature;
-import tools.jackson.databind.cfg.MapperBuilder;
+import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.ser.jdk.JavaUtilDateSerializer;
+
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.Date;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Jackson json 序列化
@@ -259,22 +250,22 @@ public class Jackson3StringSerializer implements EntityStringSerializer {
     public <T> void addEncoder(Class<T> clz, Converter<T, Object> converter) {
         if (clz == Date.class) {
             addEncoder(Date.class, new JavaUtilDateSerializer() {
-            	@Override
-            	public void serialize(Date date, JsonGenerator out, SerializationContext sp)
-            			throws JacksonException {
-                  if (this._customFormat == null) {
-	                  writeDefaultValue(converter, clz.cast(date), out);
-	              } else {
-	                  super.serialize(date, out, sp);
-	              }
-            	}
+                @Override
+                public void serialize(Date date, JsonGenerator out, SerializationContext sp)
+                        throws JacksonException {
+                    if (this._customFormat == null) {
+                        writeDefaultValue(converter, clz.cast(date), out);
+                    } else {
+                        super.serialize(date, out, sp);
+                    }
+                }
             });
         } else {
             addEncoder(clz, new ValueSerializer<T>() {
-            	@Override
-            	public void serialize(T source, JsonGenerator out, SerializationContext sp) throws JacksonException {
-            		writeDefaultValue(converter, source, out);
-            	}
+                @Override
+                public void serialize(T source, JsonGenerator out, SerializationContext sp) throws JacksonException {
+                    writeDefaultValue(converter, source, out);
+                }
             });
         }
     }
@@ -299,8 +290,8 @@ public class Jackson3StringSerializer implements EntityStringSerializer {
 
     protected void loadJsonProps(JsonProps jsonProps) {
         boolean writeNulls = false;
-        ObjectMapper mapper = getSerializeConfig().getMapper();
-        MapperBuilder builder = mapper.rebuild();
+        JsonMapper mapper = getSerializeConfig().getMapper();
+        JsonMapper.Builder builder = mapper.rebuild();
         if (jsonProps != null) {
             JsonPropsUtil2.dateAsFormat(this, jsonProps);
             JsonPropsUtil2.dateAsTicks(this, jsonProps);
@@ -313,20 +304,20 @@ public class Jackson3StringSerializer implements EntityStringSerializer {
                     jsonProps.nullBoolAsFalse ||
                     jsonProps.nullStringAsEmpty;
 
-            
+
             if (writeNulls) {
-            	builder.serializerFactory().withNullValueSerializer(new NullValueSerializerImpl(jsonProps));
+                builder.serializerFactory().withNullValueSerializer(new NullValueSerializerImpl(jsonProps));
             }
 
             if (jsonProps.enumAsName) {
-            	builder.configure(EnumFeature.WRITE_ENUMS_USING_TO_STRING, true);
+                builder.configure(EnumFeature.WRITE_ENUMS_USING_TO_STRING, true);
             }
         }
 
         if (writeNulls == false) {
-        	builder.changeDefaultPropertyInclusion(v -> 
-        		        JsonInclude.Value.construct(JsonInclude.Include.NON_NULL, JsonInclude.Include.USE_DEFAULTS)
-        		    );
+            builder.changeDefaultPropertyInclusion(v ->
+                    JsonInclude.Value.construct(JsonInclude.Include.NON_NULL, JsonInclude.Include.USE_DEFAULTS)
+            );
         }
 
         //启用 transient 关键字
@@ -343,11 +334,11 @@ public class Jackson3StringSerializer implements EntityStringSerializer {
         builder.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         //反序列化的时候如果是无效子类型,不抛出异常
         builder.configure(DeserializationFeature.FAIL_ON_INVALID_SUBTYPE, false);
-        ObjectMapper customMapper = builder.build();
         // 是否识别不带引号的key
-        customMapper.serializationConfig().with(JsonReadFeature.ALLOW_UNQUOTED_PROPERTY_NAMES);
+        builder.configure(JsonReadFeature.ALLOW_UNQUOTED_PROPERTY_NAMES, false);
         // 是否识别单引号的key
-        customMapper.serializationConfig().with(JsonReadFeature.ALLOW_SINGLE_QUOTES);	
-        getSerializeConfig().setMapper(customMapper);
+        builder.configure(JsonReadFeature.ALLOW_SINGLE_QUOTES, false);
+        getSerializeConfig().setMapper(builder.build());
+        getDeserializeConfig().setMapper(builder.build());
     }
 }

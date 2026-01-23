@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
 import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * @author coderWu
@@ -46,7 +46,7 @@ public class JacksonFormatTest {
 
         assert "{\"date\":\"2024-07-25\",\"dateWithoutFormat\":\"2024-07-25 12:34:56\"}".equals(jsonString);
 
-        ObjectMapper objectMapper = new ObjectMapper();
+        JsonMapper objectMapper = new JsonMapper();
         JsonNode jsonObject = objectMapper.readTree(jsonString);
 
         assertEquals(FORMATTED_DATE, jsonObject.get("date").asText());

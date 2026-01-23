@@ -333,13 +333,7 @@ public class Jackson3XmlStringSerializer implements EntityStringSerializer {
         builder.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         //反序列化的时候如果是无效子类型,不抛出异常
         builder.configure(DeserializationFeature.FAIL_ON_INVALID_SUBTYPE, false);
-    
-        XmlMapper customMapper = builder.build();
-        // 是否识别不带引号的key
-        customMapper.serializationConfig().with(JsonReadFeature.ALLOW_UNQUOTED_PROPERTY_NAMES);
-        // 是否识别单引号的key
-        customMapper.serializationConfig().with(JsonReadFeature.ALLOW_SINGLE_QUOTES);	
-        getSerializeConfig().setMapper(customMapper);
-        
+        getSerializeConfig().setMapper(builder.build());
+        getDeserializeConfig().setMapper(builder.build());
      }
 }

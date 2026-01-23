@@ -1,19 +1,18 @@
 package demo.serialization.jackson3;
 
+import org.noear.solon.annotation.Bean;
+import org.noear.solon.annotation.Configuration;
+import org.noear.solon.serialization.jackson3.Jackson3StringSerializer;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ValueSerializer;
+import tools.jackson.databind.json.JsonMapper;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
-
-import org.noear.solon.annotation.Bean;
-import org.noear.solon.annotation.Configuration;
-import org.noear.solon.serialization.jackson3.Jackson3StringSerializer;
-
-import tools.jackson.core.JacksonException;
-import tools.jackson.core.JsonGenerator;
-import tools.jackson.databind.ObjectMapper;
-import tools.jackson.databind.SerializationContext;
-import tools.jackson.databind.ValueSerializer;
 
 /**
  * @author noear 2025/9/13 created
@@ -42,6 +41,6 @@ public class Demo4Config {
 
         //::反序列化（用于接收参数）
         //示例3：替换 mapper
-        serializer.getDeserializeConfig().setMapper(new ObjectMapper());
+        serializer.getDeserializeConfig().setMapper(new JsonMapper());
     }
 }

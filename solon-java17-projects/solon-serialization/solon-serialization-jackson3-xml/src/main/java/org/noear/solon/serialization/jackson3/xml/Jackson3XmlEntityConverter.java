@@ -15,9 +15,8 @@
  */
 package org.noear.solon.serialization.jackson3.xml;
 
-import java.util.Collection;
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.util.LazyReference;
 import org.noear.solon.core.wrap.MethodWrap;
@@ -25,10 +24,6 @@ import org.noear.solon.core.wrap.ParamWrap;
 import org.noear.solon.serialization.AbstractStringEntityConverter;
 import org.noear.solon.serialization.SerializerNames;
 import org.noear.solon.serialization.jackson3.xml.impl.TypeReferenceImpl;
-
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-
 import tools.jackson.databind.DefaultTyping;
 import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.JsonNode;
@@ -36,7 +31,9 @@ import tools.jackson.databind.cfg.DateTimeFeature;
 import tools.jackson.dataformat.xml.XmlMapper;
 import tools.jackson.dataformat.xml.XmlReadFeature;
 import tools.jackson.dataformat.xml.XmlWriteFeature;
-import tools.jackson.datatype.jsr310.JavaTimeModule;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * JacksonXml 实体转换器
@@ -47,29 +44,11 @@ import tools.jackson.datatype.jsr310.JavaTimeModule;
 public class Jackson3XmlEntityConverter extends AbstractStringEntityConverter<Jackson3XmlStringSerializer> {
     public Jackson3XmlEntityConverter(Jackson3XmlStringSerializer serializer) {
         super(serializer);
+        XmlMapper deMapper = serializer.getDeserializeConfig().getMapper();
+        serializer.getDeserializeConfig().setMapper(newDeMapper(deMapper));
 
-        XmlMapper mapper = serializer.getDeserializeConfig().getMapper();
-        XmlMapper.Builder builder = mapper.rebuild();
-        
-        builder.configure(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS,true);
-        builder.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        builder.changeDefaultVisibility(vc -> vc.withVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY));
-        builder.activateDefaultTypingAsProperty(mapper._deserializationContext().getConfig().getPolymorphicTypeValidator(),
-				DefaultTyping.JAVA_LANG_OBJECT, "@type");
-        // 注册 JavaTimeModule ，以适配 java.time 下的时间类型
-        builder.addModule(new JavaTimeModule());
-
-        //----------------------- jackson xml 专属配置 -----------------------
-        // xml空节点处理
-        builder.configure(XmlReadFeature.EMPTY_ELEMENT_AS_NULL, true);
-        // xml声明处理
-        builder.configure(XmlWriteFeature.WRITE_XML_DECLARATION, false);
-        serializer.getDeserializeConfig().setMapper(builder.build());
-
-        builder = serializer.getSerializeConfig().getMapper().rebuild();
-        builder.configure(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS, true);
-        builder.addModule(new JavaTimeModule());
-        serializer.getSerializeConfig().setMapper(builder.build());
+        XmlMapper seMapper = serializer.getSerializeConfig().getMapper();
+        serializer.getSerializeConfig().setMapper(newSeMapper(seMapper));
     }
 
     /**
@@ -78,6 +57,29 @@ public class Jackson3XmlEntityConverter extends AbstractStringEntityConverter<Ja
     @Override
     public String[] mappings() {
         return new String[]{SerializerNames.AT_XML};
+    }
+
+    /**
+     * 初始化
+     */
+    public XmlMapper newSeMapper(XmlMapper mapper) {
+        return mapper.rebuild()
+                // xml声明处理
+                .configure(XmlWriteFeature.WRITE_XML_DECLARATION, false)
+                .configure(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS, true).build();
+    }
+
+    /**
+     * 初始化
+     */
+    public XmlMapper newDeMapper(XmlMapper mapper) {
+        return mapper.rebuild()
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                // xml空节点处理
+                .configure(XmlReadFeature.EMPTY_ELEMENT_AS_NULL, true)
+                .changeDefaultVisibility(vc -> vc.withVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY))
+                .activateDefaultTypingAsProperty(mapper._deserializationContext().getConfig().getPolymorphicTypeValidator(),
+                        DefaultTyping.JAVA_LANG_OBJECT, "@type").build();
     }
 
     /**

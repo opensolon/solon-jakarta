@@ -4,8 +4,10 @@ import org.junit.jupiter.api.Test;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.annotation.Mapping;
+import org.noear.solon.annotation.Produces;
 import org.noear.solon.core.AppContext;
 import org.noear.solon.core.handle.ContextEmpty;
+import org.noear.solon.core.util.MimeType;
 import org.noear.solon.test.SolonTest;
 
 /**
@@ -36,17 +38,19 @@ public class TestExecutor {
         context.app().tryHandle(ctx);
         ctx.result = ctx.attr("output");
         System.out.println(ctx.result);
-        assert "A".equals(ctx.result);
+        assert "<Label>A</Label>".equals(ctx.result);
     }
 
     @Controller
     public static class Demo {
         @Mapping("/a1")
+        @Produces(MimeType.APPLICATION_XML_VALUE)
         public String a1(String name, Label label) {
             return "Hello " + name + " " + label;
         }
 
         @Mapping("/a2")
+        @Produces(MimeType.APPLICATION_XML_VALUE)
         public Label a2(String name, Label label) {
             return label;
         }
