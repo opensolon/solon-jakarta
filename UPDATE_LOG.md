@@ -1,4 +1,13 @@
 
+
+### v3.9.0
+
+* 优化 solon-serialization-jackson3 初始化处理
+
+### v3.8.4
+
+* 修复 solon.serialization.json.enumAsName: false 部分序列化框架不生效的问题
+
 ### v3.8.1
 
 * 新增 `solon-net-httputils-java11` 插件 //还有问题
